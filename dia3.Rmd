@@ -1,5 +1,5 @@
 ---
-title: "Control de calidad de archivos fastq"
+title: "Análisis de datos de RNA-Seq Parte 3 Alternative Splicing"
 author: "Estefania Mancini"
 date: "Marzo 2022"
 output:
@@ -14,107 +14,25 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Control de Calidad de Archivos FASTQ
+## Utilizaremos los siguientes  paquetes
 
-Utilizaremos el paquete de R/Bioconductor [ShortRead](http://bioconductor.org/packages/release/bioc/html/ShortRead.html)
+* [edgeR](http://bioconductor.org/packages/release/bioc/html/edgeR.html)
 
+* [ggplot2]
 
-El primer paso que todo bioinformático que trabaja en NGS y recibe archivos fastq del servicio de secuenciación o de un repositorio público, es analizar los archivos para verificar la calidad de los mismos antes de comenzar cualquier análisis. De esta manera podemos identificar rápidamente: 
+* [pheatmap]
 
-* el número de lecturas de cada biblioteca
-* la existencia de problemas técnicos si las muestras hubieran sido corridas en diferentes lanes o runs y también con mucha separacién en el tiempo. Lo mismo para el primer y segundo fragmento que se secuencia.
-* la existencia de contaminantes (porque serán secuencias sobrerepresentadas) el tipo de biblioteca que se ha secuenciado (genómico, transcriptómica, amplicones) la calidad promedio de la biblioteca secuenciada En esta práctica vamos a analizar una versión reducida de un archivo fastq que fue bajado de SRA Accession number SRR931761. Cuando bajamos archivos de SRA, los mismos deben ser convertidos a fastq, utilizando una aplicación (fastq dump) que está disponible en SRA toolkit.
+* ASpli
 
+* DEGSeq 
 
-En primer lugar elegimos el directorio de trabajo y ponemos allı́ el archivo wt-short.fq. 
+# Que mas podemos hacer?
 
-Cargamos el paquete al entorno de trabajo. Vamos a analizar la calidad del archivo fastq con una función especial para ello (qa)
+## Analisis de Splicing Alternativo
 
+## Teoria 1 h
 
-```{r ShortRead, echo=TRUE, eval=FALSE}
-library(ShortRead)
-setwd("../data/")
-fqQC <-qa("R1.fastq")
-```
+## Isoformas (Salmon, practica)
 
+## Eventos (ASpli, practica)
 
-La lectura del archivo se guardará el objeto fqQC. Chequeamos qué tipo de objeto es y qué información nos brinda.
-
-```{r fqQC, echo=TRUE, eval=FALSE}
-fqQC
-```
-
-El objeto que se generó ya contiene las métricas de calidad. Podemos imprimirlo en un reporte en formato HTML. 
-
-TIP: Verificar que el directorio donde se exporta la salida.
-
-```{r report, echo=TRUE, eval=FALSE}
-report(fqQC, type="html", dest="fastqQAreport-wt-short")
-```
-
-Abrir el reporte en un navegador web. TIP: Debajo de cada gráfico se especifican las funciones con las que se han realizado. Podemos hacerlos uno por uno:
-
-```{r readCount, echo=TRUE, eval=FALSE}
-ShortRead:::.plotReadCount(fqQC)
-```
-
-Este primer gráfico no es muy informativo ya que aquı́ solo estamos analizando el total de lecturas, sin tener en cuenta si han sido filtradas o alineadas. Además estamos mirando 1 sola muestra y sola lane.
-
-```{r plot2, echo=TRUE, eval=FALSE}
-ShortRead:::.plotNucleotideCount(fqQC)
-```
-
-En este segundo gráfico, podemos ver la frecuencia de aparición de cada base. Este cálculo podemos hacerlo manualmente también usando uno de los comandos que se señalan arriba.
-
-```{r plot3, echo=TRUE, eval=FALSE}
-df <- fqQC[["readQualityScore"]]
-ShortRead:::.plotReadQuality(df[df$type=="read",])
-```
-
-En este caso observaremos la distribución de calidad en todo el archivo fastq. ¿Qué puede decir de la calidad de esta muestra? ¿Le resulta confiable para seguir trabajando?
-
-```{r plot4, echo=TRUE, eval=FALSE}
-df <- fqQC[["sequenceDistribution"]]
-ShortRead:::.plotReadOccurrences(df[df$type=="read",], cex=.5)
-```
-
-Esta es una manera de representar la proporción de lecturas del mismo tipo. Idealmente la proporción cae abruptamente. las lecturas menos representadas suelen ser errores de secuenciación o fragmentos espureos (lecturas infrecuentes) suelen ser 10 % normalmente). Si hubiera lecturas demasiado sobre representadas podriamos sospechar de alguna contaminación, también adaptadores, primers, artefactos como colas poliA, regiones altamente repetitivas, que reflejen algún error
-en la preparación de las muestras (5 % normalmente). 
-
-Otra manera de verlo rapidamente:
-
-```{r plot5, echo=TRUE, eval=FALSE}
-ShortRead:::.freqSequences(fqQC, "read", n=1000)
-#las primeras 1000 secuencias más representadas
-plot(ShortRead:::.freqSequences(fqQC, "read", n=1000)$count)
-```
-
-De acuerdo a lo que vimos sobre la tecnologı́a de secuenciación, podemos analizar cómo fue la calidad del ”base calling ciclo a ciclo.
-
-```{r plot6, echo=TRUE, eval=FALSE}
-perCycle <- fqQC[["perCycle"]]
-ShortRead:::.plotCycleBaseCall(perCycle$baseCall)
-ShortRead:::.plotCycleQuality(perCycle$quality)
-```
-
-Aparece una frecuencia diferente de la esperada al azar para estas primeras bases cuando estamos trabajando con bibliotecas de RNA debido a que el proceso de pasar de RNA a cDNA requiere de primers random que suelen tener preferencias por algunos sitios. Uno esperarı́a que fuera al azar. En este punto hay que prestar atención para distinguir rapidamente qué tipo de biblioteca estamos analizando. Con respecto a la calidad ciclo por ciclo, los primeros ciclos en la tecnologı́a de Illumina suelen tener calidades menores a las del resto de la secuencia. 
-No es para preocuparse, tiene relación con los algoritmos que llevan a cabo el proceso de identificación de la base a partir de las señales lumı́nicas y la identificación de los clusters.
-
-Finalmente: ¿Qué podemos decir del archivo fastq que se ha analizado? ¿Qué información relevante nos otorgan este tipo de análisis?
-
-Una de las herramientas más utilizadas es [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/). En la sección de ayuda se puede profundizar sobre las conclusiones. 
-
-Que se puede agregar fácilmente con la herramienta [MULTIQC](https://multiqc.info/)
-
-También podemos realizar el control de calidad en la plataforma [GALAXY](http://galaxyproject.org). Hay que ir a la sección: NGS: QC and manipulation, FastQC Readm Quality reports.
-
-
-## Preguntas mínimas (juego) (10)
-
-* Cual es la longitud de los reads
-* Es la calidad de ambos reads similar si, mejor en el 1, mejor en el 2
-* Hay algún patrón de secuencia que nos llame la atención ?
-* Cuántos reads tiene la library 1M, 10M, 100M? 
-* entonces cuantas bases tiene la library 
-* el numero de readas = numero de spots, numero de enzimas, numero de framentos
-* BONUS: Coverage, cual es el coverage de una secuenciacion si...

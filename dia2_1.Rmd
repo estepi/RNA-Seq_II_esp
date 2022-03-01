@@ -1,5 +1,5 @@
 ---
-title: "Análisis de datos de RNA-Seq Parte 3 Alternative Splicing"
+title: "Análisis de datos de RNA-Seq Dia 2 - Parte 1"
 author: "Estefania Mancini"
 date: "Marzo 2022"
 output:
@@ -22,16 +22,10 @@ knitr::opts_chunk$set(echo = FALSE)
 
 * [pheatmap]
 
-* ASpli
-
-* DEGSeq 
-
 # Que mas podemos hacer?
 
-## Análisis QAPA
+## Heatmaps
 
-## Análisis MOFA
+## GO
 
-
-
-
+## ETC

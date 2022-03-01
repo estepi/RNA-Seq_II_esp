@@ -1,5 +1,5 @@
 ---
-title: "Análisis de datos de RNA-Seq Parte 3 Alternative Splicing"
+title: "Análisis de datos de RNA-Seq Parte 2"
 author: "Estefania Mancini"
 date: "Marzo 2022"
 output:
@@ -22,16 +22,12 @@ knitr::opts_chunk$set(echo = FALSE)
 
 * [pheatmap]
 
-* ASpli
-
-* DEGSeq 
-
 # Que mas podemos hacer?
 
-## Análisis QAPA
+## Analisis de diseño experimental mas complejo
 
-## Análisis MOFA
+## Factorial
 
+## Time Course
 
-
-
+## Batch analysis
