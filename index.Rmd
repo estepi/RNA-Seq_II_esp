@@ -1,5 +1,5 @@
 ---
-title: "RNA-Seq I"
+title: "RNA-Seq II"
 author: "Estefania Mancini"
 date: "March 2022"
 output:
@@ -15,21 +15,15 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Objetivos
-El objetivo de este curso es brindar los conocimientos elementales para el análisis de datos de RNA-Seq.  Se propone realizar análisis exploratorios de los datos y obtener como resultado final los genes que se consideran diferencialmente expresados en el experimento. 
+El objetivo de este curso es profundizar en  los conocimientos elementales para el análisis de datos de RNA-Seq.  
+Se propone realizar diferentes tipos de a experimentos / datos y obtener como resultado final los genes que se consideran diferencialmente expresados en el experimento. 
 
 # Contenidos
 
-## Introduccion general
+* Dia 1 [Análisis e interpretación de datos de RNA-Seq usando R/Bioconductor I](dia1.html)
 
-* Dia 1 [Fundamentos de las Tecnologías de secuenciación de última generación](dia1.html)
+* Dia 2 [Análisis e interpretación de datos de RNA-Seq usando R/Bioconductor II](dia2.html) 
 
-* Dia 2 [Repaso R](dia2.html) 
+* Dia 3 [Splicing](dia3.html)
 
-* [Repaso Bioconductor](dia2_Bioc.html) 
-## Análisis e interpretación de datos de RNA-Seq usando R/Bioconductor 
-
-* Dia 3 [QC](dia3.html)
-
-* Dia 3 y Dia 4 [RNA-Seq](dia4.html)
-
-* [Bonus](dia4_bonus.html)
+* Dia 4 [polyA, MOFA](dia4.html)
