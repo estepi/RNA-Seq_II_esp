@@ -1,2 +1,2 @@
-# RNA-Seq_I_esp
-Material teórico para el curso de RNA-Seq I
+# RNA-Seq_II_esp
+Material teórico para el curso de RNA-Seq II

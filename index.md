@@ -1,18 +1,16 @@
-RNA-Seq I
+RNA-Seq II
 ================
 Estefania Mancini
 March 2022
 
-# Introduccion a NGS
+# RNA Seq avanzado
 
   - [Dia 1](dia1.md)
 
   - [Dia 2](dia2.md)
 
-  - [Contribution guidelines for this project](README.md)
+  - [Dia 3](dia3.md)
 
-<!-- end list -->
+  - [Dia 4](dia4.md)
 
-``` r
-cancertype="LUSC"
-```
+
