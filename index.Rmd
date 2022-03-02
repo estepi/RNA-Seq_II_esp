@@ -15,8 +15,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Objetivos
-El objetivo de este curso es profundizar en  los conocimientos elementales para el análisis de datos de RNA-Seq.  
-Se propone realizar diferentes tipos de a experimentos / datos y obtener como resultado final los genes que se consideran diferencialmente expresados en el experimento. 
+El objetivo de este curso es profundizar en  los conocimientos  para el análisis de datos de RNA-Seq.  
+Se propone realizar diferentes tipos de a experimentos / datos, comparacion de a pares y experimentos mas complejos, factoriales, time course y splicing alternativo con 2 niveles de cuantificacion
 
 # Contenidos
 
