@@ -20,10 +20,18 @@ Se propone realizar diferentes tipos de a experimentos / datos, comparacion de a
 
 # Contenidos
 
-* Dia 1 [Análisis e interpretación de datos de RNA-Seq usando R/Bioconductor I](dia1.html)
+* Dia 1 
+    * Teoría:
+    * Práctica [QC](pca1.html)
 
-* Dia 2 [Análisis e interpretación de datos de RNA-Seq usando R/Bioconductor II](dia2.html) 
+* Dia 2 
+    * [Análisis e interpretación de datos de RNA-Seq usando R/Bioconductor I](pca2.html) 
 
-* Dia 3 [Splicing](dia3.html)
+* Dia 3
+    * Teoría: diseños experimentales más complejos: timecourse, batch effect, factoriales
+    * Práctica [Análisis e interpretación de datos de RNA-Seq usando R/Bioconductor I](pca3.html)
+    
 
-* Dia 4 [polyA, MOFA](dia4.html)
+* Dia 4 
+    * Teoria: Splicing, reconstruccion de isoformas. Cuantificaion polyA, MOFA
+    * Practica [ASpli](dia4.html)
