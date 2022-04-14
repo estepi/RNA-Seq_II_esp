@@ -32,6 +32,7 @@ ggplot(df, aes(x=variable, y=value, fill=variable)) +
   theme_classic()+
   labs(title="Read distribution")
 
+
 ggplot(df, aes(x=variable, y=value, fill=variable)) + 
   geom_boxplot()+
   theme_classic()+

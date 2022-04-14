@@ -41,6 +41,6 @@ Se propone realizar diferentes tipos de a experimentos / datos, comparacion de a
     
     
 * Bonus track
-    *  [Repaso R](pca4.html)
-    *  [Repaso Bioconductor](pca4.html)
+    *  [Repaso R](R.html)
+    *  [Repaso Bioconductor](bioc.html)
     

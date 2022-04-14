@@ -1,0 +1,65 @@
+---
+title: "Instalar paquetes Bioconductor"
+subtitle: "BioScienceApps"
+author: "Estefania Mancini"
+date: "18-21 de Abril 2022"
+output:
+    html_document:
+    toc: true # table of content true
+    toc_depth: 3  # upto three depths of headings (specified by #, ## and ###)
+    number_sections: true  ## if you want number sections at each table header
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Utilizaremos los siguientes  paquetes
+
+* [edgeR](http://bioconductor.org/packages/release/bioc/html/edgeR.html)
+
+* [DESeq2](http://bioconductor.org/packages/release/bioc/html/DESeq2.html)
+
+* [RNAseqData.HNRNPC.bam.chr14](http://bioconductor.org/packages/release/data/experiment/html/RNAseqData.HNRNPC.bam.chr14.html)
+
+* [GenomicRanges](http://bioconductor.org/packages/release/bioc/html/GenomicRanges.html)
+
+* [GenomicFeatures](http://bioconductor.org/packages/release/bioc/html/GenomicFeatures.html)
+
+* [GenomicAlignments](http://bioconductor.org/packages/release/bioc/html/GenomicAlignments.html)
+
+* [ggplot2](https://cran.r-project.org/)
+
+* [ggrepel](https://cran.r-project.org/)
+
+* [pheatmap](https://cran.r-project.org/)
+
+* [reshape2](https://cran.r-project.org/)
+
+
+## CPAN:
+
+```{r installR, echo=TRUE, eval=FALSE}
+install.packages("pheatmap")
+install.packages("ggplot2")
+install.packages("ggrepel")
+install.packages("reshape2")
+```
+
+
+## Bioconductor
+
+```{r installbioc, echo=TRUE, eval=FALSE}
+
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("RNAseqData.HNRNPC.bam.chr14")
+BiocManager::install("GenomicRanges")
+BiocManager::install("GenomicFeatures")
+BiocManager::install("GenomicAlignments")
+BiocManager::install("edgeR")
+BiocManager::install("DESeq2")
+```
+
