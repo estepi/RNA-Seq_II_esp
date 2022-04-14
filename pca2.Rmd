@@ -1,5 +1,5 @@
 ---
-title: "Análisis de datos de RNA-Seq I"
+title: "Análisis de datos de RNA-Seq I: 2 condiciones"
 subtitle: "BioScienceApps"
 author: "Estefania Mancini"
 date: "18-21 de abril de 2022"
@@ -29,16 +29,20 @@ Tenemos 1 tabla cada archivo XXX
 
 # Detección de genes diferencialmente expresados
 
-Una vez que tenemos las tablas de conteos hay que realizar el análisis de los datos para buscar aquellos genes que se hayan comportado diferente en las condicones en estudio. En este caso, analizaremos datos de un trabajo cuyo objetivo es analizar el impacto sobre la remodelación del transcriptoma ante el silenciamiento de una proteı́na del spliceosoma (hnRNPC).
+Una vez que tenemos las tablas de conteos hay que realizar el análisis de los datos para buscar aquellos genes que se hayan comportado diferente en las condicones en estudio. 
 
-El diseño experimental es una comparación entre **múltiples  condiciones**, con **XX réplicas** biológicas cada una.
+En este caso, analizaremos datos de un trabajo cuyo objetivo es analizar el impacto sobre la remodelación del transcriptoma durante 2 momentos de la neurodiferenciacición.
+
+La sucesión de estadíos es: NSC-->ENB-->LNB
+
+El diseño experimental es una comparación entre **3 estados o  condiciones **, con **3 réplicas** biológicas cada una.
 
 Antes de empezar armamos un archivo *targets* o *mapping file* donde se detalla cada muestra a qué condición corresponde 
 
-Empezaremos con una compracion entre 2 condiciones: 
+Empezaremos con una compracion entre 2 condiciones: NSC vs ENB
 
 ```{r targets, echo=TRUE, eval=TRUE}
-targets <- read.table("~/Documents/BioApps/data/HNRPC/targets.txt", header = T, row.names = 1)
+targets <- read.table("~/Documents/BioApps/data/mouse/targets.txt", header = T, row.names = 1)
 ```
 
 Ahora cargaremos la tabla de counts a nivel gen. Especificamos algunas opciones tales como cuál es la colunma que le da nombre a las filas _(row.names = 1)_, así como si los nombres de las columnas. Para saber sobre estas especificaciones puede consultar el help de *read.table*.
@@ -46,7 +50,7 @@ Ahora cargaremos la tabla de counts a nivel gen. Especificamos algunas opciones 
 ```{r readt, echo=TRUE, eval=TRUE}
 counts <-
     read.table(
-        "~/Documents/BioApps/data/HNRPC/genes.hits.txt",
+        "~/Documents/BioApps/data/mouse/STAR/geneCountsMmu.tab",
         row.names = 1,
         header = T,
         stringsAsFactors = F
@@ -72,44 +76,46 @@ library(edgeR)
 Para explorar un poco la tabla de datos, miremos algunas medidas resumen y la distribucion de los counts:
 
 ```{r summary, echo=TRUE, eval=TRUE}
+class(counts)
+dim(counts)
+head(counts)
 summary(counts)
-plot(density(rowMeans(counts)))
 ```
 
-Podemos refinar un poco el gráfico:
+Trabaremos con la comparación entra las condiciones NSC-->ENB.
+
+El primer paso entonces es subsetear la tabla y la podemos reordenar ya de acuerdo a las condiciones a comparar (por practicidad):
+
+```{r dataset1, echo=TRUE, eval=TRUE}
+dataset1<-counts[,c(7,8,9,1,2,3)]
+head(dataset1)
+```
+
+
+Podemos explorar usando boxplots como es la distribución de los counts en las diferentes muestras:
 
 ```{r summaryGgplot, echo=TRUE, eval=TRUE}
 library(ggplot2)
-dreads<-density(rowMeans(counts))
-rmeans<-data.frame(rMeans=rowMeans(counts))
-rmeans$color<-rep("gene", nrow(rmeans))
+df<- melt(dataset1)
 
- ggplot(rmeans, aes(x=rMeans, fill=color)) + 
- geom_density()+
-  theme_classic()+
-  labs(title="Read density")
-```
- 
-También podemos explorar usando boxplots de cada una de las muestras para ir conociendo nuestros datos:
-
-```{r boxplots, echo=TRUE, eval=FALSE}
-par(mfrow=c(2,4))
-apply(counts, 2, boxplot)
-```
-
-
-Con un poco más de calidad:
-
-```{r boxplotsGG, echo=TRUE, eval=TRUE}
-library(reshape2) 
- df<- melt(counts)
 ggplot(df, aes(x=variable, y=value, fill=variable)) + 
   geom_boxplot()+
   theme_classic()+
   labs(title="Read distribution")
 ```
+ 
+* Hay genes que tienen una cantidad de lecturas extraordinaria. ¿Cuáles son?
 
 
+Podemos regraficar excluyendo aquellos genes con > 150000 lecturas por ejemplo:
+
+```{r boxplotsGGylim, echo=TRUE, eval=TRUE}
+ggplot(df, aes(x=variable, y=value, fill=variable)) + 
+  geom_boxplot()+
+  theme_classic()+
+  labs(title="Read distribution")+ 
+  ylim(0, 150000)
+```
 * ¿Cómo son nuestros datos?
 
 # Filtros

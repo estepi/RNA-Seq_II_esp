@@ -21,3 +21,18 @@ knitr::opts_chunk$set(echo = FALSE)
 
 
 ## Comparamos 2 condiciones simultaneamente
+
+Las muestras que nos interesan del estudio (https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE94991) son las:
+
+GSM2493847     NSC_RNAseq_1
+GSM2493848     NSC_RNAseq_2
+GSM2493849     NSC_RNAseq_3
+GSM2493855     ENB_RNAseq_1
+GSM2493856     ENB_RNAseq_2
+GSM2493857     ENB_RNAseq_3
+GSM2493860     LNB_RNAseq_1
+GSM2493861     LNB_RNAseq_2
+GSM2493862     LNB_RNAseq_3
+
+El orden temporal de las muestras es NSC-->ENB-->LNB
+

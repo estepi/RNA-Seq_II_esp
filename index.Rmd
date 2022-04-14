@@ -38,3 +38,9 @@ Se propone realizar diferentes tipos de a experimentos / datos, comparacion de a
 * Dia 4 
     * Teoria: splicing, reconstruccion de isoformas. Cuantificaion polyA, MOFA
     * Practica [ASpli](pca4.html)
+    
+    
+* Bonus track
+    *  [Repaso R](pca4.html)
+    *  [Repaso Bioconductor](pca4.html)
+    
