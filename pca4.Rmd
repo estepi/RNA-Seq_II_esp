@@ -1,0 +1,23 @@
+---
+title: "Análisis de datos de RNA-Seq - Splicing Alternativo"
+subtitle: "BioScienceApps"
+author: "Estefania Mancini"
+date: "18-21 de abril de 2022"
+output:
+    html_document:
+    toc: true # table of content true
+    toc_depth: 3  # upto three depths of headings (specified by #, ## and ###)
+    toc_float: true
+    code_folding: hide
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 6
+    number_sections: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## ASpli

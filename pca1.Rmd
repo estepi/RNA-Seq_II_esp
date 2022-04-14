@@ -1,5 +1,6 @@
 ---
 title: "Control de calidad de archivos fastq"
+subtitle: "BioScienceApps"
 author: "Estefania Mancini"
 date: "18 de abril de 2022"
 output:
@@ -16,17 +17,18 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Obtención de archivos fastq 
 
-En primer lugar elegimos el directorio de trabajo y ponemos allı́ los archivos FASTQ que descargamos, por ejemplo de SRA.
+En primer lugar elegimos el directorio de trabajo y ponemos allı́ los archivos FASTQ que descaremos, por ejemplo de SRA
 
 Para ello los vamos a descargar desde SRA usando la herramienta fastq-dump
 
-{\url{https://github.com/ncbi/sra-tools/}
+* [sra-tools](https://github.com/ncbi/sra-tools/)
 
-\url{https://github.com/ncbi/sra-tools/wiki/01.-Downloading-SRA-Toolkit/}
+* [Downloading-SRA-Toolkit](https://github.com/ncbi/sra-tools/wiki/01.-Downloading-SRA-Toolkit/)
 
-\url{https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit}
+* [Installing-SRA-Toolkit](https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit)
 
 * Ejemplo para linux:
+
 ```{bash fastq, echo=TRUE, eval=FALSE}
 wget --output-document sratoolkit.tar.gz http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-ubuntu64.tar.gz
 ```
@@ -39,9 +41,9 @@ Luego para comprobar que funciona correctamente:
 
 Repetimos el comando para obtener todos los archivos que deseamos, ejemplo para nuestro experimento:
 
-
-\center
-\includegraphics[scale=0.15]{selector.png}
+```{r selector, echo=FALSE,  out.width = '80%'}
+knitr::include_graphics("selector.png")
+```
 
 # QC 
 
@@ -60,16 +62,24 @@ El primer paso que todo bioinformático que trabaja con datos en NGS y recibe ar
 * Se pueden agregar múltiples reportes fácilmente con la herramienta [MULTIQC](https://multiqc.info/)
 Ejemplo: _(ver ejemplo en clase teórica)_
 
+# Bioconductor 
 
 Cargamos el paquete al entorno de trabajo. Vamos a analizar la calidad del archivo fastq con una función especial para ello 
 \texttt{qa}
 
 
-```{r ShortRead, echo=TRUE, eval=TRUE, message=FALSE}
+```{r ShortReadFake, echo=TRUE, eval=TRUE, message=FALSE}
 library(ShortRead)
 setwd("~/Documents/BioApps/data/QC")
 countFastq("SRR5264037_1.fastq.gz")
 fqQC <-qa("SRR5264037_1.fastq.gz")
+```
+
+```{r ShortRead, echo=FALSE, eval=FALSE, message=FALSE,results=FALSE}
+library(ShortRead)
+setwd("~/Documents/BioApps/data/QC")
+countFastq("R1.fq.gz")
+fqQC <-qa("R1.fq.gz")
 ```
 
 La lectura del archivo se guardará en el objeto \textbf{fqQC}. 
@@ -84,6 +94,8 @@ report(fqQC, type="html", dest="SRR5264037_QC")
 Abrir el reporte en un navegador web. 
 
 _TIP: Debajo de cada gráfico se especifican las funciones con las que se han realizado_
+
+##  Paso a paso: 
 
 Podemos hacerlos uno por uno:
 
@@ -142,6 +154,6 @@ En la [vignette](http://bioconductor.org/packages/release/bioc/vignettes/ShortRe
 
 ## Repaso
 
-Repetir el ejercicio con el **SRR5264037_2.fastq.gz** y completar el [cuestionario](https://forms.gle/XbFiUAZMkVPWZsMw5)
+Repetir el ejercicio con el **SRR5264037_2.fastq.gz** y completar el [cuestionario](https://forms.gle/k6JyYxuGm87SWHcz6)
     
 
