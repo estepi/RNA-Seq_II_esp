@@ -1,7 +1,8 @@
 ---
 title: "RNA-Seq II"
+subtitle: "BioScienceApp"
 author: "Estefania Mancini"
-date: "March 2022"
+date: "18-21 Abril 2022"
 output:
     html_document:
     toc: true # table of content true
