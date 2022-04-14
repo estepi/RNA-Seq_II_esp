@@ -14,21 +14,38 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Control de Calidad de Archivos FASTQ
+## Obtención de archivos fastq 
 
-Utilizaremos el paquete de R/Bioconductor [ShortRead](http://bioconductor.org/packages/release/bioc/html/ShortRead.html)
+En primer lugar elegimos el directorio de trabajo y ponemos allı́ los archivos FASTQ que descargamos, por ejemplo de SRA.
 
-Si no está instalado, hay que hacerlo:
+Para ello los vamos a descargar desde SRA usando la herramienta fastq-dump
 
+{\url{https://github.com/ncbi/sra-tools/}
 
-```{r InstallShortRead, echo=TRUE, eval=FALSE}
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+\url{https://github.com/ncbi/sra-tools/wiki/01.-Downloading-SRA-Toolkit/}
 
-BiocManager::install("ShortRead")
+\url{https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit}
+
+* Ejemplo para linux:
+```{bash fastq, echo=TRUE, eval=FALSE}
+wget --output-document sratoolkit.tar.gz http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-ubuntu64.tar.gz
 ```
 
-El primer paso que todo bioinformático que trabaja en NGS y recibe archivos fastq del servicio de secuenciación o de un repositorio público, es analizar los archivos para verificar la calidad de los mismos antes de comenzar cualquier análisis. De esta manera podemos identificar rápidamente: 
+Luego para comprobar que funciona correctamente:
+
+```{bash fastqdump, echo=TRUE, eval=FALSE}
+  fastq-dump --split-e  SRR5264037
+```
+
+Repetimos el comando para obtener todos los archivos que deseamos, ejemplo para nuestro experimento:
+
+
+\center
+\includegraphics[scale=0.15]{selector.png}
+
+# QC 
+
+El primer paso que todo bioinformático que trabaja con datos en NGS y recibe archivos fastq del servicio de secuenciación o de un repositorio público, es analizar los archivos para verificar la calidad de los mismos antes de comenzar cualquier análisis. De esta manera podemos identificar rápidamente: 
 
 * el número de lecturas de cada biblioteca
 
@@ -36,21 +53,13 @@ El primer paso que todo bioinformático que trabaja en NGS y recibe archivos fas
 
 * la existencia de contaminantes, el tipo de biblioteca que se ha secuenciado (genómico, transcriptómica, amplicones) la calidad promedio de la biblioteca secuenciada.
 
+# FASTQC + MultiQC
 
-En primer lugar elegimos el directorio de trabajo y ponemos allı́ los archivos FASTQ que descargamos de SRA.
+* Una de las herramientas más utilizadas es   [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/). En la sección de ayuda se puede profundizar sobre las conclusiones. 
 
-Para ello los vamos a descargar desde SRA usando la herramienta fastq dump
+* Se pueden agregar múltiples reportes fácilmente con la herramienta [MULTIQC](https://multiqc.info/)
+Ejemplo: _(ver ejemplo en clase teórica)_
 
-\url{https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit}
-```{bash fastq, echo=TRUE, eval=FALSE}
-wget --output-document sratoolkit.tar.gz http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-ubuntu64.tar.gz
-```
-
-Luego:
-
-```{bash fastqdump, echo=TRUE, eval=FALSE}
-  fastq-dump --split-e  SRR5264037
-```
 
 Cargamos el paquete al entorno de trabajo. Vamos a analizar la calidad del archivo fastq con una función especial para ello 
 \texttt{qa}
@@ -58,9 +67,9 @@ Cargamos el paquete al entorno de trabajo. Vamos a analizar la calidad del archi
 
 ```{r ShortRead, echo=TRUE, eval=TRUE, message=FALSE}
 library(ShortRead)
-setwd("~/Documents/UNR/clases/data/QC/")
-countFastq("R1.fq.gz")
-fqQC <-qa("R1.fq.gz")
+setwd("~/Documents/BioApps/data/QC")
+countFastq("SRR5264037_1.fastq.gz")
+fqQC <-qa("SRR5264037_1.fastq.gz")
 ```
 
 La lectura del archivo se guardará en el objeto \textbf{fqQC}. 
@@ -69,7 +78,7 @@ El objeto que se generó ya contiene las métricas de calidad. Podemos imprimirl
 _TIP: Verificar que el directorio donde se exporta la salida._
 
 ```{r report, echo=TRUE, eval=TRUE}
-report(fqQC, type="html", dest="fastqQAreport-wt-short")
+report(fqQC, type="html", dest="SRR5264037_QC")
 ```
 
 Abrir el reporte en un navegador web. 
@@ -127,16 +136,12 @@ ShortRead:::.plotCycleQuality(perCycle$quality)
 
 * ¿Qué podemos decir del archivo fastq que se ha analizado? ¿Qué información relevante nos otorgan este tipo de análisis?
 
-## Otras herramientas
-
-Una de las herramientas más utilizadas es   [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/). En la sección de ayuda se puede profundizar sobre las conclusiones. Se puede agregar fácilmente con la herramienta [MULTIQC](https://multiqc.info/) _(ver ejemplo en clase teórica)_
-
 ## Vignette
 En la [vignette](http://bioconductor.org/packages/release/bioc/vignettes/ShortRead/inst/doc/Overview.pdf) hay más funcionalidades para explorar.
 
 
 ## Repaso
 
-Repetir el ejercicio con el **R2.fq.gz** y completar el [cuestionario](https://forms.gle/XbFiUAZMkVPWZsMw5)
+Repetir el ejercicio con el **SRR5264037_2.fastq.gz** y completar el [cuestionario](https://forms.gle/XbFiUAZMkVPWZsMw5)
     
 
