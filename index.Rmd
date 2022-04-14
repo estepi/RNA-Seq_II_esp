@@ -16,12 +16,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Objetivos
 El objetivo de este curso es profundizar en  los conocimientos  para el análisis de datos de RNA-Seq.  
-Se propone realizar diferentes tipos de a experimentos / datos, comparacion de a pares y experimentos mas complejos, factoriales, time course y splicing alternativo con 2 niveles de cuantificacion
+Se propone realizar diferentes tipos de a experimentos / datos, comparacion de a pares y experimentos mas complejos, factoriales, time course y splicing alternativo 
 
 # Contenidos
 
 * Dia 1 
-    * Teoría:
+    * Teoría: Introducción a RNA-Seq
     * Práctica [QC](pca1.html)
 
 * Dia 2 
@@ -29,9 +29,9 @@ Se propone realizar diferentes tipos de a experimentos / datos, comparacion de a
 
 * Dia 3
     * Teoría: diseños experimentales más complejos: timecourse, batch effect, factoriales
-    * Práctica [Análisis e interpretación de datos de RNA-Seq usando R/Bioconductor I](pca3.html)
+    * Práctica [Análisis e interpretación de datos de RNA-Seq usando R/Bioconductor II](pca3.html)
     
 
 * Dia 4 
-    * Teoria: Splicing, reconstruccion de isoformas. Cuantificaion polyA, MOFA
+    * Teoria: splicing, reconstruccion de isoformas. Cuantificaion polyA, MOFA
     * Practica [ASpli](dia4.html)
