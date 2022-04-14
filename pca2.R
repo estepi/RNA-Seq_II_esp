@@ -4,8 +4,6 @@ library(edgeR)
 
 # NSC-->ENB-->LNB
 ## ----targets, echo=TRUE, eval=TRUE----------------------------------
-targets <- read.table("~/Documents/BioApps/data/mouse/targets.txt", header = T, row.names = 1)
-
 counts <-
     read.table(
         "~/Documents/BioApps/data/mouse/STAR/geneCountsMmu.tab",
@@ -33,87 +31,93 @@ ggplot(df, aes(x=variable, y=value, fill=variable)) +
   labs(title="Read distribution")
 
 
-ggplot(df, aes(x=variable, y=value, fill=variable)) + 
+highlyExpress<-rowMeans(dataset1)>50000
+dataset1[which(highlyExpress),]
+
+
+# quienes son los outliers ?ggplot(df, aes(x=variable, y=value, fill=variable)) + 
   geom_boxplot()+
   theme_classic()+
   labs(title="Read distribution")+ 
-  ylim(0, 150000)
-
-# quienes son los outliers ?
-# podriamos pedir reads > 50?
-# o replotear con un eje Y diferente
+  ylim(0, 100000)
 
 
-## ----filtros, echo=TRUE, eval=TRUE----------------------------------
-cpms<-cpm(counts[,1:ncol(counts)])
+cpms<-cpm(dataset1)
 
+dim(dataset1)
 
-## ----keep, echo=TRUE, eval=TRUE-------------------------------------
-keep<-rowSums(cpms>1)>4
+keep<-rowSums(cpms>1)>3
 
-
-## ----keep2, echo=TRUE, eval=TRUE------------------------------------
-dim(counts)
-countsf<-counts[keep,]
-dim(countsf)
-
-
-## ----keep3, echo=TRUE, eval=TRUE------------------------------------
+dim(dataset1)
+countsf<-dataset1[keep,]
+dim(countsf)# 35%
 summary(countsf)
 
+#####################
+#primero hay que armar el objeto:
+# Podemos replotear la dist:
+dff<- melt(countsf)
 
-## ----DGEList1, echo=TRUE, eval=TRUE---------------------------------
-d<-DGEList(counts=countsf, group=targets$condition)
-str(d)
+ggplot(dff, aes(x=variable, y=value, fill=variable)) + 
+  geom_boxplot()+
+  theme_classic()+
+  labs(title="Read distribution")
 
-
-## ----calcNormF, echo=TRUE, eval=TRUE--------------------------------
-d<-calcNormFactors(d)
-d
-
-
-## ----names, echo=TRUE, eval=TRUE------------------------------------
-shortNames<-paste(targets$condition, rep(1:4, 2), sep=".")
-targets<-cbind(targets,shortNames)
-
-plotMDS(d, labels=targets$shortNames,
-col=c("darkgreen","blue")[factor(targets$condition)])
+highlyExpressF<-rowMeans(countsf)>50000
+countsf[which(highlyExpressF),]
 
 
+condition<-factor(rep(c("NSC","ENB"), each=3))
+levels(condition)
 
-## ----names2, echo=TRUE, eval=TRUE-----------------------------------
-d<-estimateCommonDisp(d, verbose=TRUE)
+# The levels of a factor are re-ordered so that 
+# the level specified by ref is first and the others are moved down. 
+# This is useful for contr.treatment contrasts 
+# which take the first level as the reference.
+
+condition<-factor(rep(c("NSC","ENB"), each=3), 
+                  levels = c("NSC","ENB"))
+levels(condition)
+
+y <- DGEList(counts=dataset1, group=condition)
+keep <- filterByExpr(y)
+y <- y[keep, , keep.lib.sizes=FALSE]
+dim(y)
+condition
+# ojo porque se factoriza por orden alfabetico !
+# 
+design <- model.matrix(~ condition)
+design
+
+y <- calcNormFactors(y)
+y
+
+plotMDS(y, labels=condition,
+col=c("darkgreen","blue")[factor(condition)])
 
 
-## ----disp, echo=TRUE, eval=TRUE-------------------------------------
-d<-estimateTagwiseDisp(d)
-d
+y <- estimateDisp(y, verbose=TRUE)
+y <- estimateCommonDisp(y,verbose = T)
+y <- estimateTagwiseDisp(y, verbose = T)
 
+plotBCV(y)
 
-## ----plotBCV, echo=TRUE, eval=TRUE----------------------------------
-plotBCV(d)
-
-
-## ----exactTest, echo=TRUE, eval=TRUE--------------------------------
-de<-exactTest(d, pair=c("CT","KD"))
+de<-exactTest(y, pair = c("NSC","ENB"))
 str(de)
-
-
+head(de)
 
 ## ----toptagsDefault, echo=TRUE, eval=TRUE---------------------------
 tt <- topTags(de)
 tt
 
-
 ## ----toptags, echo=TRUE, eval=TRUE----------------------------------
 tt <- topTags(de, n = nrow(de))
-
 
 ## ----toptags2, echo=TRUE, eval=TRUE---------------------------------
 table(tt$table$FDR <0.05)
 
 df <- data.frame(
-  exp="KD",
+  exp="ENB",
   fdr=tt$table$FDR)
 # Change colors
 ggplot(df, aes(x=fdr)) + 
@@ -123,13 +127,11 @@ theme_classic()+
 labs(title="FDR distribution")
 
 
-
-## ----deg, echo=TRUE, eval=TRUE--------------------------------------
+# ----deg, echo=TRUE, eval=TRUE--------------------------------------
 deg<-rownames(tt)[tt$table$FDR <.05 &   
                   abs(tt$table$logFC )>1 ]
-plotSmear(d, de.tags=deg)
+plotSmear(y, de.tags=deg)
 abline(h=c(-1,0,1))
-
 
 
 ## ----degGGPLOT, echo=TRUE, eval=TRUE, warning=FALSE-----------------
@@ -139,18 +141,16 @@ tt10 <- topTags(de, n=20)
 y$gene_color <- rep("grey", nrow(y))
 y$gene_color[y$logFC>1] <-"red"   
 y$gene_color[y$logFC< (-1)]<-"green"
-
 y$imp_genes<-NA
 
 ii <- match(rownames(tt10), rownames(y))
 y$imp_genes[ii]<-rownames(y)[ii]
 
 library(ggrepel)
-
 ggplot(y, aes(x=logFC, y=-log10(FDR))) +
   geom_point(aes(col=gene_color), cex= 1.2) +
   scale_color_manual(values=c("dark green","dark grey", "dark red")) +
-  labs(title="DEG", x="log2(FC)", y="-log10(FDR)") +
+  labs(title="DEG ENB", x="log2(FC)", y="-log10(FDR)") +
   geom_vline(xintercept= c(-1, 1), colour= 'black', linetype= 'dashed') +
   geom_hline(yintercept= 1.30103, colour= 'black', linetype= 'dashed') +
   theme_minimal()+
@@ -165,8 +165,9 @@ ggplot(y, aes(x=logFC, y=-log10(FDR))) +
                   hjust =1,
                   max.overlaps = 50)
 
-
 ## ----tt2, echo=TRUE, eval=FALSE-------------------------------------
-## write.table() o write.csv():
-## write.csv(tt$table, file="red_edgeR.csv")
+ write.csv(tt$table, file="ENB_edgeR.csv")
 
+# symbol retrieving
+
+# gene ontology

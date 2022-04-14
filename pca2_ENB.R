@@ -1,7 +1,7 @@
 library(ggplot2)
 library(reshape2) 
 library(edgeR)
-
+library(ggrepel)
 # NSC-->ENB-->LNB
 ## ----targets, echo=TRUE, eval=TRUE----------------------------------
 counts <-
@@ -146,7 +146,7 @@ forPlot$imp_genes<-NA
 ii <- match(rownames(tt10), rownames(forPlot))
 forPlot$imp_genes[ii]<-rownames(forPlot)[ii]
 
-library(ggrepel)
+
 ggplot(forPlot, aes(x=logFC, y=-log10(FDR))) +
   geom_point(aes(col=gene_color), cex= 1.2) +
   scale_color_manual(values=c("dark green","dark grey", "dark red")) +

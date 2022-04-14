@@ -237,6 +237,11 @@ col=c("darkgreen","blue")[factor(condition)])
 
 * Esta función calculará las distancias euclı́deas entre cada para de muestras y representará en un gráfico de 2 dimensiones cómo es la relación entre las muestras. * Podemos observar si en el experimento la separación entre condiciones es suficientemente robusta y cómo es la relación entre las réplicas. 
 
+**AGREGAR::::**
+* Se puede hacer con las funciones clásicas de R como prcomp etc
+
+VER XX
+
 ## Dispersión
 
 Primero estimaremos la dispersión común a todas las bibliotecas:
@@ -299,13 +304,12 @@ table(tt$table$FDR <0.05)
 df <- data.frame(
   exp="ENB",
   fdr=tt$table$FDR)
-
+# Change colors
 ggplot(df, aes(x=fdr)) + 
 geom_histogram(color="black", fill="white", binwidth=0.01)+
 geom_vline(xintercept=0.05, linetype="dashed")+
 theme_classic()+
 labs(title="FDR distribution")
-
 ```
 
 ## MA plot
@@ -317,7 +321,6 @@ deg<-rownames(tt)[tt$table$FDR <.05 &
                   abs(tt$table$logFC )>1 ]
 plotSmear(y, de.tags=deg)
 abline(h=c(-1,0,1))
-
 ```
 
 * En nuestro caso observamos el cociente entre cada uno de los genes y la media de expresion de cada gen (en cpm). 
@@ -329,17 +332,17 @@ abline(h=c(-1,0,1))
 ## VULCANO PLOT (el último esfuerzo)
 
 ```{r degGGPLOT, echo=TRUE, eval=TRUE, warning=FALSE}
-
 forPlot <-tt$table
 tt10 <- topTags(de, n=10)
 
 forPlot$gene_color <- rep("grey", nrow(y))
-forPlot$gene_color[y$logFC>1] <-"red"   
-forPlot$gene_color[y$logFC< (-1)]<-"green"
+forPlot$gene_color[forPlot$logFC>1] <-"red"   
+forPlot$gene_color[forPlot$logFC< (-1)]<-"green"
 forPlot$imp_genes<-NA
 
 ii <- match(rownames(tt10), rownames(forPlot))
 forPlot$imp_genes[ii]<-rownames(forPlot)[ii]
+
 
 ggplot(forPlot, aes(x=logFC, y=-log10(FDR))) +
   geom_point(aes(col=gene_color), cex= 1.2) +
@@ -358,7 +361,6 @@ ggplot(forPlot, aes(x=logFC, y=-log10(FDR))) +
                   box.padding = unit(0.25, "lines"),
                   hjust =1,
                   max.overlaps = 50)
-
 ```
 
 Exportamos los resultados en formato tabular, para futuros análisis:
