@@ -28,7 +28,8 @@ Se propone realizar diferentes tipos de a experimentos / datos, comparacion de a
         - [QC](pca1.html)
 
 * Dia 2 
-    * [Análisis e interpretación de datos de RNA-Seq usando R/Bioconductor I](pca2.html) 
+    * [Comparación 1](pca2a.html) 
+    * [Comparación 2](pca2b.html) 
 
 * Dia 3
     * Teoría: diseños experimentales más complejos: timecourse, batch effect, factoriales
