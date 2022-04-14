@@ -22,7 +22,9 @@ Se propone realizar diferentes tipos de a experimentos / datos, comparacion de a
 
 * Dia 1 
     * Teoría: Introducción a RNA-Seq
-    * Práctica [QC](pca1.html)
+    * Práctica 
+        - [AWS](aws.html)
+        - [QC](pca1.html)
 
 * Dia 2 
     * [Análisis e interpretación de datos de RNA-Seq usando R/Bioconductor I](pca2.html) 
