@@ -28,17 +28,17 @@ Se propone realizar diferentes tipos de a experimentos / datos, comparacion de a
         - [QC](pca1.html)
 
 * Dia 2 
-    * [Comparación 1](pca2a.html) 
-    * [Comparación 2](pca2b.html) 
+    * [Comparación 1 NSC -> ENB](pca2a.html) 
+    * [Comparación 2 NSC -> LNB](pca2b.html) 
 
 * Dia 3
     * Teoría: diseños experimentales más complejos: timecourse, batch effect, factoriales
-    * Práctica [Análisis e interpretación de datos de RNA-Seq usando R/Bioconductor II](pca3.html)
+    * Práctica [Comparación NSC -> ENB -> LNB  ](pca3.html)
     
 
 * Dia 4 
     * Teoria: splicing, reconstruccion de isoformas. Cuantificaion polyA, MOFA
-    * Practica [ASpli](pca4.html)
+    * Practica [ASpli NSC -> ENB](pca4.html)
     
     
 * Bonus track
