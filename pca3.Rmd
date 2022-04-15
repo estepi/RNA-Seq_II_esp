@@ -20,19 +20,215 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
-## Comparamos 2 condiciones simultaneamente
+## Comparación de 2 o más condiciones 
 
-Las muestras que nos interesan del estudio (https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE94991) son las:
+El caso más sencillo se nos presentan cuando queremos comparar varias condiciones contra 1 grupo control.
+En ese caso, por ejemplo tendriamos un caso donde hay un orden temporal de las muestras: NSC-->ENB-->LNB
 
-GSM2493847     NSC_RNAseq_1
-GSM2493848     NSC_RNAseq_2
-GSM2493849     NSC_RNAseq_3
-GSM2493855     ENB_RNAseq_1
-GSM2493856     ENB_RNAseq_2
-GSM2493857     ENB_RNAseq_3
-GSM2493860     LNB_RNAseq_1
-GSM2493861     LNB_RNAseq_2
-GSM2493862     LNB_RNAseq_3
+La forma de análisis clásico sería comparar de a pares (como en la práctica anterior)
 
-El orden temporal de las muestras es NSC-->ENB-->LNB
+Para eso, cargamos los datos y estimaremos los parámetros de dispersión teniendo en cuenta todas las condiciones ahora
 
+Cargamos todas los paquetes que usaremos:
+
+```{r libraries, include=FALSE, eval=TRUE}
+library(edgeR)
+library(pheatmap)
+library(ggplot2)
+library(reshape2) 
+```
+
+
+## Leemos la tabla de conteos y exploramos los datos:
+
+```{r readt, echo=TRUE, eval=TRUE}
+counts <-
+    read.table(
+        "~/Documents/BioApps/data/mouse/STAR/geneCountsMmu.tab",
+        row.names = 1,
+        header = T,
+        stringsAsFactors = F
+    )
+```
+
+
+```{r summary, echo=TRUE, eval=TRUE}
+class(counts)
+dim(counts)
+summary(counts)
+
+```
+```{r head, echo=TRUE, eval=TRUE}
+head(counts)
+```
+
+Por cuestiones de practicidad los reordenamos de acuerdo a la comparación:
+
+
+```{r order, echo=TRUE, eval=TRUE}
+counts<-counts[, c(7,8,9,1,2,3,4,5,6)]
+head(counts)
+```
+
+* Armamos el objeto para hacer los boxplot por condición:
+
+```{r summaryGgplot2, echo=TRUE, eval=TRUE}
+df<- melt(counts)
+df$condition<-df$variable
+df$condition<-gsub("_1", "",df$condition)
+df$condition<-gsub("_2", "",df$condition)
+df$condition<-gsub("_3", "",df$condition)
+df$condition <- factor(df$condition, 
+                       levels = c("NSC","ENB", "LNB"))
+
+ggplot(df, aes(x=condition, y=value, fill=condition)) + 
+  geom_boxplot()+
+  theme_classic()+
+  labs(title="Read distribution")
+```
+ 
+* Definimos las condiciones:
+
+```{r condition, echo=TRUE, eval=TRUE}
+condition<-factor(rep(c("NSC","ENB", "LNB"), each=3), 
+                  levels = c("NSC","ENB", "LNB"))
+levels(condition)
+condition
+```
+
+* Armamos el objeto para trabajar con edgeR:
+
+```{r DGEList, echo=TRUE, eval=TRUE}
+y <- DGEList(counts=counts, group=condition)
+keep <- filterByExpr(y)
+summary(keep)
+y <- y[keep, , keep.lib.sizes=FALSE]
+y<-calcNormFactors(y)
+```
+
+* Estimamos dispersion
+Es importante notar que aca se consideran todas las muestras juntas
+_¿Hay alguna diferencia en los valores?_
+
+* La matriz de diseño
+
+Aquí tenemos uno de los pasos más oscuros en el workflow, armar la matriz de diseño. Aunque la notación es un poco inentendible, simplemente asiga 0 y 1 a las diferentes condiciones.
+Por defecto toma la primera condicion como "control", todo se comparará a ese factor. 
+
+**En este punto es donde se presenta la estrategia para analizar diferentes diseños experimentales**
+
+```{r modelmatrix, echo=TRUE, eval=TRUE}
+design <- model.matrix(~condition)
+rownames(design) <- colnames(y)
+design
+```
+
+* Ahora sí estimamos la dispersión usando la matriz definida:
+
+
+```{r disp, echo=TRUE, eval=TRUE}
+y <- estimateDisp(y, design, robust = T, verbose=TRUE)
+y$common.dispersion
+sqrt(y$common.dispersion)
+#coeficiente de variación biológica
+plotBCV(y)
+```
+
+_The square root of the common dispersion gives the coefficient of variation of biological variation.   Here the common dispersion is found to be XXX, so the coefficient of biological variation is around XX._
+
+
+* Ahora fiteamos el modelo:....Fit a negative binomial generalized log-linear model to the read counts for each gene. Conduct genewise statistical tests for a given coefficient or coefficient contrast.
+
+```{r glmFit, echo=TRUE, eval=TRUE}
+fit<-glmFit(y,design)
+```
+
+* Podemos testear de a pares (como en la práctica anterior):
+
+* Una vez que ajustamos el modelo, usando la matrix de diseño
+
+```{r design, echo=TRUE, eval=TRUE}
+design
+```
+
+
+podemos ir testeando, de a pares:
+
+```{r glmLRT2, echo=TRUE, eval=TRUE}
+lrtENB<-glmLRT(fit, coef=2)
+head(topTags(lrtENB))
+summary(decideTests(lrtENB))
+```
+
+```{r glmLRT3, echo=TRUE, eval=TRUE}
+lrtLNB<-glmLRT(fit, coef=3)
+head(topTags(lrtLNB))
+summary(decideTests(lrtLNB))
+```
+
+```{r glmLRT1, echo=TRUE, eval=TRUE}
+lrtCT<-glmLRT(fit, coef=1)
+head(topTags(lrtCT))
+```
+
+* O los 2 a la vez:
+
+```{r glmLRT0, echo=TRUE, eval=TRUE}
+lrt<-glmLRT(fit, coef=2:3); 
+head(topTags(lrt))
+summary(decideTests(lrt))
+```
+
+
+Ahora con estos resultados, podemos empezar a hacernos preguntas más interesantes:
+
+* Son los mismos genes afectados?
+Aca dependiendo de como definamos el TopTags, armaremos 2 vectores y podemos simplemente superponerlos
+
+
+## Clustering no supervisado
+
+Podemos seleccionar aquellos genes más afectos (de acuerdo por ejemplo al FDR) y de ahi graficarlos en forma de heatmap.
+Podemos agruparlos usando un clustering jerarquico y de ahi extraer diferentes grupos para analizarlos, por ejemplo, con Gene Ontology
+
+Tambien podrias ser por ejemplo, buscar motivos regulatorios comunes dentro de los grupos
+
+```{r topTags, echo=TRUE, eval=TRUE}
+tt<-topTags(lrt, n = nrow(lrt$fitted.values))
+head(tt)
+topis<-which(tt$table$FDR < 0.00001); length(topis)##856
+fc<-tt$table[topis,][,1:2]
+```
+
+
+* Hacemos el heatmap:
+
+```{r hmo, echo=TRUE, eval=TRUE}
+paletteLength <- 50
+myColor <- colorRampPalette(c("blue","white", "red"))(paletteLength)
+myBreaks <- c(seq(min(fc), 0, 
+              length.out=ceiling(paletteLength/2) + 1), 
+              seq(max(fc)/paletteLength, 
+              max(fc), 
+              length.out=floor(paletteLength/2)))
+```
+
+* Decido separar en 10 grupos:
+
+```{r hm1, echo=TRUE, eval=TRUE}
+heat<-pheatmap(fc, 
+         fontsize_col= 1,
+         fontsize_row=2, 
+         myColor, 
+         breaks=myBreaks, 
+         cluster_rows = TRUE,
+         cutree_rows=10        )
+```
+
+* Extraemos los genes por sus grupos:
+
+```{r hm2, echo=TRUE, eval=TRUE}
+hc <-heat$tree_row
+lbl <- cutree(hc, 10) 
+table(lbl)
+```

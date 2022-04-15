@@ -103,6 +103,7 @@ design
 ```{r DGELIST, echo=TRUE, eval=TRUE}
 y <- DGEList(counts=dataset2, group=condition)
 keep <- filterByExpr(y)
+summary(keep)
 y <- y[keep, , keep.lib.sizes=FALSE]
 dim(y)
 ```
@@ -127,10 +128,13 @@ col=c("darkgreen","blue")[factor(condition)])
 ## Dispersión
 
 ```{r names2, echo=TRUE, eval=TRUE}
-y <- estimateDisp(y, verbose=TRUE)
-y <- estimateCommonDisp(y,verbose = T)
-y <- estimateTagwiseDisp(y, verbose = T)
+y <- estimateDisp(y, verbose=TRUE, robust = TRUE)
+y$common.dispersion # 
+sqrt(y$common.dispersion)
+#coeficiente de variación biológica
 ```
+
+The square root of the common dispersion gives the coefficient of variation of biological variation.   Here the common dispersion is found to be XXX, so the coefficient of biological variation is around XX.
 
 ```{r plotBCV, echo=TRUE, eval=TRUE}
 plotBCV(y)

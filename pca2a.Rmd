@@ -141,6 +141,7 @@ Armamos un nuevo objeto y sobre el realizamos el filtro:
 
 ```{r keep, echo=TRUE, eval=TRUE}
 keep<-rowSums(cpms>1)>3
+summary(keep)
 ```
 
 ¿Qué tipo de vector es **keep**? ¿Para qué voy a utilizarlo? ¿Qué longitud tiene? ¿Cuántos valores son **TRUE**? 
@@ -193,6 +194,7 @@ design
 ```{r DGELIST, echo=TRUE, eval=TRUE}
 y <- DGEList(counts=dataset1, group=condition)
 keep <- filterByExpr(y)
+summary(keep)
 y <- y[keep, , keep.lib.sizes=FALSE]
 dim(y)
 ```
@@ -240,20 +242,18 @@ Primero estimaremos la dispersión común a todas las bibliotecas:
 
 ```{r names2, echo=TRUE, eval=TRUE}
 y <- estimateDisp(y, verbose=TRUE)
+y$common.dispersion
+#coeficiente de variación biológica
+sqrt(y$common.dispersion)
 ```
+
+The square root of the common dispersion gives the coefficient of variation of biological variation. 
+Here the common dispersion is found to be 0.159, so the coefficient of biological variation is around 0.4.
+The dispersion estimates can be viewed in a BCV plot:
 
 * En este caso la dispersión tiene 2 componentes: la técnica y la biológica. La biológica es la raı́z cuadrada de la dispersión.
 
 * Si analizamos cómo se comporta el Coeficiente de variación Biológica, vemos que es superior a la dispersión común a bajas concentraciones de lecturas. Esto hace que sea más apropiado, establecer una dispersión gen a gen y no utilizar la misma dispersión común para todos.
-
-
-```{r disp, echo=TRUE, eval=TRUE}
-y <- estimateCommonDisp(y,verbose = T)
-```
-
-```{r twdisp, echo=TRUE, eval=TRUE}
-y <- estimateTagwiseDisp(y, verbose = T)
-```
 
 Y analizar la nube de puntos gráficamente, con la función **plotBCV**
 
