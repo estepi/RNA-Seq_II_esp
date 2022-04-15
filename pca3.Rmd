@@ -136,6 +136,11 @@ plotBCV(y)
 
 _The square root of the common dispersion gives the coefficient of variation of biological variation.   Here the common dispersion is found to be XXX, so the coefficient of biological variation is around XX._
 
+* Inspeccionamos la relación entre las réplicas:
+
+```{r MDS, echo=TRUE, eval=TRUE}
+plotMDS(y)
+```
 
 * Ahora fiteamos el modelo:....Fit a negative binomial generalized log-linear model to the read counts for each gene. Conduct genewise statistical tests for a given coefficient or coefficient contrast.
 
