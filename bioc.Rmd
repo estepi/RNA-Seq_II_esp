@@ -28,6 +28,7 @@ knitr::opts_chunk$set(echo = FALSE)
 * [pheatmap](https://cran.r-project.org/)
 * [reshape2](https://cran.r-project.org/)
 * [ASpli](http://bioconductor.org/packages/release/bioc/html/ASpli.html)
+* [org.Mm.eg.db)](http://bioconductor.org/help/search/index.html?q=org.Mm.eg.db/)
 
 
 ## CPAN
@@ -52,6 +53,6 @@ BiocManager::install("GenomicRanges")
 BiocManager::install("GenomicFeatures")
 BiocManager::install("GenomicAlignments")
 BiocManager::install("edgeR")
-BiocManager::install("DESeq2")
+
 ```
 
