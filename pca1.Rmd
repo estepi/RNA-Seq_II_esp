@@ -17,9 +17,9 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Obtención de archivos fastq 
 
-En primer lugar elegimos el directorio de trabajo y ponemos allı́ los archivos FASTQ que descaremos, por ejemplo de SRA
+En primer lugar elegimos el directorio de trabajo y ponemos allı́ los archivos FASTQ que descargaremos, por ejemplo de SRA.
 
-Para ello los vamos a descargar desde SRA usando la herramienta fastq-dump
+En este ejemplo usando la herramienta **fastq-dump**:
 
 * [sra-tools](https://github.com/ncbi/sra-tools/)
 
@@ -39,19 +39,19 @@ Luego para comprobar que funciona correctamente:
   fastq-dump --split-e  SRR5264037
 ```
 
-Repetimos el comando para obtener todos los archivos que deseamos, ejemplo para nuestro experimento:
+Usando la tabla con la información complementaria  del ese registro _(accession)_:
 
 ```{r selector, echo=FALSE,  out.width = '80%'}
 knitr::include_graphics("selector.png")
 ```
 
-# QC 
+# Control de calidad de las secuencias _(QC)_
 
-El primer paso que todo bioinformático que trabaja con datos en NGS y recibe archivos fastq del servicio de secuenciación o de un repositorio público, es analizar los archivos para verificar la calidad de los mismos antes de comenzar cualquier análisis. De esta manera podemos identificar rápidamente: 
+El primer paso que todo bioinformático que trabaja con datos de secuenciación masiva y recibe archivos fastq es analizar las lecturas obtenidas para verificar la calidad de las mismos antes de comenzar cualquier análisis. De esta manera podemos identificar rápidamente: 
 
-* el número de lecturas de cada biblioteca
+* el número de lecturas de cada muestra
 
-* la existencia de problemas técnicos si las muestras hubieran sido corridas en diferentes calles o aparatos y también con mucha separación en el tiempo. Lo mismo para el primer y segundo fragmento que se secuencia.
+* la existencia de problemas técnicos: si las muestras hubieran sido corridas en diferentes calles o aparatos, con mucha separación en el tiempo, la estabilidad del material secuenciado, las diferencias entre el primer y segundo fragmento que se secuencia.
 
 * la existencia de contaminantes, el tipo de biblioteca que se ha secuenciado (genómico, transcriptómica, amplicones) la calidad promedio de la biblioteca secuenciada.
 
@@ -59,8 +59,8 @@ El primer paso que todo bioinformático que trabaja con datos en NGS y recibe ar
 
 * Una de las herramientas más utilizadas es   [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/). En la sección de ayuda se puede profundizar sobre las conclusiones. 
 
-* Se pueden agregar múltiples reportes fácilmente con la herramienta [MULTIQC](https://multiqc.info/)
-Ejemplo: _(ver ejemplo en clase teórica)_
+* Se pueden _agregar_ (juntar) múltiples reportes fácilmente con la herramienta [MULTIQC](https://multiqc.info/)
+[Ejemplo:](https://estepi.github.io/RNA-Seq_II_esp/multiqc/multiqc_report.html#)
 
 # Bioconductor 
 
@@ -83,7 +83,7 @@ fqQC <-qa("R1.fq.gz")
 ```
 
 La lectura del archivo se guardará en el objeto \textbf{fqQC}. 
-El objeto que se generó ya contiene las métricas de calidad. Podemos imprimirlo en un reporte en formato HTML. 
+El objeto que se generó ya contiene las métricas de calidad. Podemos exportarlo en formato HTML y abrirlo en un navegador web. 
 
 _TIP: Verificar que el directorio donde se exporta la salida._
 
@@ -91,7 +91,6 @@ _TIP: Verificar que el directorio donde se exporta la salida._
 report(fqQC, type="html", dest="SRR5264037_QC")
 ```
 
-Abrir el reporte en un navegador web. 
 
 _TIP: Debajo de cada gráfico se especifican las funciones con las que se han realizado_
 
@@ -154,6 +153,6 @@ En la [vignette](http://bioconductor.org/packages/release/bioc/vignettes/ShortRe
 
 ## Repaso
 
-Repetir el ejercicio con el **SRR5264037_2.fastq.gz** y completar el [cuestionario](https://forms.gle/k6JyYxuGm87SWHcz6)
+Repetir el ejercicio con el **SRR5264037_2.fastq.gz** y completar el [cuestionario](https://forms.gle/4Ydq5KTcEfk1DrXU8)
     
 
