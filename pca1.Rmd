@@ -60,7 +60,8 @@ El primer paso que todo bioinformático que trabaja con datos de secuenciación 
 * Una de las herramientas más utilizadas es   [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/). En la sección de ayuda se puede profundizar sobre las conclusiones. 
 
 * Se pueden _agregar_ (juntar) múltiples reportes fácilmente con la herramienta [MULTIQC](https://multiqc.info/)
-[Ejemplo:](https://estepi.github.io/RNA-Seq_II_esp/multiqc/multiqc_report.html#)
+
+* [Ejemplo:](https://estepi.github.io/RNA-Seq_II_esp/multiqc/multiqc_report.html)
 
 # Bioconductor 
 
