@@ -23,7 +23,7 @@ Se propone analizar diferentes tipos de experimentos / datos, como comparacion d
 
 * _Bonus track_
     *  [Repaso R](R.html)
-    *  [Repaso Bioconductor](bioc.html)
+    *  [Paquetes](bioc.html)
 
 * Dia 1 
     * Teoría: Introducción a RNA-Seq
