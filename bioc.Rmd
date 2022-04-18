@@ -1,5 +1,5 @@
 ---
-title: "Instalar paquetes Bioconductor"
+title: "Instalar paquetes R/Bioconductor"
 subtitle: "BioScienceApps"
 author: "Estefania Mancini"
 date: "18-21 de Abril 2022"
@@ -18,27 +18,19 @@ knitr::opts_chunk$set(echo = FALSE)
 ## Utilizaremos los siguientes  paquetes
 
 * [edgeR](http://bioconductor.org/packages/release/bioc/html/edgeR.html)
-
 * [DESeq2](http://bioconductor.org/packages/release/bioc/html/DESeq2.html)
-
 * [RNAseqData.HNRNPC.bam.chr14](http://bioconductor.org/packages/release/data/experiment/html/RNAseqData.HNRNPC.bam.chr14.html)
-
 * [GenomicRanges](http://bioconductor.org/packages/release/bioc/html/GenomicRanges.html)
-
 * [GenomicFeatures](http://bioconductor.org/packages/release/bioc/html/GenomicFeatures.html)
-
 * [GenomicAlignments](http://bioconductor.org/packages/release/bioc/html/GenomicAlignments.html)
-
 * [ggplot2](https://cran.r-project.org/)
-
 * [ggrepel](https://cran.r-project.org/)
-
 * [pheatmap](https://cran.r-project.org/)
-
 * [reshape2](https://cran.r-project.org/)
+* [ASpli](http://bioconductor.org/packages/release/bioc/html/ASpli.html)
 
 
-## CPAN:
+## CPAN
 
 ```{r installR, echo=TRUE, eval=FALSE}
 install.packages("pheatmap")
