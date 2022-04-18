@@ -31,14 +31,14 @@ Se propone analizar diferentes tipos de experimentos / datos, como comparacion d
 
 * Dia 2 
     * [Comparación 1 NSC -> ENB](pca2a.html) 
-    * [Comparación 2 NSC -> LNB](pca2b.html) 
+    * [Comparación 2 ENB -> LNB](pca2bx.html) 
 
 * Dia 3
-    * Práctica: series temporales [Comparación NSC -> ENB -> LNB  ](pca3.html)
+    * Práctica: series temporales [Comparación NSC -> ENB -> LNB  ](pca3x.html)
 
 * Dia 4 
     * Teoria: _splicing_ alternativo, reconstrucción de isoformas. Cuantificación poliA, análisis de multiómicas 
-    * Practica [ASpli NSC -> ENB](pca4.html)
+    * Practica [ASpli](pca4x.html)
     
     
     

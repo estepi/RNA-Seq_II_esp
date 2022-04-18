@@ -1,5 +1,5 @@
 ---
-title: "Análisis de datos de RNA-Seq I: 2 condiciones NSC-->ENB"
+title: "Comparación NSC-->ENB"
 subtitle: "BioScienceApps"
 author: "Estefania Mancini"
 date: "18-21 de abril de 2022"
@@ -29,11 +29,11 @@ library(ggrepel)
 ```
 
 ## Tabla de conteos
+
 Luego del alineamiento hay que contar cuántas lecturas han caı́do en cada región de interés y dependerá nuevamente de nuestra pregunta biológica y de la referencia contra la que hayamos decidido alinear. 
 
-En nuestro caso: STAR ...
+En nuestro caso, con STAR, usando el parámetro **--quantMode GeneCounts**, por cada alineamiento, también se obtiene un archivo en formato tabular con las lecturas que se superponen a las coordenadas de los genes. 
 
-Tenemos 1 tabla cada archivo XXX
 
 # Detección de genes diferencialmente expresados
 
@@ -122,16 +122,6 @@ ggplot(df, aes(x=variable, y=value, fill=variable)) +
 
 También podemos probar con diferentes umbrales. No hay una regla estricta, dependerá del experimento en concreto
 
-Genes with very low counts across all libraries provide little evidence for differential expression.
-In the biological point of view, a gene must be expressed at some minimal level before it is likely
-to be translated into a protein or to be biologically important. In addition, the pronounced
-discreteness of these counts interferes with some of the statistical approximations that are
-used later in the pipeline. These genes should be filtered out prior to further analysis.
-As a rule of thumb, genes are dropped if they can’t possibly be expressed in all the samples
-for any of the conditions. Users can set their own definition of genes being expressed. Usually
-a gene is required to have a count of 5-10 in a library to be considered expressed in that
-library. Users should also filter with count-per-million (CPM) rather than filtering on the
-counts directly, as the latter does not account for differences in library sizes between samples.
 
 ```{r filtros, echo=TRUE, eval=TRUE}
 cpms<-cpm(dataset1)
@@ -161,8 +151,7 @@ Repetimos las medidas resumen y gráficos exploratorios:
 summary(countsf)
 ```
 
-* En el caso de edgeR tenemos una funcion que puede filtar de manera menos arbitraria y se trabaja sobre la tabla cruda
-
+* En el caso de **edgeR** tenemos una función que puede filtar de manera menos arbitraria y se trabaja sobre la tabla cruda (_filterByExpr()_)
 
 Para comenzar a trabajar creamos un objeto de tipo **DGELis**t que es propio del paquete **edgeR**. tenemos que pasarle los conteos y un vector factorial con las condiciones de cada muestra. 
 
@@ -231,31 +220,34 @@ col=c("darkgreen","blue")[factor(condition)])
 
 * Esta función calculará las distancias euclı́deas entre cada para de muestras y representará en un gráfico de 2 dimensiones cómo es la relación entre las muestras. * Podemos observar si en el experimento la separación entre condiciones es suficientemente robusta y cómo es la relación entre las réplicas. 
 
-**AGREGAR::::**
-* Se puede hacer con las funciones clásicas de R como prcomp etc
-
-VER XX
-
 ## Dispersión
 
-Primero estimaremos la dispersión común a todas las bibliotecas:
+En edgeR podemos estimar la dispersión usando diferentes estrategias: 
+```{r dispDC, echo=TRUE, eval=TRUE}
+yD <- estimateCommonDisp(y, verbose=TRUE)
+#coeficiente de variación biológica
+```
 
-```{r names2, echo=TRUE, eval=TRUE}
+* Tagwise: siempre hay que calcular primero la dispersión común:
+
+```{r dispDT, echo=TRUE, eval=TRUE}
+yD <- estimateTagwiseDisp(yD)
+```
+
+Se recomienda usar la función _estimateDisp()_, que estima _common dispersion_ y _tagwise dispersions_ en 1 solo paso:
+
+```{r disp, echo=TRUE, eval=TRUE}
 y <- estimateDisp(y, verbose=TRUE)
 y$common.dispersion
 #coeficiente de variación biológica
 sqrt(y$common.dispersion)
 ```
 
-The square root of the common dispersion gives the coefficient of variation of biological variation. 
-Here the common dispersion is found to be 0.159, so the coefficient of biological variation is around 0.4.
-The dispersion estimates can be viewed in a BCV plot:
-
 * En este caso la dispersión tiene 2 componentes: la técnica y la biológica. La biológica es la raı́z cuadrada de la dispersión.
 
-* Si analizamos cómo se comporta el Coeficiente de variación Biológica, vemos que es superior a la dispersión común a bajas concentraciones de lecturas. Esto hace que sea más apropiado, establecer una dispersión gen a gen y no utilizar la misma dispersión común para todos.
+* Si analizamos cómo se comporta el Coeficiente de variación Biológica, vemos que es superior la dispersión común a bajas concentraciones de lecturas. Esto hace que sea más apropiado, establecer una dispersión gen a gen y no utilizar la misma dispersión común para todos.
 
-Y analizar la nube de puntos gráficamente, con la función **plotBCV**
+Para analizar la nube de puntos gráficamente, podemos usar la función _plotBCV_
 
 ```{r plotBCV, echo=TRUE, eval=TRUE}
 plotBCV(y)
@@ -263,24 +255,24 @@ plotBCV(y)
 
 # Expresión diferencial
 
-Ya estamos en condiciones de testear la expresión diferencial. Para ello **edegR** tiene la función **exactTest**. La misma necesitará la dispersión que acabamos de calcular y el par que queremos comparar. Este es un test que se utiliza para evaluar diferencias entre pares, bajo una distribución binomial negativa. Como resultado del test, obtenemos los _pvalues_ para cada comparación. El resultado del test lo guardamos en un objeto nuevo **de**. 
+Ya estamos en condiciones de testear la expresión diferencial. Para ello **edegR** tiene la función *exactTest*. La misma necesitará la dispersión que acabamos de calcular y el par que queremos comparar. Este es un test que se utiliza para evaluar diferencias entre pares, bajo una distribución binomial negativa. Como resultado del test, obtenemos los _pvalues_ para cada comparación. El resultado del test lo guardamos en un objeto nuevo **de**. 
 
 ```{r exactTest, echo=TRUE, eval=TRUE}
-de<-exactTest(y, pair = c("NSC","ENB"))
+de<-exactTest(y)
 str(de)
 head(de)
 ```
 
 ¿Qué tenemos en el objeto **de**?
 
-Con la función **topTags** se ordenarán los genes por su _pvalue_ corregido. Se muestran los top 10:
+Con la función **topTags** se ordenarán los genes por su _pvalue_ corregido. Por defecto se muestran los top 10:
 
 ```{r toptagsDefault, echo=TRUE, eval=TRUE}
 tt <- topTags(de)
 tt
 ```
 
-También odemos extraer la cantidad que especifiquemos, por ejemplo TODOS los genes. 
+Pdemos extraer la cantidad de genes que especifiquemos, por ejemplo **TODOS** los genes testeados:
 
 ```{r toptags, echo=TRUE, eval=TRUE}
 tt <- topTags(de, n = nrow(de))
@@ -291,6 +283,7 @@ _¿Cuáles son los genes que están más afectado en este experimento? ¿Tiene l
 Podemos explorar rápidamente cómo se distribuyeron los _pvalues_:
 
 ```{r toptags2, echo=TRUE, eval=TRUE}
+summary(tt$table$FDR)
 table(tt$table$FDR <0.05)
 
 df <- data.frame(
@@ -321,22 +314,22 @@ abline(h=c(-1,0,1))
 
 * Recordar que en el vector **deg** se han guardado los nombres de los genes que consideramos diferencialmente expresados con nuestro criterio. Para exportar los datos a un archivo en formato tabular, simplemente imprimo con el comando: 
 
-## VULCANO PLOT (el último esfuerzo)
+## Vulcano plot (casi el último esfuerzo)
 
 ```{r degGGPLOT, echo=TRUE, eval=TRUE, warning=FALSE}
-forPlot <-tt$table
-tt10 <- topTags(de, n=10)
+ttable <-tt$table
+dim(ttable)
+tt10 <- topTags(de, n=20)
 
-forPlot$gene_color <- rep("grey", nrow(y))
-forPlot$gene_color[forPlot$logFC>1] <-"red"   
-forPlot$gene_color[forPlot$logFC< (-1)]<-"green"
-forPlot$imp_genes<-NA
+ttable$gene_color <- rep("grey", nrow(ttable))
+ttable$gene_color[ttable$logFC>1] <-"red"   
+ttable$gene_color[ttable$logFC< (-1)]<-"green"
+ttable$imp_genes<-NA
 
-ii <- match(rownames(tt10), rownames(forPlot))
-forPlot$imp_genes[ii]<-rownames(forPlot)[ii]
+ii <- match(rownames(tt10), rownames(ttable))
+ttable$imp_genes[ii]<-rownames(ttable)[ii]
 
-
-ggplot(forPlot, aes(x=logFC, y=-log10(FDR))) +
+ggplot(ttable, aes(x=logFC, y=-log10(FDR))) +
   geom_point(aes(col=gene_color), cex= 1.2) +
   scale_color_manual(values=c("dark green","dark grey", "dark red")) +
   labs(title="DEG ENB", x="log2(FC)", y="-log10(FDR)") +
@@ -347,12 +340,13 @@ ggplot(forPlot, aes(x=logFC, y=-log10(FDR))) +
         plot.title = element_text(size = 12, face="italic", hjust=0.4),
         axis.title.x = element_text(color = "black", size=12, hjust = 0.4),   
         axis.title.y = element_text(size =12, hjust = 0.5)) +
-  geom_text_repel(data=forPlot,
+  geom_text_repel(data=ttable,
                   aes(x=logFC, y=-log10(FDR)), 
-                  label =forPlot$imp_genes,
+                  label =ttable$imp_genes,
                   box.padding = unit(0.25, "lines"),
                   hjust =1,
                   max.overlaps = 50)
+
 ```
 
 Exportamos los resultados en formato tabular, para futuros análisis:
@@ -362,17 +356,107 @@ tt500 <- topTags(de, n =500)
 write.csv(tt500$table, file="top500_ENB_edgeR.csv")
 ```
 
-# Un poquito más
+## Un poquito más...
+* Cambiamos el ensembl ID por el symbol. Vamos a usar los paquetes del paradigma:  **org.XX.eg.db**
+* Son muy prácticos para trabajar con Bioconductor
 
-* Gene Ontology: \url{https://biit.cs.ut.ee/gprofiler/gost}
+```{r ordDB, echo=TRUE, eval=TRUE}
+library(org.Mm.eg.db)
+MmuENS <- toTable(org.Mm.egENSEMBL2EG); head(MmuENS)
+MmuSYMBOL <- toTable(org.Mm.egSYMBOL); head(MmuSYMBOL)
+```
 
+* Agregamos Entrez Id:
+
+```{r mapDB, echo=TRUE, eval=TRUE}
+gi <- match(rownames(ttable), MmuENS$ensembl_id)
+length(which(is.na(gi)))#983
+ttable$ensemble_id <- rownames(ttable)
+ttable$EntrezId <- MmuENS$gene_id[gi]
+```
+
+* Y symbol a nuestras tablas:
+
+```{r mapsymbol, echo=TRUE, eval=TRUE}
+si <- match(ttable$EntrezId, MmuSYMBOL$gene_id)
+length(which(is.na(si)))#983
+ttable$Symbol <- MmuSYMBOL$symbol[si]
+head(ttable)
+```
+
+* Ahora podemos repetir el vulcano plot con el **symbol** como etiqueta:
+
+```{r vulcanoSymbol, echo=TRUE, eval=TRUE}
+ii <- match(rownames(tt10), rownames(ttable))
+ttable$imp_genes[ii]<-ttable$Symbol[ii]
+
+ggplot(ttable, aes(x=logFC, y=-log10(FDR))) +
+  geom_point(aes(col=gene_color), cex= 1.2) +
+  scale_color_manual(values=c("dark green","dark grey", "dark red")) +
+  labs(title="DEG ENB", x="log2(FC)", y="-log10(FDR)") +
+  geom_vline(xintercept= c(-1, 1), colour= 'black', linetype= 'dashed') +
+  geom_hline(yintercept= 1.30103, colour= 'black', linetype= 'dashed') +
+  theme_minimal()+
+  theme(legend.position = "none",
+        plot.title = element_text(size = 12, face="italic", hjust=0.4),
+        axis.title.x = element_text(color = "black", size=12, hjust = 0.4),   
+        axis.title.y = element_text(size =12, hjust = 0.5)) +
+  geom_text_repel(data=ttable,
+                  aes(x=logFC, y=-log10(FDR)), 
+                  label =ttable$imp_genes,
+                  box.padding = unit(0.25, "lines"),
+                  hjust =1,
+                  max.overlaps = 50)
+
+```
+
+## Gene Ontology
+
+Podemos analizar enriquecimientos ontológicos de una forma muy sencilla:
+
+* Primero hay que agregar EntrezID al objeto **de**:
+
+```{r GOtest, echo=TRUE, eval=TRUE}
+entrezi <- match(rownames(de), MmuENS$ensembl_id)
+length(which(is.na(entrezi)))#983
+de$ensemble_id <- rownames(de)
+de$EntrezId <- MmuENS$gene_id[entrezi]
+```
+
+* Ahora vamos testeando, con diferentes opciones la lista de genes **de**
+
+* Procesos Biológicos:
+```{r GOtestBP, echo=TRUE, eval=TRUE}
+go <- goana(de, species = "Mm", geneid=de$EntrezId)
+topBPUp<-topGO(go, ont="BP", n=30, truncate=30, sort = "Up")
+head(topBPUp)# enriquecimiento sobreexpresados
+
+topBPDown<-topGO(go, ont="BP", n=30, truncate=30, sort = "Down")
+head(topBPDown)
+```
+
+* Función molecular (MF)
+```{r GOtestMF, echo=TRUE, eval=TRUE}
+topMF<-topGO(go, ont="MF", n=30, truncate=30)
+head(topMF)
+```
+
+* Componentes celulares (CC)
+```{r GOtestCC, echo=TRUE, eval=TRUE}
+topCC<-topGO(go, ont="CC", n=30, truncate=30)
+head(topCC)
+```
+* Vías metabólicas usando KEGG:
+
+```{r GOtesKEGG, echo=TRUE, eval=TRUE}
+keg <- kegga(de, species="Mm",  geneid=de$EntrezId)
+topKEGG(keg)
+```
+
+* gProfiler: \url{https://biit.cs.ut.ee/gprofiler/gost}
 
 ```{r BP, echo=FALSE,  out.width = '80%'}
 knitr::include_graphics("BP_ENB.png")
 ```
-
-
-
-* Recuperar los SYMBOLS usando los ensembl IDs 
 
 

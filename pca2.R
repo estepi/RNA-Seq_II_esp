@@ -1,6 +1,7 @@
 library(ggplot2)
 library(reshape2) 
 library(edgeR)
+library(ggrepel)
 
 # NSC-->ENB-->LNB
 ## ----targets, echo=TRUE, eval=TRUE----------------------------------
@@ -95,14 +96,13 @@ y
 plotMDS(y, labels=condition,
 col=c("darkgreen","blue")[factor(condition)])
 
-
-y <- estimateDisp(y, verbose=TRUE)
 y <- estimateCommonDisp(y,verbose = T)
 y <- estimateTagwiseDisp(y, verbose = T)
 
+y <- estimateDisp(y, verbose=TRUE)
 plotBCV(y)
 
-de<-exactTest(y, pair = c("NSC","ENB"))
+de<-exactTest(y)
 str(de)
 head(de)
 
@@ -130,24 +130,24 @@ labs(title="FDR distribution")
 # ----deg, echo=TRUE, eval=TRUE--------------------------------------
 deg<-rownames(tt)[tt$table$FDR <.05 &   
                   abs(tt$table$logFC )>1 ]
+?plotSmear
 plotSmear(y, de.tags=deg)
 abline(h=c(-1,0,1))
 
-
 ## ----degGGPLOT, echo=TRUE, eval=TRUE, warning=FALSE-----------------
-y <-tt$table
+ttable <-tt$table
+dim(ttable)
 tt10 <- topTags(de, n=20)
 
-y$gene_color <- rep("grey", nrow(y))
-y$gene_color[y$logFC>1] <-"red"   
-y$gene_color[y$logFC< (-1)]<-"green"
-y$imp_genes<-NA
+ttable$gene_color <- rep("grey", nrow(ttable))
+ttable$gene_color[ttable$logFC>1] <-"red"   
+ttable$gene_color[ttable$logFC< (-1)]<-"green"
+ttable$imp_genes<-NA
 
-ii <- match(rownames(tt10), rownames(y))
-y$imp_genes[ii]<-rownames(y)[ii]
+ii <- match(rownames(tt10), rownames(ttable))
+ttable$imp_genes[ii]<-rownames(ttable)[ii]
 
-library(ggrepel)
-ggplot(y, aes(x=logFC, y=-log10(FDR))) +
+ggplot(ttable, aes(x=logFC, y=-log10(FDR))) +
   geom_point(aes(col=gene_color), cex= 1.2) +
   scale_color_manual(values=c("dark green","dark grey", "dark red")) +
   labs(title="DEG ENB", x="log2(FC)", y="-log10(FDR)") +
@@ -158,16 +158,76 @@ ggplot(y, aes(x=logFC, y=-log10(FDR))) +
         plot.title = element_text(size = 12, face="italic", hjust=0.4),
         axis.title.x = element_text(color = "black", size=12, hjust = 0.4),   
         axis.title.y = element_text(size =12, hjust = 0.5)) +
-  geom_text_repel(data=y,
+  geom_text_repel(data=ttable,
                   aes(x=logFC, y=-log10(FDR)), 
-                  label =y$imp_genes,
+                  label =ttable$imp_genes,
                   box.padding = unit(0.25, "lines"),
                   hjust =1,
                   max.overlaps = 50)
 
 ## ----tt2, echo=TRUE, eval=FALSE-------------------------------------
- write.csv(tt$table, file="ENB_edgeR.csv")
+library(org.Mm.eg.db)
+# primero tenemos que tener los ENTREX IDs
+# nosotros tenemos los ENSEMBL Ids.
+# usamos el paquete org.Mm.eg.db para hacer el mapeo
+# org.Mm.egENSEMBL 
+# Map Ensembl gene accession numbers with Entrez Gene identifiers
+# Convert to a list
+MmuENS <- toTable(org.Mm.egENSEMBL2EG)
+head(MmuENS)
+gi <- match(rownames(ttable), MmuENS$ensembl_id)
+length(which(is.na(gi)))#983
+ttable$ensemble_id <- rownames(ttable)
+ttable$EntrezId <- MmuENS$gene_id[gi]
+head(ttable)
 
-# symbol retrieving
+MmuSYMBOL <- toTable(org.Mm.egSYMBOL)
+head(MmuSYMBOL)
+si <- match(ttable$EntrezId, MmuSYMBOL$gene_id)
+length(which(is.na(si)))#983
+ttable$Symbol <- MmuSYMBOL$symbol[si]
+head(ttable)
 
-# gene ontology
+# Podemos repetir ahora el plot un poco más entendible:
+ii <- match(rownames(tt10), rownames(ttable))
+ttable$imp_genes[ii]<-ttable$Symbol[ii]
+
+ggplot(ttable, aes(x=logFC, y=-log10(FDR))) +
+  geom_point(aes(col=gene_color), cex= 1.2) +
+  scale_color_manual(values=c("dark green","dark grey", "dark red")) +
+  labs(title="DEG ENB", x="log2(FC)", y="-log10(FDR)") +
+  geom_vline(xintercept= c(-1, 1), colour= 'black', linetype= 'dashed') +
+  geom_hline(yintercept= 1.30103, colour= 'black', linetype= 'dashed') +
+  theme_minimal()+
+  theme(legend.position = "none",
+        plot.title = element_text(size = 12, face="italic", hjust=0.4),
+        axis.title.x = element_text(color = "black", size=12, hjust = 0.4),   
+        axis.title.y = element_text(size =12, hjust = 0.5)) +
+  geom_text_repel(data=ttable,
+                  aes(x=logFC, y=-log10(FDR)), 
+                  label =ttable$imp_genes,
+                  box.padding = unit(0.25, "lines"),
+                  hjust =1,
+                  max.overlaps = 50)
+
+###########################################
+rownames(de)
+entrezi <- match(rownames(de), MmuENS$ensembl_id)
+length(which(is.na(entrezi)))#983
+de$ensemble_id <- rownames(de)
+de$EntrezId <- MmuENS$gene_id[entrezi]
+
+go <- goana(de, species = "Mm", geneid=de$EntrezId)
+topBPUp<-topGO(go, ont="BP", n=30, truncate=30, sort = "Up")
+head(topBPUp)
+topBPDown<-topGO(go, ont="BP", n=30, truncate=30, sort = "Down")
+head(topBPDown)
+
+topMF<-topGO(go, ont="MF", n=30, truncate=30)
+head(topMF)
+topCC<-topGO(go, ont="CC", n=30, truncate=30)
+head(topCC)
+
+keg <- kegga(de, species="Mm",  geneid=de$EntrezId)
+topKEGG(keg)
+
