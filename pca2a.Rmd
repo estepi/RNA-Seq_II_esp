@@ -370,7 +370,7 @@ MmuSYMBOL <- toTable(org.Mm.egSYMBOL); head(MmuSYMBOL)
 
 ```{r mapDB, echo=TRUE, eval=TRUE}
 gi <- match(rownames(ttable), MmuENS$ensembl_id)
-length(which(is.na(gi)))#983
+length(which(is.na(gi)))
 ttable$ensemble_id <- rownames(ttable)
 ttable$EntrezId <- MmuENS$gene_id[gi]
 ```
@@ -418,7 +418,7 @@ Podemos analizar enriquecimientos ontológicos de una forma muy sencilla:
 
 ```{r GOtest, echo=TRUE, eval=TRUE}
 entrezi <- match(rownames(de), MmuENS$ensembl_id)
-length(which(is.na(entrezi)))#983
+length(which(is.na(entrezi)))
 de$ensemble_id <- rownames(de)
 de$EntrezId <- MmuENS$gene_id[entrezi]
 ```

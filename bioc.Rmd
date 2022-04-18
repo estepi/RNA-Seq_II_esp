@@ -28,7 +28,7 @@ knitr::opts_chunk$set(echo = FALSE)
 * [pheatmap](https://cran.r-project.org/)
 * [reshape2](https://cran.r-project.org/)
 * [ASpli](http://bioconductor.org/packages/release/bioc/html/ASpli.html)
-* [org.Mm.eg.db)](http://bioconductor.org/help/search/index.html?q=org.Mm.eg.db/)
+* [org.Mm.eg.db](http://bioconductor.org/help/search/index.html?q=org.Mm.eg.db/)
 
 
 ## CPAN

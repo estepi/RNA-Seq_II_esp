@@ -227,7 +227,6 @@ write.csv(tt500$table, file="top500_LNB_edgeR.csv")
 * Son muy prácticos para trabajar con Bioconductor
 
 ```{r ordDB, echo=TRUE, eval=TRUE}
-library(org.Mm.eg.db)
 MmuENS <- toTable(org.Mm.egENSEMBL2EG); head(MmuENS)
 MmuSYMBOL <- toTable(org.Mm.egSYMBOL); head(MmuSYMBOL)
 ```
@@ -236,7 +235,7 @@ MmuSYMBOL <- toTable(org.Mm.egSYMBOL); head(MmuSYMBOL)
 
 ```{r mapDB, echo=TRUE, eval=TRUE}
 gi <- match(rownames(ttable), MmuENS$ensembl_id)
-length(which(is.na(gi)))#983
+length(which(is.na(gi)))
 ttable$ensemble_id <- rownames(ttable)
 ttable$EntrezId <- MmuENS$gene_id[gi]
 ```
@@ -245,7 +244,7 @@ ttable$EntrezId <- MmuENS$gene_id[gi]
 
 ```{r mapsymbol, echo=TRUE, eval=TRUE}
 si <- match(ttable$EntrezId, MmuSYMBOL$gene_id)
-length(which(is.na(si)))#983
+length(which(is.na(si)))
 ttable$Symbol <- MmuSYMBOL$symbol[si]
 head(ttable)
 ```
