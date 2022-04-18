@@ -31,7 +31,7 @@ Se propone analizar diferentes tipos de experimentos / datos, como comparacion d
 
 * Dia 2 
     * [Comparación 1 NSC -> ENB](pca2a.html) 
-    * [Comparación 2 ENB -> LNB](pca2bx.html) 
+    * [Comparación 2 ENB -> LNB](pca2b.html) 
 
 * Dia 3
     * Práctica: series temporales [Comparación NSC -> ENB -> LNB  ](pca3x.html)

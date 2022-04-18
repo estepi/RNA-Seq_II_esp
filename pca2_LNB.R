@@ -14,13 +14,13 @@ counts <-
 
 
 
-# Ejemplo NSC-->LNB
+# Ejemplo ENB->LNB
 class(counts)
 dim(counts)
 head(counts)
 summary(counts)
 
-dataset2<-counts[,c(7,8,9,4,5,6)]
+dataset2<-counts[,c(1,2,3,4,5,6)]
 head(dataset2)
 
 df<- melt(dataset2)
@@ -34,31 +34,12 @@ ggplot(df, aes(x=variable, y=value, fill=variable)) +
 highlyExpress<-rowMeans(dataset2)>50000
 dataset2[which(highlyExpress),]
 
-
 # quienes son los outliers ?ggplot(df, aes(x=variable, y=value, fill=variable)) + 
 cpms<-cpm(dataset2)
 dim(dataset2)
 
-keep<-rowSums(cpms>1)>3
-dim(dataset2)
-countsf<-dataset2[keep,]
-dim(countsf)# 35%
-summary(countsf)
-#####################
-#primero hay que armar el objeto:
-# Podemos replotear la dist:
-dff<- melt(countsf)
 
-ggplot(dff, aes(x=variable, y=value, fill=variable)) + 
-  geom_boxplot()+
-  theme_classic()+
-  labs(title="Read distribution")
-
-highlyExpressF<-rowMeans(countsf)>50000
-countsf[which(highlyExpressF),]
-
-
-condition<-factor(rep(c("NSC","LNB"), each=3))
+condition<-factor(rep(c("ENB","LNB"), each=3))
 levels(condition)
 
 # The levels of a factor are re-ordered so that 
@@ -66,8 +47,8 @@ levels(condition)
 # This is useful for contr.treatment contrasts 
 # which take the first level as the reference.
 
-condition<-factor(rep(c("NSC","LNB"), each=3), 
-                  levels = c("NSC","LNB"))
+condition<-factor(rep(c("ENB","LNB"), each=3), 
+                  levels = c("ENB","LNB"))
 levels(condition)
 
 head(dataset2)
@@ -95,7 +76,7 @@ y <- estimateTagwiseDisp(y, verbose = T)
 
 plotBCV(y)
 
-de<-exactTest(y, pair = c("NSC","LNB"))
+de<-exactTest(y)
 str(de)
 head(de)
 
@@ -161,6 +142,3 @@ write.csv(tt$table, file="LNB_edgeR.csv")
 tt500 <- topTags(de, n =500)
 write.csv(tt500$table, file="top500_LNB_edgeR.csv")
 
-# symbol retrieving
-
-# gene ontology

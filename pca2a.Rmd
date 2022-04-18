@@ -26,6 +26,7 @@ library(ggplot2)
 library(reshape2) 
 library(edgeR)
 library(ggrepel)
+library(org.Mm.eg.db)
 ```
 
 ## Tabla de conteos
@@ -332,7 +333,7 @@ ttable$imp_genes[ii]<-rownames(ttable)[ii]
 ggplot(ttable, aes(x=logFC, y=-log10(FDR))) +
   geom_point(aes(col=gene_color), cex= 1.2) +
   scale_color_manual(values=c("dark green","dark grey", "dark red")) +
-  labs(title="DEG ENB", x="log2(FC)", y="-log10(FDR)") +
+  labs(title="DEG NSC - ENB", x="log2(FC)", y="-log10(FDR)") +
   geom_vline(xintercept= c(-1, 1), colour= 'black', linetype= 'dashed') +
   geom_hline(yintercept= 1.30103, colour= 'black', linetype= 'dashed') +
   theme_minimal()+
@@ -361,7 +362,6 @@ write.csv(tt500$table, file="top500_ENB_edgeR.csv")
 * Son muy prácticos para trabajar con Bioconductor
 
 ```{r ordDB, echo=TRUE, eval=TRUE}
-library(org.Mm.eg.db)
 MmuENS <- toTable(org.Mm.egENSEMBL2EG); head(MmuENS)
 MmuSYMBOL <- toTable(org.Mm.egSYMBOL); head(MmuSYMBOL)
 ```
@@ -393,7 +393,7 @@ ttable$imp_genes[ii]<-ttable$Symbol[ii]
 ggplot(ttable, aes(x=logFC, y=-log10(FDR))) +
   geom_point(aes(col=gene_color), cex= 1.2) +
   scale_color_manual(values=c("dark green","dark grey", "dark red")) +
-  labs(title="DEG ENB", x="log2(FC)", y="-log10(FDR)") +
+  labs(title="DEG NSC - ENB", x="log2(FC)", y="-log10(FDR)") +
   geom_vline(xintercept= c(-1, 1), colour= 'black', linetype= 'dashed') +
   geom_hline(yintercept= 1.30103, colour= 'black', linetype= 'dashed') +
   theme_minimal()+
