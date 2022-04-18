@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 Cargamos todas los paquetes que usaremos:
 
-```{r libraries, include=FALSE, eval=TRUE}
+```{r libraries, include=FALSE, eval=TRUE, echo=TRUE}
 library(ggplot2)
 library(reshape2) 
 library(edgeR)
@@ -283,7 +283,7 @@ Podemos analizar enriquecimientos ontológicos de una forma muy sencilla:
 
 ```{r GOtest, echo=TRUE, eval=TRUE}
 entrezi <- match(rownames(de), MmuENS$ensembl_id)
-length(which(is.na(entrezi)))#983
+length(which(is.na(entrezi)))
 de$ensemble_id <- rownames(de)
 de$EntrezId <- MmuENS$gene_id[entrezi]
 ```
