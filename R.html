@@ -357,37 +357,54 @@ pre code {
 </div>
 
 
-<p>Directorio de trabajo: Informar sobre el directorio de trabajo actual</p>
+<div id="algunas-funciónes-básicas-pero-muy-útiles" class="section level2">
+<h2>Algunas funciónes básicas pero muy útiles:</h2>
+<ul>
+<li>Directorio de trabajo: Informar sobre el directorio de trabajo actual</li>
+</ul>
 <pre class="r"><code>getwd()</code></pre>
-<p>Cambiar el directorio de trabajo a la carpeta <strong>dia1</strong> (hay que crearla)</p>
+<ul>
+<li>Cambiar el directorio de trabajo a la carpeta <strong>dia1</strong> (hay que crearla)</li>
+</ul>
 <pre class="r"><code>setwd(&quot;dia1&quot;);</code></pre>
-<p>Informar la versión de R con la que está trabajando y los paquetes instalados:</p>
+<ul>
+<li>Informar la versión de R con la que está trabajando y los paquetes instalados:</li>
+</ul>
 <pre class="r"><code>sessionInfo()
 search()</code></pre>
-<p>Usar la ayuda para hallar información sobre:</p>
+</div>
+<div id="usar-la-ayuda-para-encontrar-información-sobre" class="section level2">
+<h2>Usar la ayuda para encontrar información sobre:</h2>
 <ul>
-<li>la varianza de una variable <em>random</em></li>
+<li>la varianza de una variable:</li>
 </ul>
 <pre class="r"><code>??variance ?var</code></pre>
 <ul>
 <li>la raíz cuadrada de un número:</li>
 </ul>
 <pre class="r"><code>??square ?sqrt</code></pre>
-<p>Información acerca del paquete <em>graphics</em></p>
+<ul>
+<li>Información acerca del paquete <strong>graphics</strong></li>
+</ul>
 <pre class="r"><code>??graphics</code></pre>
 <ul>
-<li>Las funciones  y </li>
+<li>Las funciones <em>mean</em> y <em>median</em></li>
 </ul>
 <pre class="r"><code>?mean ?median</code></pre>
-<p><em>Analice con cuidado los parámetros que son obligatorios y la resolución cuando hay datos faltantes (NA)</em></p>
-<p>Obtenga una lista de todas las funciones en R que contienen la cadena de caracteres <em>test</em> en su nombre.</p>
+<p><strong>Analice con cuidado los parámetros que son obligatorios y la resolución cuando hay datos faltantes (NA)</strong></p>
+<ul>
+<li>Obtenga una lista de todas las funciones en R que contienen la cadena de caracteres <em>test</em> en su nombre.</li>
+</ul>
+</div>
 <div id="guardar-objetos" class="section level2">
 <h2>Guardar objetos</h2>
-<p>Guarde todos los comandos ejecutados y sus resultados de esta sesión en el archivo <em>Primera.R</em>. Si no sabe como hacerlo revise la ayuda de la función , </p>
+<p>Guarde todos los comandos ejecutados y sus resultados de esta sesión en el archivo <em>Primera.R</em>. Si no sabe como hacerlo revise la ayuda de las funciones <em>save</em> y <em>savehistory</em></p>
 <pre class="r"><code>savehistory(file=&quot;Primera.Rhistory&quot;)</code></pre>
-<p>Si quiero guardar los objetos:</p>
+<ul>
+<li>Si quiero guardar los objetos:</li>
+</ul>
 <pre class="r"><code>save(obj1, file=&quot;obj1.RData&quot;)</code></pre>
-<p>y luego, podemos cargarlos:</p>
+<p>para luego cargarlos al entorno:</p>
 <pre class="r"><code>load(file=&quot;obj1.RData&quot;)</code></pre>
 <p><em>Salga de <strong>RStudio</strong> sin guardar el área de trabajo <em>(workspace)</em> y vuelva a ingresar y abra el script guardado</em></p>
 </div>
@@ -395,13 +412,21 @@ search()</code></pre>
 <h2>Generando datos</h2>
 <p>Cree el vector <strong>info</strong> que contiene su edad, altura (en cm) y código postal.</p>
 <pre class="r"><code>info&lt;-c(38,172,2146)</code></pre>
-<p>Obtener el cuadrado de un número:</p>
+<ul>
+<li>Obtener el cuadrado de un número:</li>
+</ul>
 <pre class="r"><code>4^2</code></pre>
-<p>Obtener el valor de la constante <strong>pi</strong>. ¿Cuánto vale <strong>pi</strong>? ¿Cómo lo sabe <em>R</em>?</p>
+<ul>
+<li>Obtener el valor de la constante <strong>pi</strong>. <em>¿Cuánto vale <strong>pi</strong>? ¿Cómo lo sabe <em>R</em>?</em></li>
+</ul>
 <pre class="r"><code>pi</code></pre>
-<p>Obtener la tangente de un ángulo:</p>
+<ul>
+<li>Obtener la tangente de un ángulo:</li>
+</ul>
 <pre class="r"><code>tan(5*pi/180)</code></pre>
-<p>Recalcule usando el coseno. ¿Dónde se guardan estos resultados?</p>
+<ul>
+<li>Recalcule usando el coseno. <em>¿Dónde se guardan estos resultados?</em></li>
+</ul>
 <pre class="r"><code>??cosine 
 ?cos 
 cos(5*pi/180)</code></pre>
@@ -410,36 +435,54 @@ cos(5*pi/180)</code></pre>
 </ul>
 <pre class="r"><code>a1 &lt;- pi
 a2 &lt;- cos(pi)</code></pre>
-<p>Asignar a <strong>B</strong> el valor de -3 y crear una nueva variable que reduzca su valor en -2.5.</p>
+<ul>
+<li>Asignar a <strong>B</strong> el valor de -3 y crear una nueva variable que reduzca su valor en -2.5.</li>
+</ul>
 <pre class="r"><code>B &lt;- -3 
 b &lt;- B - c(-2.5) </code></pre>
-<p>Asignar el valor de -1000 a <strong>pi</strong> y volver a obtener su valor:</p>
+<ul>
+<li>Asignar el valor de -1000 a <strong>pi</strong> y volver a obtener su valor:</li>
+</ul>
 <pre class="r"><code>pi &lt;- -1000; pi</code></pre>
-<p>Tipear <em>base::pi</em> y compara los resultados con lo anterior.</p>
+<ul>
+<li>Tipear <em>base::pi</em> y compara los resultados con lo anterior.</li>
+</ul>
 </div>
 <div id="vectores" class="section level2">
-<h2>VECTORES</h2>
-<p>Definir un vector numérico <strong>n</strong> como:</p>
+<h2>Vectores</h2>
+<ul>
+<li>Definir un vector numérico <strong>n</strong> como:</li>
+</ul>
 <pre class="r"><code>n &lt;- seq(-2, 1, by = 0.25)</code></pre>
-<p>Obtener el mínimo (min), maximo (max), suma (sum), media (mean) y varianza (var) de n.</p>
-<p>Definir un vector lógico <strong>p</strong> y un vector caracter <strong>a</strong>. Aplicar la funcion <em>class()</em> a <strong>n</strong>, <strong>p</strong> y <strong>q</strong></p>
-<p>La función secuencia <em>seq()</em>: permite crear una cadena de valores con cualquier incremento que se desee. Se puede especificar el valor incremental o la longitud deseada:</p>
+<ul>
+<li><p>Obtener el mínimo (min), maximo (max), suma (sum), media (mean) y varianza (var) de n.</p></li>
+<li><p>Definir un vector lógico <strong>p</strong> y un vector caracter <strong>a</strong>. Aplicar la funcion <em>class()</em> a <strong>n</strong>, <strong>p</strong> y <strong>q</strong></p></li>
+<li><p>La función secuencia <em>seq()</em>: permite crear una cadena de valores con cualquier incremento que se desee. Se puede especificar el valor incremental o la longitud deseada:</p></li>
+</ul>
 <pre class="r"><code>seq(1,5) 
 seq(1,5,by=.5) 
 seq(1,5,length=7)</code></pre>
-<p>Analice con la ayuda la función <em>seq()</em> y cree un vector, de longitud 10, con separaciones cada 0.1</p>
-<p><em>(No subestime esta función, es muy útil por ejemplo para generar intervalos para histogramas y etiquetas para plots)</em></p>
-<p>La función replicar o repetir <em>rep()</em> permite repetir un valor o una secuencia de valores una cantidad especificada de veces:</p>
+<ul>
+<li>Analice con la ayuda la función <em>seq()</em> y cree un vector, de longitud 10, con separaciones cada 0.1</li>
+</ul>
+<p><strong>(No subestime esta función, es muy útil por ejemplo para generar intervalos, histogramas, etiquetas para ejes…)</strong></p>
+<ul>
+<li>La función replicar o repetir <em>rep()</em> permite repetir un valor o una secuencia de valores una cantidad especificada de veces:</li>
+</ul>
 <pre class="r"><code>rep(10,10) 
 rep(c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;),2) </code></pre>
+</div>
+<div id="indexación" class="section level2">
+<h2>Indexación</h2>
 <ul>
-<li>Subsetear</li>
+<li>Definir un vector numérico <strong>i</strong> como:</li>
 </ul>
-<p>Definir un vector numérico I como:</p>
 <pre class="r"><code>i &lt;- -1:-10</code></pre>
 <p>Usando un vector de indexación de los posibles enteros, definir un vector <strong>i2</strong> que contiene el 2do, 5to y 7mo elemento del vector <strong>i</strong> usando un vector de indexación de enteros negativos. Definir un vector <strong>i3</strong> que contiene el vector 1 sin el 1er, 3er y 9no elemento</p>
-<p>Usar un vector condicional <strong>i4</strong> como índice que contiene solo los elementos de <strong>I</strong> que son mayores a -5</p>
-<p>Realizar las siguientes operaciones</p>
+<ul>
+<li><p>Usar un vector condicional <strong>i4</strong> como índice que contiene solo los elementos de <strong>i</strong> que son mayores a -5</p></li>
+<li><p>Realizar las siguientes operaciones</p></li>
+</ul>
 <pre class="r"><code>x &lt;- c(1,2,3,4)
 y &lt;- c(5,6,7,8)
 z&lt;-c(1,2)
@@ -453,56 +496,63 @@ z*x
 z+x
 y+z</code></pre>
 <p><em>¿Qué pasa con <strong>z</strong> que tiene diferente longitud?</em></p>
-<div id="uso-de-valores-na-y-nan" class="section level3">
-<h3>Uso de valores NA y NaN</h3>
-<p>Generar una variable Z:</p>
-<pre class="r"><code>Z &lt;- c(1:3)</code></pre>
-<p><em>¿Qué se obtiene si intento extraer la 4ta posición de esta variable (vector)? Como determino si una variable tiene valores ausentes?</em></p>
-<ul>
-<li><p>Crear un vector numérico y asignarlo a <strong>x</strong>. Luego ordenar de manera creciente y decreciente y guardarlos en <strong>cx</strong>, <strong>dx</strong>. Usar </p></li>
-<li><p>Crear un vector numérico <strong>h</strong> aplicar la función </p></li>
-<li><p>Crear un vector numérico <strong>z</strong> y aplicar la funcion </p></li>
-<li><p>Concatenar <strong>z</strong> como caracter y aplicar la funcion </p></li>
-<li><p>Crear un vector lógico <strong>L</strong> y coercionarlo a valores numéricos usando  y </p></li>
-<li><p>Usar la funcion  para concatenar z y “es un caracter”. <em>No subestimar la funcion , es muy útil por ejemplo para armar nombres de archivos o de variables de forma dinámica</em></p></li>
-</ul>
 </div>
+<div id="uso-de-valores-na-y-nan" class="section level2">
+<h2>Uso de valores NA y NaN</h2>
+<ul>
+<li>Generar una variable <strong>Z</strong>:</li>
+</ul>
+<pre class="r"><code>Z &lt;- c(1:3)</code></pre>
+<p><em>¿Qué se obtiene si intento extraer la 4ta posición de esta variable (vector)? ¿Cómo determino si una variable tiene valores ausentes?</em></p>
+<ul>
+<li><p>Crear un vector numérico y asignarlo a <strong>x</strong>. Luego ordenar de manera creciente y decreciente y guardarlos en <strong>cx</strong>, <strong>dx</strong>. Usar <strong>sort</strong> y <strong>order</strong></p></li>
+<li><p>Crear un vector numérico <strong>h</strong> aplicar la función <em>prod(h)</em></p></li>
+<li><p>Crear un vector numérico <strong>z</strong> y aplicar la función <em>summary(z)</em></p></li>
+<li><p>Concatenar <strong>z</strong> como caracter y aplicar la función </p></li>
+<li><p>Crear un vector lógico <strong>L</strong> y coercionarlo a valores numéricos usando  y </p></li>
+<li><p>Usar la funcion  para concatenar z y “es un caracter”.</p></li>
+</ul>
+<p><strong>No subestimar la funcion <em>paste</em>, es muy útil por ejemplo para armar nombres de archivos o de variables de forma dinámica</strong></p>
 </div>
 <div id="matrices" class="section level2">
 <h2>Matrices</h2>
-<p>Entre las poderosas características de R se en cuentra su habilidad para realizar operaciones matriciales. Se pueden crear objetos matriciales a partir de un vector numérico utilizando el comando <em>matrix()</em>:</p>
+<p>Entre las poderosas características de R se encuentra su capacidad para realizar operaciones matriciales. Se pueden crear objetos matriciales a partir de un vector numérico utilizando el comando <em>matrix()</em>:</p>
 <pre class="r"><code>a &lt;- c(1,2,3,4,5,6,7,8,9,10)
 A &lt;- matrix(a, nrow = 5, ncol = 2) 
 B &lt;- matrix(a, nrow = 5, ncol = 2, byrow = TRUE) 
 C &lt;- matrix(a, nrow = 2, ncol = 5, byrow = TRUE)</code></pre>
-<p>Otra forma de generar matrices a partir de vectores es utilizando las funciones <em>cbind()</em> y <em>rbind()</em></p>
+<ul>
+<li>Otra forma de generar matrices a partir de vectores es utilizando las funciones <em>cbind()</em> y <em>rbind()</em></li>
+</ul>
 <pre class="r"><code>x1&lt;-c(1,2,3); x2&lt;-c(4,5,6);  x3&lt;-c(0,0,0)
 XC&lt;-cbind(x1,x2,x3) 
 is.matrix(XC) #chequear la clase del objeto XC</code></pre>
 <p>Repetir el <em>cbind()</em> con:</p>
 <pre class="r"><code>x3&lt;-c(1,2,3,4) </code></pre>
 <p><em>¿Qué pasa?</em></p>
-<p>La función  pega sus argumentos por filas. Obtenemos también en este caso un objeto de clase matrix.</p>
+<p>La función <em>rbind</em> pega sus argumentos por filas. Obtenemos también en este caso un objeto de clase matrix.</p>
 <pre class="r"><code>XR&lt;- rbind(x1,x2,x3); is.matrix(XR); print(XR)
 matrix(rep(0,16),nrow=4) # una matriz de ceros de 4x4</code></pre>
 <ul>
 <li><p>Definir una matriz <strong>M1</strong> de 10x10, con los datos de la secuencia de 101 a 200</p></li>
 <li><p>Definir una submatriz <strong>M2</strong> que contiene todas las filas pero solo las primeras 5 columnas de <strong>M1</strong></p></li>
 <li><p>Definir una submatriz <strong>M3</strong> igual a M1 exceptuando la toda la fila y columna 5.</p></li>
-<li><p>Aplicar la función  a todas las matrices (<strong>M1, M2, M3</strong>)</p></li>
+<li><p>Aplicar la función <em>dim</em> a todas las matrices (<strong>M1, M2, M3</strong>)</p></li>
 </ul>
 </div>
 <div id="listas" class="section level2">
 <h2>Listas</h2>
-<p>Definir una matriz numérica, un vector de caracter y un vector lógico. Construir una lista <strong>L1</strong> con los 3 componentes dando a cada uno un nombre de elección</p>
-<p>Definir un vector factorial y un vector numérico. Construir una lista <strong>L2</strong> con estos 2 componentes y asignarles un nombre.</p>
-<p>Combinar las listas <strong>L1</strong> y <strong>L2</strong> en una tercera <strong>L3</strong>.</p>
-<p>Aplicar las función  y  as <strong>L3</strong> como un todo y a cada uno de sus componentes.</p>
+<ul>
+<li><p>Definir una matriz numérica, un vector de tipo caracter y un vector de tipo lógico. Construir una lista <strong>L1</strong> con los 3 componentes dando a cada uno un nombre de elección</p></li>
+<li><p>Definir un vector factorial y un vector numérico. Construir una lista <strong>L2</strong> con estos 2 componentes y asignarles un nombre.</p></li>
+<li><p>Combinar las listas <strong>L1</strong> y <strong>L2</strong> en una tercera <strong>L3</strong>.</p></li>
+<li><p>Aplicar las función <em>class</em> y <em>attributes</em> a <strong>L3</strong> como un todo y a cada uno de sus componentes.</p></li>
+</ul>
 </div>
 <div id="objetos" class="section level2">
 <h2>Objetos</h2>
 <ul>
-<li><p>Listar todos los objetos y variables que estén cargados en su sesión actual.</p></li>
+<li><p>Listar todos los objetos y variables que estén cargados en su sesión actual</p></li>
 <li><p>Remover algunos objetos/variables a su elección</p></li>
 </ul>
 </div>
@@ -510,30 +560,36 @@ matrix(rep(0,16),nrow=4) # una matriz de ceros de 4x4</code></pre>
 <h2>Paquetes</h2>
 <ul>
 <li><p>Listar todos los paquetes instalados y cargados</p></li>
-<li><p>Comprobar si están instalados los paquetes:  y </p></li>
+<li><p>Comprobar si están instalados los paquetes: <strong>knitr</strong> y <strong>markdown</strong></p></li>
 <li><p>Quitar los paquetes del entorno</p></li>
-<li><p>Cargar un paquete de su preferencia y comprobar una función que este posea antes y después de cargarlo. (ejemplo: paquete , función )</p></li>
-<li><p>Instalar el paquete <strong>xpose4</strong> usando el comando </p></li>
+<li><p>Cargar un paquete de su preferencia y comprobar una función que este posea antes y después de cargarlo. (ejemplo: paquete <strong>limma</strong>, función <em>VennDiagram</em>)</p></li>
+<li><p>Instalar el paquete <strong>xpose4</strong> usando el comando <em>install.packages()</em></p></li>
 </ul>
-<div id="datos-de-paquetes-instalados" class="section level3">
-<h3>Datos de paquetes instalados</h3>
-<p>R contiene muchos conjuntos de datos incorporados en la instalación. Estos datos están guardados como <strong>dataframes</strong>. Para ver la lista de conjuntos de datos tipee . Se abrirá una ventana en la que se listan los conjuntos de datos disponibles (hay muchos otros en los paquetes escritos por usuarios).</p>
-<p>Cargar los datos del paquete <strong>iris</strong> y conocer su clase. Tambien derteminar la clase de los componentes <strong>Sepal.Length</strong> y <strong>Species</strong>.</p>
+</div>
+<div id="datos-de-paquetes-instalados" class="section level2">
+<h2>Datos de paquetes instalados</h2>
+<p>R contiene muchos conjuntos de datos incorporados en la instalación. Estos datos están guardados como <strong>dataframes</strong>. Para ver la lista de conjuntos de datos tipee <em>data()</em>. Se abrirá una ventana en la que se listan los conjuntos de datos disponibles (hay muchos otros en los paquetes escritos por usuarios).</p>
+<p>Cargar los datos del paquete <strong>iris</strong> y conocer su clase. También derteminar la clase de los componentes <strong>Sepal.Length</strong> y <strong>Species</strong>.</p>
 <pre class="r"><code>search()
 detach()</code></pre>
 </div>
-</div>
 <div id="clases" class="section level2">
 <h2>Clases</h2>
-<p>Convertir de un tipo de dato a otro</p>
+<ul>
+<li>Convertir de un tipo de dato a otro</li>
+</ul>
 <pre class="r"><code>class(iris); as.matrix(iris); as.list(iris); as.vector(iris); as.vector(as.matrix((iris)))</code></pre>
-<p>Para acceder a las variables individuales en un <em>dataframe</em>, se usa un <strong>$</strong> entre el nombre del <em>dataframe</em> y el nombre de la columna:</p>
+<ul>
+<li>Para acceder a las variables individuales en un <em>dataframe</em>, se usa un <strong>$</strong> entre el nombre del <em>dataframe</em> y el nombre de la columna:</li>
+</ul>
 <pre class="r"><code>data(trees)
 trees$Height
 sum(trees$Height) 
 mean(trees$Height) 
 max(trees$Height); min(trees$Height)</code></pre>
-<p>También se puede acceder a un elemento individual o a una fila especificando su posición (en un formato fila columna) entre corchetes a continuación del nombre del data frame:</p>
+<ul>
+<li>También se puede acceder a un elemento individual o a una fila especificando su posición (en un formato fila columna) entre corchetes a continuación del nombre del data frame:</li>
+</ul>
 <pre class="r"><code>trees[4,3] # entrada en la fila cuatro y tercera
 trees[4,] # selecciona la fila
 attributes(tree)</code></pre>
@@ -542,23 +598,25 @@ attributes(tree)</code></pre>
 <h2>Input/Output</h2>
 <ul>
 <li>Cree un dataframe llamado <strong>cronograma</strong> con las variables: <strong>nombre, días, cantidad de horas semanales</strong>.</li>
-<li>Genere un archivo de datos utilizando una planilla de cálculo que contenga las variables: <em>edad, género, cantidad de materias aprobadas de un curso hipotético con 15 alumnos</em>.</li>
-<li>Incluya el nombre de las variables en la primera fila.</li>
-<li>Guárdelo en formato texto (por ejemplo, delimitado por tabulaciones) e impórtelo a un data frame del R.</li>
-<li>Guarde en un data frame llamado <strong>tempacid</strong> las variables <strong>Water.Temp y Acid.Conc.</strong> del dataset <strong>stackloss</strong> de R.</li>
+<li><p>Genere un archivo de datos utilizando una planilla de cálculo que contenga las variables: <em>edad, género, cantidad de materias aprobadas de un curso hipotético con 15 alumnos</em>.</p></li>
+<li><p>Incluya el nombre de las variables en la primera fila.</p></li>
+<li><p>Guárdelo en formato texto (por ejemplo, delimitado por tabulaciones) e impórtelo a un data frame del R.</p></li>
+<li><p>Guarde en un data frame llamado <strong>tempacid</strong> las variables <strong>Water.Temp y Acid.Conc.</strong> del dataset <strong>stackloss</strong> de R.</p></li>
 </ul>
 </div>
 <div id="uso-de-comentarios" class="section level2">
 <h2>Uso de comentarios</h2>
-<p>Ingresar un comentario en la linea de comando:</p>
+<ul>
+<li>Ingresar un comentario en la línea de comando:</li>
+</ul>
 <pre class="r"><code>h &lt;- cos(9/3) #en este paso calculo el coseno</code></pre>
 </div>
 <div id="funciones" class="section level2">
 <h2>Funciones</h2>
-<p>Crear una función:</p>
 <ul>
-<li><p><strong>f1</strong>: que devuelva la suma de las medias de 2 vectores. Guardarla en un archivo <em>f1.R</em> y cargarlo en una nueva sesion de R usando <em>source(“f1.R”)</em></p></li>
-<li><p><strong>f2</strong>: acepte 3 vectores numéricos y devuelva el producto de su longitud dividido por el valor del más largo. Guardarla en un archivo <em>f2.R</em> y cargarlo en una nueva sesion de R usando <em>source(“f2.R”)</em></p></li>
+<li><p>Crear una función:</p></li>
+<li><p><strong>f1</strong>: que devuelva la suma de las medias de 2 vectores. Guardarla en un archivo <em>f1.R</em> y cargarlo en una nueva sesión de R usando <em>source(“f1.R”)</em></p></li>
+<li><p><strong>f2</strong>: acepte 3 vectores numéricos y devuelva el producto de su longitud dividido por el valor del más largo. Guardarla en un archivo <em>f2.R</em> y cargarlo en una nueva sesión de R usando <em>source(“f2.R”)</em></p></li>
 <li><p><strong>f3</strong>: Crear una función que acepte un vector y una variable (numéricas) y devuelva el valor de vector^variable. Si no se provee la variable, se devuelve el valor del vector^2. Comprobar que la variable ingresada es numérica. <em>Ayuda: usar <strong>if</strong>, <strong>is.numeric()</strong> </em></p></li>
 </ul>
 </div>
