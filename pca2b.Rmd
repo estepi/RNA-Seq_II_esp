@@ -19,6 +19,9 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+
+# Detección de genes diferencialmente expresados
+
 Cargamos todas los paquetes que usaremos:
 
 ```{r libraries, include=FALSE, eval=TRUE, echo=TRUE}
@@ -29,11 +32,9 @@ library(ggrepel)
 library(org.Mm.eg.db)
 ```
 
-# Detección de genes diferencialmente expresados
-
 Cargaremos la tabla de counts a nivel gen
 
-```{r readt, echo=TRUE, eval=TRUE}
+```{r readt, echo=FALSE, eval=TRUE}
 counts <-
     read.table(
         "~/Documents/BioApps/data/mouse/STAR/geneCountsMmu.tab",
@@ -42,6 +43,17 @@ counts <-
         stringsAsFactors = F
     )
 ```
+
+```{r readc, echo=TRUE, eval=FALSE}
+counts <-
+    read.table(
+        "/home/alumno01/data/mouse/geneCountsMmu.tab",
+        row.names = 1,
+        header = T,
+        stringsAsFactors = F
+    )
+```
+
 
 Para explorar un poco la tabla de datos, miremos algunas medidas resumen y la distribucion de los counts:
 

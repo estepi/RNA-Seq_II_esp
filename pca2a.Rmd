@@ -19,15 +19,6 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-Cargamos todas los paquetes que usaremos:
-
-```{r libraries, include=FALSE, eval=TRUE, echo=TRUE}
-library(ggplot2)
-library(reshape2) 
-library(edgeR)
-library(ggrepel)
-library(org.Mm.eg.db)
-```
 
 ## Tabla de conteos
 
@@ -54,10 +45,30 @@ Empezaremos con una compracion entre 2 condiciones: NSC vs ENB
 
 Cargaremos la tabla de counts a nivel gen. Especificamos algunas opciones tales como cuál es la colunma que le da nombre a las filas _(row.names = 1)_, así como si los nombres de las columnas. Para saber sobre estas especificaciones puede consultar el help de *read.table*.
 
-```{r readt, echo=TRUE, eval=TRUE}
+Cargamos todas los paquetes que usaremos:
+
+```{r libraries, include=FALSE, eval=TRUE, echo=TRUE}
+library(ggplot2)
+library(reshape2) 
+library(edgeR)
+library(ggrepel)
+library(org.Mm.eg.db)
+```
+
+```{r readt, echo=FALSE, eval=TRUE}
 counts <-
     read.table(
         "~/Documents/BioApps/data/mouse/STAR/geneCountsMmu.tab",
+        row.names = 1,
+        header = T,
+        stringsAsFactors = F
+    )
+```
+
+```{r readc, echo=TRUE, eval=FALSE}
+counts <-
+    read.table(
+        "/home/alumno01/data/mouse/geneCountsMmu.tab",
         row.names = 1,
         header = T,
         stringsAsFactors = F
