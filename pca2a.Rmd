@@ -472,4 +472,7 @@ topKEGG(keg)
 knitr::include_graphics("BP_ENB.png")
 ```
 
+```{r si, echo=TRUE, eval=TRUE}
+sessionInfo()
+```
 

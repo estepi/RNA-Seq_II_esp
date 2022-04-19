@@ -224,6 +224,9 @@ ggplot(ttable, aes(x=logFC, y=-log10(FDR))) +
 
 ```
 
+```{r si, echo=TRUE, eval=TRUE}
+sessionInfo()
+```
 Exportamos los resultados en formato tabular, para futuros análisis:
 
 ```{r tt2, echo=TRUE, eval=FALSE}
