@@ -66,7 +66,7 @@ counts <-
 class(counts)
 dim(counts)
 summary(counts)
-
+head(rowMeans(counts))
 ```
 ```{r head, echo=TRUE, eval=TRUE}
 head(counts)
@@ -128,7 +128,7 @@ Por defecto toma la primera condicion como "control", todo se comparará a ese f
 **En este punto es donde se presenta la estrategia para analizar diferentes diseños experimentales**
 
 ```{r modelmatrix, echo=TRUE, eval=TRUE}
-design <- model.matrix(~condition)
+design <- model.matrix(~y$samples$group)
 rownames(design) <- colnames(y)
 design
 ```
@@ -137,14 +137,14 @@ design
 
 
 ```{r disp, echo=TRUE, eval=TRUE}
-y <- estimateDisp(y, design, robust = T, verbose=TRUE)
+y <- estimateDisp(y)
 y$common.dispersion
 sqrt(y$common.dispersion)
+summary(y$trended.dispersion)
+summary(y$tagwise.dispersion)
 #coeficiente de variación biológica
 plotBCV(y)
 ```
-
-_The square root of the common dispersion gives the coefficient of variation of biological variation.   Here the common dispersion is found to be XXX, so the coefficient of biological variation is around XX._
 
 * Inspeccionamos la relación entre las réplicas:
 
@@ -153,13 +153,11 @@ plotMDS(y, labels=condition,
 col=c("darkgreen","blue","red")[factor(condition)])
 ```
 
-* Ahora fiteamos el modelo:....Fit a negative binomial generalized log-linear model to the read counts for each gene. Conduct genewise statistical tests for a given coefficient or coefficient contrast.
+* Ahora fiteamos el modelo:
 
 ```{r glmFit, echo=TRUE, eval=TRUE}
 fit<-glmFit(y,design)
 ```
-
-* Podemos testear de a pares (como en la práctica anterior):
 
 * Una vez que ajustamos el modelo, usando la matrix de diseño
 
@@ -167,8 +165,7 @@ fit<-glmFit(y,design)
 design
 ```
 
-
-podemos ir testeando, de a pares:
+* podemos testear de a pares (como en la práctica anterior):
 
 ```{r glmLRT2, echo=TRUE, eval=TRUE}
 lrtENB<-glmLRT(fit, coef=2)
@@ -182,11 +179,6 @@ head(topTags(lrtLNB))
 summary(decideTests(lrtLNB))
 ```
 
-```{r glmLRT1, echo=TRUE, eval=TRUE}
-lrtCT<-glmLRT(fit, coef=1)
-head(topTags(lrtCT))
-summary(decideTests(lrtCT))
-```
 
 * O los 2 a la vez:
 
