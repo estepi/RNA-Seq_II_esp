@@ -35,6 +35,8 @@ Luego del alineamiento hay que contar cuántas lecturas han caı́do en cada reg
 
 En nuestro caso, con STAR, usando el parámetro **--quantMode GeneCounts**, por cada alineamiento, también se obtiene un archivo en formato tabular con las lecturas que se superponen a las coordenadas de los genes. 
 
+Podemos inspeccionar como fueron las métricas de los alineamientos, usando la herramienta MultiQC: 
+[STARQC](https://estepi.github.io/RNA-Seq_II_esp/STARQC/multiqc_report.html)
 
 # Detección de genes diferencialmente expresados
 
