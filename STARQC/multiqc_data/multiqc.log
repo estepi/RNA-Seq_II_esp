@@ -1,0 +1,149 @@
+[2022-04-19 13:35:25,086] multiqc                                            [DEBUG  ]  No MultiQC config found: /nfs/software/mi/el7.2/python_virtenvs2/.virtualenvs/multiqc/lib/python2.7/site-packages/multiqc_config.yaml
+[2022-04-19 13:35:25,086] multiqc                                            [DEBUG  ]  No MultiQC config found: /users/jvalcarcel/emancini/.multiqc_config.yaml
+[2022-04-19 13:35:25,087] multiqc                                            [DEBUG  ]  No MultiQC config found: multiqc_config.yaml
+[2022-04-19 13:35:25,087] multiqc                                            [DEBUG  ]  Command used: /nfs/software/mi/el7.2/python_virtenvs2/.virtualenvs/multiqc/bin/multiqc -p 03_align/
+[2022-04-19 13:35:25,562] multiqc                                            [WARNING]  MultiQC Version v1.12 now available!
+[2022-04-19 13:35:25,562] multiqc                                            [INFO   ]  This is MultiQC v1.6
+[2022-04-19 13:35:25,562] multiqc                                            [DEBUG  ]  Command     : /nfs/software/mi/el7.2/python_virtenvs2/.virtualenvs/multiqc/bin/multiqc -p 03_align/
+[2022-04-19 13:35:25,562] multiqc                                            [DEBUG  ]  Working dir : /nfs/no_backup/jvalcarcel/emancini/anieto
+[2022-04-19 13:35:25,563] multiqc                                            [INFO   ]  Template    : default
+[2022-04-19 13:35:25,563] multiqc                                            [INFO   ]  Searching '03_align/'
+[2022-04-19 13:35:25,563] multiqc                                            [DEBUG  ]  Analysing modules: custom_content, conpair, peddy, methylQA, qualimap, preseq, quast, qorts, rna_seqc, rsem, rseqc, busco, goleft_indexcov, disambiguate, supernova, deeptools, sargasso, verifybamid, mirtrace, happy, homer, macs2, theta2, snpeff, gatk, htseq, bcftools, featureCounts, dedup, picard, prokka, samblaster, samtools, bamtools, jellyfish, vcftools, longranger, bbmap, bismark, hicexplorer, hicup, hicpro, salmon, kallisto, slamdunk, star, hisat2, tophat, bowtie2, bowtie1, kat, leehom, adapterRemoval, clipandmerge, cutadapt, flexbar, trimmomatic, skewer, sortmerna, biobloomtools, fastq_screen, afterqc, fastp, fastqc, clusterflow, bcl2fastq, interop
+[2022-04-19 13:35:25,563] multiqc                                            [DEBUG  ]  Using temporary directory for creating report: /tmp/tmpj2ftuq
+[2022-04-19 13:35:26,416] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_3_2.fastq.gz
+[2022-04-19 13:35:26,416] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_1.bam.bai
+[2022-04-19 13:35:27,676] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_1.bam
+[2022-04-19 13:35:28,557] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_3_1.fastq.gz
+[2022-04-19 13:35:28,557] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_1_2.fastq.gz
+[2022-04-19 13:35:30,430] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_1Aligned.out.sam
+[2022-04-19 13:35:30,430] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_1_1.fastq.gz
+[2022-04-19 13:35:30,432] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_3.bam.bai
+[2022-04-19 13:35:31,410] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_2.bam
+[2022-04-19 13:35:44,904] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_2_2.fastq.gz
+[2022-04-19 13:35:45,292] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_3_2.fastq.gz
+[2022-04-19 13:35:45,295] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_2.bam.bai
+[2022-04-19 13:35:45,296] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_1Aligned.out.sam
+[2022-04-19 13:35:45,297] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_3Aligned.out.sam
+[2022-04-19 13:35:45,297] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_2Aligned.out.sam
+[2022-04-19 13:35:46,764] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_3_2.fastq.gz
+[2022-04-19 13:35:46,764] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_1_2.fastq.gz
+[2022-04-19 13:35:46,765] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_3.bam.bai
+[2022-04-19 13:35:46,766] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_2.bam
+[2022-04-19 13:35:46,766] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_3_1.fastq.gz
+[2022-04-19 13:35:46,766] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_1_2.fastq.gz
+[2022-04-19 13:35:46,767] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_1_1.fastq.gz
+[2022-04-19 13:35:46,768] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_1.bam
+[2022-04-19 13:35:47,330] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_2.bam.bai
+[2022-04-19 13:35:57,344] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_2.bam
+[2022-04-19 13:35:57,346] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_3.bam.bai
+[2022-04-19 13:35:57,346] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_3Aligned.out.sam
+[2022-04-19 13:35:57,347] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_1.bam.bai
+[2022-04-19 13:35:57,348] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_1.bam.bai
+[2022-04-19 13:36:09,280] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_3Aligned.out.sam
+[2022-04-19 13:36:09,281] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_1.bam
+[2022-04-19 13:36:09,675] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_3.bam
+[2022-04-19 13:36:11,247] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_2_1.fastq.gz
+[2022-04-19 13:36:11,249] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_2Aligned.out.sam
+[2022-04-19 13:36:38,193] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_2_2.fastq.gz
+[2022-04-19 13:36:38,195] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_3_1.fastq.gz
+[2022-04-19 13:36:39,009] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_2_1.fastq.gz
+[2022-04-19 13:36:39,011] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_2_1.fastq.gz
+[2022-04-19 13:36:39,012] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_1Aligned.out.sam
+[2022-04-19 13:36:48,869] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_3.bam
+[2022-04-19 13:36:48,870] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_3.bam
+[2022-04-19 13:36:58,485] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LNB_1_1.fastq.gz
+[2022-04-19 13:36:58,864] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_2_2.fastq.gz
+[2022-04-19 13:36:58,865] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: ENB_2.bam.bai
+[2022-04-19 13:36:58,870] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: NSC_2Aligned.out.sam
+[2022-04-19 13:37:13,245] multiqc                                            [DEBUG  ]  No samples found: custom_content
+[2022-04-19 13:37:13,306] multiqc                                            [DEBUG  ]  No samples found: conpair
+[2022-04-19 13:37:13,364] multiqc                                            [DEBUG  ]  No samples found: peddy
+[2022-04-19 13:37:13,421] multiqc                                            [DEBUG  ]  No samples found: methylQA
+[2022-04-19 13:37:13,520] multiqc                                            [DEBUG  ]  No samples found: qualimap
+[2022-04-19 13:37:13,579] multiqc                                            [DEBUG  ]  No samples found: preseq
+[2022-04-19 13:37:13,633] multiqc                                            [DEBUG  ]  No samples found: quast
+[2022-04-19 13:37:13,699] multiqc                                            [DEBUG  ]  No samples found: qorts
+[2022-04-19 13:37:13,781] multiqc                                            [DEBUG  ]  No samples found: rna_seqc
+[2022-04-19 13:37:13,828] multiqc                                            [DEBUG  ]  No samples found: rsem
+[2022-04-19 13:37:14,042] multiqc                                            [DEBUG  ]  No samples found: rseqc
+[2022-04-19 13:37:14,103] multiqc                                            [DEBUG  ]  No samples found: busco
+[2022-04-19 13:37:14,161] multiqc                                            [DEBUG  ]  No samples found: goleft_indexcov
+[2022-04-19 13:37:14,214] multiqc                                            [DEBUG  ]  No samples found: disambiguate
+[2022-04-19 13:37:14,270] multiqc                                            [DEBUG  ]  No samples found: supernova
+[2022-04-19 13:37:14,419] multiqc                                            [DEBUG  ]  No samples found: deeptools
+[2022-04-19 13:37:14,475] multiqc                                            [DEBUG  ]  No samples found: sargasso
+[2022-04-19 13:37:14,528] multiqc                                            [DEBUG  ]  No samples found: verifybamid
+[2022-04-19 13:37:14,580] multiqc                                            [DEBUG  ]  No samples found: mirtrace
+[2022-04-19 13:37:14,641] multiqc                                            [DEBUG  ]  No samples found: happy
+[2022-04-19 13:37:14,743] multiqc                                            [DEBUG  ]  No samples found: homer
+[2022-04-19 13:37:14,821] multiqc                                            [DEBUG  ]  No samples found: macs2
+[2022-04-19 13:37:14,872] multiqc                                            [DEBUG  ]  No samples found: theta2
+[2022-04-19 13:37:14,923] multiqc                                            [DEBUG  ]  No samples found: snpeff
+[2022-04-19 13:37:15,021] multiqc                                            [DEBUG  ]  No samples found: gatk
+[2022-04-19 13:37:15,074] multiqc                                            [DEBUG  ]  No samples found: htseq
+[2022-04-19 13:37:15,147] multiqc                                            [DEBUG  ]  No samples found: bcftools
+[2022-04-19 13:37:15,206] multiqc                                            [DEBUG  ]  No samples found: featureCounts
+[2022-04-19 13:37:15,272] multiqc                                            [DEBUG  ]  No samples found: dedup
+[2022-04-19 13:37:15,599] multiqc                                            [DEBUG  ]  No samples found: picard
+[2022-04-19 13:37:15,660] multiqc                                            [DEBUG  ]  No samples found: prokka
+[2022-04-19 13:37:15,725] multiqc                                            [DEBUG  ]  No samples found: samblaster
+[2022-04-19 13:37:15,843] multiqc                                            [DEBUG  ]  No samples found: samtools
+[2022-04-19 13:37:15,927] multiqc                                            [DEBUG  ]  No samples found: bamtools
+[2022-04-19 13:37:15,969] multiqc                                            [DEBUG  ]  No samples found: jellyfish
+[2022-04-19 13:37:16,088] multiqc                                            [DEBUG  ]  No samples found: vcftools
+[2022-04-19 13:37:16,137] multiqc                                            [DEBUG  ]  No samples found: longranger
+[2022-04-19 13:37:16,436] multiqc                                            [DEBUG  ]  No samples found: bbmap
+[2022-04-19 13:37:16,485] multiqc                                            [DEBUG  ]  No samples found: bismark
+[2022-04-19 13:37:16,542] multiqc                                            [DEBUG  ]  No samples found: hicexplorer
+[2022-04-19 13:37:16,611] multiqc                                            [DEBUG  ]  No samples found: hicup
+[2022-04-19 13:37:16,662] multiqc                                            [DEBUG  ]  No samples found: hicpro
+[2022-04-19 13:37:16,721] multiqc                                            [DEBUG  ]  No samples found: salmon
+[2022-04-19 13:37:16,775] multiqc                                            [DEBUG  ]  No samples found: kallisto
+[2022-04-19 13:37:16,829] multiqc                                            [DEBUG  ]  No samples found: slamdunk
+[2022-04-19 13:37:17,490] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: ENB_2
+[2022-04-19 13:37:17,910] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: NSC_1
+[2022-04-19 13:37:18,327] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: NSC_2
+[2022-04-19 13:37:18,741] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: LNB_3
+[2022-04-19 13:37:19,113] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: ENB_3
+[2022-04-19 13:37:19,433] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: LNB_1
+[2022-04-19 13:37:19,774] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: NSC_3
+[2022-04-19 13:37:20,126] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: ENB_1
+[2022-04-19 13:37:20,452] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: LNB_2
+[2022-04-19 13:37:20,453] multiqc.modules.star.star                          [INFO   ]  Found 9 reports and 9 gene count files
+[2022-04-19 13:37:31,922] multiqc                                            [DEBUG  ]  No samples found: hisat2
+[2022-04-19 13:37:31,973] multiqc                                            [DEBUG  ]  No samples found: tophat
+[2022-04-19 13:37:32,021] multiqc                                            [DEBUG  ]  No samples found: bowtie2
+[2022-04-19 13:37:32,072] multiqc                                            [DEBUG  ]  No samples found: bowtie1
+[2022-04-19 13:37:32,119] multiqc                                            [DEBUG  ]  No samples found: kat
+[2022-04-19 13:37:32,166] multiqc                                            [DEBUG  ]  No samples found: leehom
+[2022-04-19 13:37:32,229] multiqc                                            [DEBUG  ]  No samples found: adapterRemoval
+[2022-04-19 13:37:32,283] multiqc                                            [DEBUG  ]  No samples found: clipandmerge
+[2022-04-19 13:37:32,334] multiqc                                            [DEBUG  ]  No samples found: cutadapt
+[2022-04-19 13:37:32,392] multiqc                                            [DEBUG  ]  No samples found: flexbar
+[2022-04-19 13:37:32,448] multiqc                                            [DEBUG  ]  No samples found: trimmomatic
+[2022-04-19 13:37:32,501] multiqc                                            [DEBUG  ]  No samples found: skewer
+[2022-04-19 13:37:32,555] multiqc                                            [DEBUG  ]  No samples found: sortmerna
+[2022-04-19 13:37:32,617] multiqc                                            [DEBUG  ]  No samples found: biobloomtools
+[2022-04-19 13:37:32,677] multiqc                                            [DEBUG  ]  No samples found: fastq_screen
+[2022-04-19 13:37:32,733] multiqc                                            [DEBUG  ]  No samples found: afterqc
+[2022-04-19 13:37:32,785] multiqc                                            [DEBUG  ]  No samples found: fastp
+[2022-04-19 13:37:32,842] multiqc                                            [DEBUG  ]  No samples found: fastqc
+[2022-04-19 13:37:32,900] multiqc                                            [DEBUG  ]  No samples found: clusterflow
+[2022-04-19 13:37:32,951] multiqc                                            [DEBUG  ]  No samples found: bcl2fastq
+[2022-04-19 13:37:33,005] multiqc                                            [DEBUG  ]  No samples found: interop
+[2022-04-19 13:37:33,023] multiqc                                            [INFO   ]  Compressing plot data
+[2022-04-19 13:37:33,102] multiqc                                            [INFO   ]  Report      : multiqc_report.html
+[2022-04-19 13:37:33,102] multiqc                                            [INFO   ]  Data        : multiqc_data
+[2022-04-19 13:37:33,122] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/tmpj2ftuq/multiqc_data/multiqc_star.txt' to '/nfs/no_backup/jvalcarcel/emancini/anieto/multiqc_data'
+[2022-04-19 13:37:33,170] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/tmpj2ftuq/multiqc_data/mqc_star_gene_counts_Same_Stranded.txt' to '/nfs/no_backup/jvalcarcel/emancini/anieto/multiqc_data'
+[2022-04-19 13:37:33,195] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/tmpj2ftuq/multiqc_data/mqc_star_alignment_plot_1.txt' to '/nfs/no_backup/jvalcarcel/emancini/anieto/multiqc_data'
+[2022-04-19 13:37:33,203] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/tmpj2ftuq/multiqc_data/mqc_star_gene_counts_Reverse_Stranded.txt' to '/nfs/no_backup/jvalcarcel/emancini/anieto/multiqc_data'
+[2022-04-19 13:37:33,217] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/tmpj2ftuq/multiqc_data/multiqc_data.json' to '/nfs/no_backup/jvalcarcel/emancini/anieto/multiqc_data'
+[2022-04-19 13:37:33,227] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/tmpj2ftuq/multiqc_data/mqc_star_gene_counts_Unstranded.txt' to '/nfs/no_backup/jvalcarcel/emancini/anieto/multiqc_data'
+[2022-04-19 13:37:33,235] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/tmpj2ftuq/multiqc_data/multiqc_sources.txt' to '/nfs/no_backup/jvalcarcel/emancini/anieto/multiqc_data'
+[2022-04-19 13:37:33,243] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/tmpj2ftuq/multiqc_data/multiqc_general_stats.txt' to '/nfs/no_backup/jvalcarcel/emancini/anieto/multiqc_data'
+[2022-04-19 13:37:33,253] multiqc                                            [INFO   ]  Plots       : multiqc_plots
+[2022-04-19 13:37:33,254] multiqc                                            [DEBUG  ]  Moving plots directory from '/tmp/tmpj2ftuq/multiqc_plots/svg' to '/nfs/no_backup/jvalcarcel/emancini/anieto/multiqc_plots'
+[2022-04-19 13:37:33,330] multiqc                                            [DEBUG  ]  Moving plots directory from '/tmp/tmpj2ftuq/multiqc_plots/pdf' to '/nfs/no_backup/jvalcarcel/emancini/anieto/multiqc_plots'
+[2022-04-19 13:37:33,399] multiqc                                            [DEBUG  ]  Moving plots directory from '/tmp/tmpj2ftuq/multiqc_plots/png' to '/nfs/no_backup/jvalcarcel/emancini/anieto/multiqc_plots'
+[2022-04-19 13:37:34,342] multiqc                                            [INFO   ]  MultiQC complete

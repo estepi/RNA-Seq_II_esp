@@ -1,0 +1,10 @@
+Sample	STAR_mqc-generalstats-star-uniquely_mapped_percent	STAR_mqc-generalstats-star-uniquely_mapped
+ENB_1	76.21	11580123.0
+ENB_2	74.78	7550898.0
+ENB_3	75.16	14478650.0
+LNB_1	64.75	7625000.0
+LNB_2	69.72	13803403.0
+LNB_3	67.44	5269378.0
+NSC_1	68.07	12452690.0
+NSC_2	83.51	11590057.0
+NSC_3	68.65	10039772.0
