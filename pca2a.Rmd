@@ -1,5 +1,5 @@
 ---
-title: "Comparación NSC-->ENB"
+title: "º NSC-->ENB"
 subtitle: "BioScienceApps"
 author: "Estefania Mancini"
 date: "18-21 de abril de 2022"
