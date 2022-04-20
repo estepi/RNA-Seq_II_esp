@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 Cargamos todas los paquetes que usaremos:
 
-```{r libraries, include=FALSE, eval=TRUE, echo=TRUE}
+```{r libraries, eval=TRUE, echo=TRUE, message=FALSE}
 library(ggplot2)
 library(reshape2) 
 library(edgeR)

@@ -47,7 +47,7 @@ Cargaremos la tabla de counts a nivel gen. Especificamos algunas opciones tales 
 
 Cargamos todas los paquetes que usaremos:
 
-```{r libraries, eval=TRUE, echo=TRUE}
+```{r libraries, eval=TRUE, echo=TRUE, message=FALSE}
 library(ggplot2)
 library(reshape2) 
 library(edgeR)

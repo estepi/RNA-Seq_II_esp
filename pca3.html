@@ -363,11 +363,12 @@ pre code {
 <p>La forma de análisis clásico sería comparar de a pares (como en la práctica anterior)</p>
 <p>Para eso, cargamos los datos y estimaremos los parámetros de dispersión teniendo en cuenta todas las condiciones ahora</p>
 <p>Cargamos todas los paquetes que usaremos:</p>
-<pre class="r"><code>library(edgeR)</code></pre>
-<pre><code>## Loading required package: limma</code></pre>
-<pre class="r"><code>library(pheatmap)
-library(ggplot2)
-library(reshape2) </code></pre>
+<pre class="r"><code>library(ggplot2)
+library(reshape2) 
+library(edgeR)
+library(ggrepel)
+library(org.Mm.eg.db)
+library(pheatmap)</code></pre>
 </div>
 <div id="leemos-la-tabla-de-conteos-y-exploramos-los-datos" class="section level2">
 <h2>Leemos la tabla de conteos y exploramos los datos:</h2>
@@ -699,26 +700,31 @@ table(lbl)</code></pre>
 ## [11] LC_MEASUREMENT=es_ES.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
+## [8] methods   base     
 ## 
 ## other attached packages:
-## [1] reshape2_1.4.4  ggplot2_3.3.5   pheatmap_1.0.12 edgeR_3.32.1   
-## [5] limma_3.46.0   
+##  [1] pheatmap_1.0.12      org.Mm.eg.db_3.12.0  AnnotationDbi_1.52.0
+##  [4] IRanges_2.24.1       S4Vectors_0.28.1     Biobase_2.50.0      
+##  [7] BiocGenerics_0.36.1  ggrepel_0.9.1        edgeR_3.32.1        
+## [10] limma_3.46.0         reshape2_1.4.4       ggplot2_3.3.5       
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] locfit_1.5-9.4     tidyselect_1.1.2   xfun_0.30          bslib_0.3.1       
-##  [5] purrr_0.3.4        splines_4.0.0      lattice_0.20-41    colorspace_2.0-3  
-##  [9] vctrs_0.4.1        generics_0.1.2     htmltools_0.5.2    yaml_2.3.5        
-## [13] utf8_1.2.2         rlang_1.0.2        jquerylib_0.1.4    pillar_1.7.0      
-## [17] glue_1.6.2         withr_2.5.0        DBI_1.1.2          RColorBrewer_1.1-3
-## [21] lifecycle_1.0.1    plyr_1.8.7         stringr_1.4.0      munsell_0.5.0     
-## [25] gtable_0.3.0       evaluate_0.15      labeling_0.4.2     knitr_1.38        
-## [29] fastmap_1.1.0      fansi_1.0.3        highr_0.9          Rcpp_1.0.8.3      
-## [33] scales_1.2.0       jsonlite_1.8.0     farver_2.1.0       digest_0.6.29     
-## [37] stringi_1.7.6      dplyr_1.0.8        grid_4.0.0         cli_3.2.0         
-## [41] tools_4.0.0        magrittr_2.0.3     sass_0.4.1         tibble_3.1.6      
-## [45] crayon_1.5.1       pkgconfig_2.0.3    ellipsis_0.3.2     assertthat_0.2.1  
-## [49] rmarkdown_2.13     rstudioapi_0.13    R6_2.5.1           compiler_4.0.0</code></pre>
+##  [1] Rcpp_1.0.8.3       locfit_1.5-9.4     lattice_0.20-41    assertthat_0.2.1  
+##  [5] digest_0.6.29      utf8_1.2.2         R6_2.5.1           plyr_1.8.7        
+##  [9] RSQLite_2.2.12     evaluate_0.15      highr_0.9          pillar_1.7.0      
+## [13] rlang_1.0.2        rstudioapi_0.13    jquerylib_0.1.4    blob_1.2.3        
+## [17] rmarkdown_2.13     splines_4.0.0      labeling_0.4.2     stringr_1.4.0     
+## [21] bit_4.0.4          munsell_0.5.0      compiler_4.0.0     xfun_0.30         
+## [25] pkgconfig_2.0.3    htmltools_0.5.2    tidyselect_1.1.2   tibble_3.1.6      
+## [29] fansi_1.0.3        crayon_1.5.1       dplyr_1.0.8        withr_2.5.0       
+## [33] grid_4.0.0         jsonlite_1.8.0     gtable_0.3.0       lifecycle_1.0.1   
+## [37] DBI_1.1.2          magrittr_2.0.3     scales_1.2.0       cli_3.2.0         
+## [41] stringi_1.7.6      cachem_1.0.6       farver_2.1.0       bslib_0.3.1       
+## [45] ellipsis_0.3.2     generics_0.1.2     vctrs_0.4.1        RColorBrewer_1.1-3
+## [49] tools_4.0.0        bit64_4.0.5        glue_1.6.2         purrr_0.3.4       
+## [53] fastmap_1.1.0      yaml_2.3.5         colorspace_2.0-3   memoise_2.0.1     
+## [57] knitr_1.38         sass_0.4.1</code></pre>
 </div>
 
 

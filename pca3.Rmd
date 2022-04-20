@@ -31,11 +31,13 @@ Para eso, cargamos los datos y estimaremos los parámetros de dispersión tenien
 
 Cargamos todas los paquetes que usaremos:
 
-```{r libraries, echo=TRUE,eval=TRUE}
-library(edgeR)
-library(pheatmap)
+```{r libraries, eval=TRUE, echo=TRUE, message=FALSE}
 library(ggplot2)
 library(reshape2) 
+library(edgeR)
+library(ggrepel)
+library(org.Mm.eg.db)
+library(pheatmap)
 ```
 
 
