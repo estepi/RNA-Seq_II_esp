@@ -359,6 +359,229 @@ pre code {
 
 <div id="aspli" class="section level2">
 <h2>ASpli</h2>
+<pre class="r"><code>library(GenomicFeatures)</code></pre>
+<pre><code>## Loading required package: BiocGenerics</code></pre>
+<pre><code>## Loading required package: parallel</code></pre>
+<pre><code>## 
+## Attaching package: 'BiocGenerics'</code></pre>
+<pre><code>## The following objects are masked from 'package:parallel':
+## 
+##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+##     clusterExport, clusterMap, parApply, parCapply, parLapply,
+##     parLapplyLB, parRapply, parSapply, parSapplyLB</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     IQR, mad, sd, var, xtabs</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+##     dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+##     grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+##     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+##     rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+##     union, unique, unsplit, which.max, which.min</code></pre>
+<pre><code>## Loading required package: S4Vectors</code></pre>
+<pre><code>## Loading required package: stats4</code></pre>
+<pre><code>## 
+## Attaching package: 'S4Vectors'</code></pre>
+<pre><code>## The following object is masked from 'package:base':
+## 
+##     expand.grid</code></pre>
+<pre><code>## Loading required package: IRanges</code></pre>
+<pre><code>## Loading required package: GenomeInfoDb</code></pre>
+<pre><code>## Loading required package: GenomicRanges</code></pre>
+<pre><code>## Loading required package: AnnotationDbi</code></pre>
+<pre><code>## Loading required package: Biobase</code></pre>
+<pre><code>## Welcome to Bioconductor
+## 
+##     Vignettes contain introductory material; view with
+##     'browseVignettes()'. To cite Bioconductor, see
+##     'citation(&quot;Biobase&quot;)', and for packages 'citation(&quot;pkgname&quot;)'.</code></pre>
+<pre class="r"><code>TxDb &lt;- makeTxDbFromGFF(
+  file=&quot;~/Documents/BioApps/ssh/chr14.gtf&quot;,
+  format=&quot;gtf&quot;)</code></pre>
+<pre><code>## Import genomic features from the file as a GRanges object ...</code></pre>
+<pre><code>## Warning in .local(con, format, text, ...): gff-version directive indicates
+## version is 3, not 2</code></pre>
+<pre><code>## OK</code></pre>
+<pre><code>## Prepare the 'metadata' data frame ... OK
+## Make the TxDb object ... OK</code></pre>
+<pre class="r"><code>library(ASpli)</code></pre>
+<pre><code>## Loading required package: edgeR
+## Loading required package: limma
+## 
+## Attaching package: 'limma'
+## 
+## The following object is masked from 'package:BiocGenerics':
+## 
+##     plotMA</code></pre>
+<pre class="r"><code>features &lt;- binGenome(TxDb) </code></pre>
+<pre><code>##   2 genes were dropped because they have exons located on both strands of
+##   the same reference sequence or on more than one reference sequence, so
+##   cannot be represented by a single genomic range.
+##   Use 'single.strand.genes.only=FALSE' to get all the genes in a
+##   GRangesList object, or use suppressMessages() to suppress this message.
+## * Number of extracted Genes = 782
+## * Number of extracted Exon Bins = 6723
+## * Number of extracted intron bins = 6810
+## * Number of extracted trascripts = 1357
+## * Number of extracted junctions = 6265
+## * Number of AS bins (not include external) = 440
+## * Number of AS bins (include external) = 442
+## * Classified as: 
+##  ES bins = 230   (52%)
+##  IR bins = 27    (6%)
+##  Alt5'ss bins = 50   (11%)
+##  Alt3'ss bins = 49   (11%)
+##  Multiple AS bins = 84   (19%)
+##  classified as:
+##          ES bins = 26    (31%)
+##          IR bins = 11    (13%)
+##          Alt5'ss bins = 26   (31%)
+##          Alt3'ss bins = 17   (20%)</code></pre>
+<pre class="r"><code>library(RNAseqData.HNRNPC.bam.chr14)
+genome &lt;- TxDb
+targets &lt;- data.frame(bam=RNAseqData.HNRNPC.bam.chr14_BAMFILES,
+                      condition=c(rep(&quot;CT&quot;,4),rep(&quot;KD&quot;,4)))
+
+gbcounts &lt;- gbCounts(features=features, targets=targets,
+                     minReadLength = 100, maxISize = 50000)</code></pre>
+<pre><code>## Summarizing ERR127306
+## ETA: 2 min
+## Summarizing ERR127307
+## ETA: 1 min
+## Summarizing ERR127308
+## ETA: 1 min
+## Summarizing ERR127309
+## ETA: 1 min
+## Summarizing ERR127302
+## ETA: 1 min
+## Summarizing ERR127303
+## ETA: 0 min
+## Summarizing ERR127304
+## ETA: 0 min
+## Summarizing ERR127305
+## ETA: 0 min</code></pre>
+<pre class="r"><code>asd &lt;- jCounts(counts=gbcounts, features=features, minReadLength=100)</code></pre>
+<pre><code>## Junctions PJU completed
+## Junctions PIR completed
+## Junctions IR PIR completed
+## Junctions AltSS PSI completed
+## Junctions ES PSI completed</code></pre>
+<pre class="r"><code>gb &lt;-  gbDUreport(gbcounts, contrast = c(-1,1))</code></pre>
+<pre><code>## Filtering genes:
+##   Filtering by reads.
+##   Filtering using CT,KD conditions
+##   Filtering any condition with mean minimum value 10
+##   Filtering by read density.
+##   Filtering using CT,KD conditions
+##   Filtering any condition with mean minimum value 0.05
+## Filtering genes done
+## Genes differential expression:
+##   Contrast:-1CT  1KD  
+##   Running GLM LRT
+## Genes differential expression done
+## Genes DE completed
+## Bins DE completed</code></pre>
+<pre class="r"><code>jdur &lt;- jDUreport(asd, contrast=c(-1,1), strongFilter = FALSE)</code></pre>
+<pre><code>## Running junctionsPJU test
+## Running junctionsPIR test
+## Running irPIR test
+## Running esPSI test
+## Running altPSI test</code></pre>
+<pre class="r"><code>jdur</code></pre>
+<pre><code>## Object of class ASpliJDU 
+## Locale Junctions: 3656 junctions. Access using localej(object) 
+## Locale Clusters: 951 clusters Access using localec(object) 
+## Anchor Junctions: 2791 junctions. Access using anchorj(object) 
+## Anchor Clusters: 2791 clusters Access using anchorc(object) 
+## Intron Retention Junctions: 2724 junctions. Access using jir(object) 
+## Exon Skipping Junctions: 86 junctions. Access using jes(object) 
+## Alternative Splicing Junctions: 33 junctions. Access using jalt(object)</code></pre>
+<pre class="r"><code>###########################
+mBAMs &lt;- data.frame( bam = sub(&quot;_[012]&quot;,&quot;&quot;,targets$bam[c(1,4)]),
+                       condition = c(&quot;CT&quot;,&quot;KD&quot;))
+mBAMs</code></pre>
+<pre><code>##                                                                                                      bam
+## 1 /home/estepi/R/x86_64-pc-linux-gnu-library/4.0/RNAseqData.HNRNPC.bam.chr14/extdata/ERR127306_chr14.bam
+## 2 /home/estepi/R/x86_64-pc-linux-gnu-library/4.0/RNAseqData.HNRNPC.bam.chr14/extdata/ERR127309_chr14.bam
+##   condition
+## 1        CT
+## 2        KD</code></pre>
+<pre class="r"><code>###########################
+sr &lt;- splicingReport(gb, jdur, counts=gbcounts)
+is &lt;- integrateSignals(sr,asd)
+exportIntegratedSignals(is,sr=sr,
+                          output.dir = &quot;aspliExample&quot;,
+                          counts=gbcounts,features=features,asd=asd,
+                          mergedBams = mBAMs)</code></pre>
+<pre><code>## Generating graphs...</code></pre>
+<pre><code>## 
+  |                                                                            
+  |                                                                      |   0%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |===                                                                   |   5%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |=======                                                               |  10%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |==========                                                            |  14%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |=============                                                         |  19%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |=================                                                     |  24%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |====================                                                  |  29%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |=======================                                               |  33%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |===========================                                           |  38%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |==============================                                        |  43%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |=================================                                     |  48%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |=====================================                                 |  52%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |========================================                              |  57%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |===========================================                           |  62%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |===============================================                       |  67%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |==================================================                    |  71%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |=====================================================                 |  76%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |=========================================================             |  81%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |============================================================          |  86%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |===============================================================       |  90%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |===================================================================   |  95%</code></pre>
+<pre><code>## 
+  |                                                                            
+  |======================================================================| 100%</code></pre>
 </div>
 
 
