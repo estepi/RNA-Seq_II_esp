@@ -22,12 +22,12 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Comparación de 2 o más condiciones 
 
-El caso más sencillo se nos presentan cuando queremos comparar varias condiciones contra 1 grupo control.
+Con este tipo de datos podemos hacernos diferentes preguntas o contrastes.
+Un caso sencillo sería pensar 1 condición como control y comparar las demás contra esta o por ejemplo si hubiera un orden temporal.
+
 En ese caso, por ejemplo tendriamos un caso donde hay un orden temporal de las muestras: NSC-->ENB-->LNB
 
-  La forma de análisis clásico sería comparar de a pares (como en la práctica anterior)
-
-Para eso, cargamos los datos y estimaremos los parámetros de dispersión teniendo en cuenta todas las condiciones ahora
+Para eso, cargamos los datos y estimaremos los parámetros de dispersión teniendo en cuenta todas las condiciones juntas
 
 Cargamos todos los paquetes que usaremos:
 
@@ -123,7 +123,7 @@ y$samples
 Es importante notar que acá se consideran todas las muestras juntas
 _¿Hay alguna diferencia en los valores?_
 
-* La matriz de diseño
+## La matriz de diseño
 
 Aquí tenemos uno de los pasos más oscuros en el workflow, armar la matriz de diseño. Aunque la notación es un poco inentendible, simplemente asigna 0 y 1 a las diferentes condiciones.
 Usando esta notación se toma la primera condicion como "control", todo se comparará a ese factor. 
@@ -134,14 +134,6 @@ Usando esta notación se toma la primera condicion como "control", todo se compa
 design <- model.matrix(~y$samples$group)
 rownames(design) <- colnames(y)
 design
-```
-
-Podemos usar una notación alternativa, que representará ...
-
-```{r modelmatrixAlt, echo=TRUE, eval=TRUE}
-designAlt <- model.matrix(~0+y$samples$group)
-rownames(designAlt) <- colnames(y)
-designAlt
 ```
 
 * Ahora sí estimamos la dispersión usando la matriz definida:
@@ -190,7 +182,7 @@ summary(decideTests(lrtLNB))
 ```
 
 
-* O los 2 a la vez:
+* O los 2 a la vez, de manera de buscar genes que se hayan perturbado en algunas de las condiciones: _(ANOVA-like)_
 
 ```{r glmLRT0, echo=TRUE, eval=TRUE}
 lrt<-glmLRT(fit, coef=2:3); 
@@ -198,10 +190,10 @@ head(topTags(lrt))
 summary(decideTests(lrt))
 ```
 
-
 Ahora con estos resultados, podemos empezar a hacernos preguntas más interesantes:
 
-* Son los mismos genes afectados?
+* _¿Son los mismos genes afectados?_
+
 Aca dependiendo de como definamos el TopTags, armaremos 2 vectores y podemos simplemente superponerlos
 
 
@@ -252,6 +244,41 @@ lbl <- cutree(hc, 10)
 table(lbl)
 ```
 
+## Un contraste alternativo: cada condición es independiente 
+
+Ahora la matriz debe ser definida de esta manera:
+
+```{r modelmatrixAlt, echo=TRUE, eval=TRUE}
+designAlt <- model.matrix(~0+y$samples$group)
+rownames(designAlt ) <- colnames(y)
+designAlt
+```
+
+* Repetimos todos los pasos de estimar la dispersion, definir el modelo y testear por genes DE:
+
+```{r dispAlt, echo=TRUE, eval=TRUE}
+y <- estimateDisp(y, design = designAlt)
+y$common.dispersion
+sqrt(y$common.dispersion)
+summary(y$trended.dispersion)
+summary(y$tagwise.dispersion)
+```
+
+```{r contrastesAlt, echo=TRUE, eval=TRUE}
+levels(condition)
+fit <- glmQLFit(y, designAlt)
+
+qlf_NvE <- glmQLFTest(fit,
+                  contrast=c(1,-1,0))
+
+head(topTags(qlf_NvE))
+summary(decideTests(qlf_NvE))
+
+qlfE_v_L <- glmQLFTest(fit,
+                  contrast=c(0, 1,-1))
+head(topTags(qlfE_v_L))
+summary(decideTests(qlfE_v_L))
+```
 
 ```{r si, echo=TRUE, eval=TRUE}
 sessionInfo()

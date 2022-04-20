@@ -96,7 +96,6 @@ head(tt)
 topis<-which(tt$table$FDR < 0.00001); length(topis)
 fc<-tt$table[topis,][,1:2]
 
-
 paletteLength <- 50
 myColor <- colorRampPalette(c("blue","white", "red"))(paletteLength)
 myBreaks <- c(seq(min(fc), 0, 
@@ -116,3 +115,36 @@ heat<-pheatmap(fc,
 hc <-heat$tree_row
 lbl <- cutree(hc, 10) 
 table(lbl)
+
+
+
+design
+designAlt <- model.matrix(~0+Group)
+colnames(design) <- levels(Group)
+
+designAlt <- model.matrix(~0+y$samples$group)
+
+rownames(designAlt ) <- colnames(y)
+designAlt
+
+y <- estimateDisp(y, design = designAlt)
+y$common.dispersion
+sqrt(y$common.dispersion)
+summary(y$trended.dispersion)
+summary(y$tagwise.dispersion)
+#coeficiente de variación biológica
+plotBCV(y)
+levels(condition)
+fit <- glmQLFit(y, designAlt)
+
+qlf_NvE <- glmQLFTest(fit,
+                  contrast=c(1,-1,0))
+
+head(topTags(qlf_NvE))
+summary(decideTests(qlf_NvE))
+
+qlfE_v_L <- glmQLFTest(fit,
+                  contrast=c(0, 1,-1))
+head(topTags(qlfE_v_L))
+summary(decideTests(qlfE_v_L))
+

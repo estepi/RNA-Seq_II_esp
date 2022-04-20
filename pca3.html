@@ -359,9 +359,9 @@ pre code {
 
 <div id="comparación-de-2-o-más-condiciones" class="section level2">
 <h2>Comparación de 2 o más condiciones</h2>
-<p>El caso más sencillo se nos presentan cuando queremos comparar varias condiciones contra 1 grupo control. En ese caso, por ejemplo tendriamos un caso donde hay un orden temporal de las muestras: NSC–&gt;ENB–&gt;LNB</p>
-<p>La forma de análisis clásico sería comparar de a pares (como en la práctica anterior)</p>
-<p>Para eso, cargamos los datos y estimaremos los parámetros de dispersión teniendo en cuenta todas las condiciones ahora</p>
+<p>Con este tipo de datos podemos hacernos diferentes preguntas o contrastes. Un caso sencillo sería pensar 1 condición como control y comparar las demás contra esta o por ejemplo si hubiera un orden temporal.</p>
+<p>En ese caso, por ejemplo tendriamos un caso donde hay un orden temporal de las muestras: NSC–&gt;ENB–&gt;LNB</p>
+<p>Para eso, cargamos los datos y estimaremos los parámetros de dispersión teniendo en cuenta todas las condiciones juntas</p>
 <p>Cargamos todos los paquetes que usaremos:</p>
 <pre class="r"><code>library(ggplot2)
 library(reshape2) 
@@ -477,9 +477,11 @@ y$samples</code></pre>
 ## LNB_2   LNB  9114095    1.0095833
 ## LNB_3   LNB  3843948    0.9357870</code></pre>
 <ul>
-<li><p>Estimamos dispersión Es importante notar que acá se consideran todas las muestras juntas <em>¿Hay alguna diferencia en los valores?</em></p></li>
-<li><p>La matriz de diseño</p></li>
+<li>Estimamos dispersión Es importante notar que acá se consideran todas las muestras juntas <em>¿Hay alguna diferencia en los valores?</em></li>
 </ul>
+</div>
+<div id="la-matriz-de-diseño" class="section level2">
+<h2>La matriz de diseño</h2>
 <p>Aquí tenemos uno de los pasos más oscuros en el workflow, armar la matriz de diseño. Aunque la notación es un poco inentendible, simplemente asigna 0 y 1 a las diferentes condiciones. Usando esta notación se toma la primera condicion como “control”, todo se comparará a ese factor.</p>
 <p><strong>En este punto es donde se presenta la estrategia para analizar diferentes diseños experimentales</strong></p>
 <pre class="r"><code>design &lt;- model.matrix(~y$samples$group)
@@ -497,25 +499,6 @@ design</code></pre>
 ## LNB_3           1                  0                  1
 ## attr(,&quot;assign&quot;)
 ## [1] 0 1 1
-## attr(,&quot;contrasts&quot;)
-## attr(,&quot;contrasts&quot;)$`y$samples$group`
-## [1] &quot;contr.treatment&quot;</code></pre>
-<p>Podemos usar una notación alternativa, que representará …</p>
-<pre class="r"><code>designAlt &lt;- model.matrix(~0+y$samples$group)
-rownames(designAlt) &lt;- colnames(y)
-designAlt</code></pre>
-<pre><code>##       y$samples$groupNSC y$samples$groupENB y$samples$groupLNB
-## NSC_1                  1                  0                  0
-## NSC_2                  1                  0                  0
-## NSC_3                  1                  0                  0
-## ENB_1                  0                  1                  0
-## ENB_2                  0                  1                  0
-## ENB_3                  0                  1                  0
-## LNB_1                  0                  0                  1
-## LNB_2                  0                  0                  1
-## LNB_3                  0                  0                  1
-## attr(,&quot;assign&quot;)
-## [1] 1 1 1
 ## attr(,&quot;contrasts&quot;)
 ## attr(,&quot;contrasts&quot;)$`y$samples$group`
 ## [1] &quot;contr.treatment&quot;</code></pre>
@@ -599,7 +582,7 @@ head(topTags(lrtLNB))</code></pre>
 ## NotSig              12362
 ## Up                   1299</code></pre>
 <ul>
-<li>O los 2 a la vez:</li>
+<li>O los 2 a la vez, de manera de buscar genes que se hayan perturbado en algunas de las condiciones: <em>(ANOVA-like)</em></li>
 </ul>
 <pre class="r"><code>lrt&lt;-glmLRT(fit, coef=2:3); 
 head(topTags(lrt))</code></pre>
@@ -624,8 +607,9 @@ head(topTags(lrt))</code></pre>
 ## Sig                                     4375</code></pre>
 <p>Ahora con estos resultados, podemos empezar a hacernos preguntas más interesantes:</p>
 <ul>
-<li>Son los mismos genes afectados? Aca dependiendo de como definamos el TopTags, armaremos 2 vectores y podemos simplemente superponerlos</li>
+<li><em>¿Son los mismos genes afectados?</em></li>
 </ul>
+<p>Aca dependiendo de como definamos el TopTags, armaremos 2 vectores y podemos simplemente superponerlos</p>
 </div>
 <div id="clustering-no-supervisado" class="section level2">
 <h2>Clustering no supervisado</h2>
@@ -681,6 +665,79 @@ table(lbl)</code></pre>
 <pre><code>## lbl
 ##   1   2   3   4   5   6   7   8   9  10 
 ##  34 306 302  17  30   5  40  59  46   1</code></pre>
+</div>
+<div id="un-contraste-alternativo-cada-condición-es-independiente" class="section level2">
+<h2>Un contraste alternativo: cada condición es independiente</h2>
+<p>Ahora la matriz debe ser definida de esta manera:</p>
+<pre class="r"><code>designAlt &lt;- model.matrix(~0+y$samples$group)
+rownames(designAlt ) &lt;- colnames(y)
+designAlt</code></pre>
+<pre><code>##       y$samples$groupNSC y$samples$groupENB y$samples$groupLNB
+## NSC_1                  1                  0                  0
+## NSC_2                  1                  0                  0
+## NSC_3                  1                  0                  0
+## ENB_1                  0                  1                  0
+## ENB_2                  0                  1                  0
+## ENB_3                  0                  1                  0
+## LNB_1                  0                  0                  1
+## LNB_2                  0                  0                  1
+## LNB_3                  0                  0                  1
+## attr(,&quot;assign&quot;)
+## [1] 1 1 1
+## attr(,&quot;contrasts&quot;)
+## attr(,&quot;contrasts&quot;)$`y$samples$group`
+## [1] &quot;contr.treatment&quot;</code></pre>
+<ul>
+<li>Repetimos todos los pasos de estimar la dispersion, definir el modelo y testear por genes DE:</li>
+</ul>
+<pre class="r"><code>y &lt;- estimateDisp(y, design = designAlt)
+y$common.dispersion</code></pre>
+<pre><code>## [1] 0.2481241</code></pre>
+<pre class="r"><code>sqrt(y$common.dispersion)</code></pre>
+<pre><code>## [1] 0.4981205</code></pre>
+<pre class="r"><code>summary(y$trended.dispersion)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## 0.07251 0.09458 0.17346 0.33119 0.54118 0.97988</code></pre>
+<pre class="r"><code>summary(y$tagwise.dispersion)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## 0.02814 0.07319 0.15598 0.37544 0.43503 5.91213</code></pre>
+<pre class="r"><code>levels(condition)</code></pre>
+<pre><code>## [1] &quot;NSC&quot; &quot;ENB&quot; &quot;LNB&quot;</code></pre>
+<pre class="r"><code>fit &lt;- glmQLFit(y, designAlt)
+
+qlf_NvE &lt;- glmQLFTest(fit,
+                  contrast=c(1,-1,0))
+
+head(topTags(qlf_NvE))</code></pre>
+<pre><code>## Coefficient:  1*y$samples$groupNSC -1*y$samples$groupENB 
+##                        logFC   logCPM        F       PValue          FDR
+## ENSMUSG00000052551 -3.795362 6.669242 165.6650 1.516937e-07 0.0006786033
+## ENSMUSG00000042988 10.587312 5.004365 279.2349 1.678247e-07 0.0006786033
+## ENSMUSG00000021136 -2.870971 6.930851 157.1453 1.947203e-07 0.0006786033
+## ENSMUSG00000020181 -3.622852 6.977985 154.6429 2.100496e-07 0.0006786033
+## ENSMUSG00000030772  4.034346 8.099090 147.8527 2.595508e-07 0.0006786033
+## ENSMUSG00000041642 -2.739942 7.216218 141.8008 3.158981e-07 0.0006786033</code></pre>
+<pre class="r"><code>summary(decideTests(qlf_NvE))</code></pre>
+<pre><code>##        1*y$samples$groupNSC -1*y$samples$groupENB
+## Down                                         1090
+## NotSig                                      12547
+## Up                                           1186</code></pre>
+<pre class="r"><code>qlfE_v_L &lt;- glmQLFTest(fit,
+                  contrast=c(0, 1,-1))
+head(topTags(qlfE_v_L))</code></pre>
+<pre><code>## Coefficient:  1*y$samples$groupENB -1*y$samples$groupLNB 
+##                       logFC   logCPM        F       PValue          FDR
+## ENSMUSG00000020808 3.319039 6.674784 358.1186 3.713902e-09 5.505117e-05
+## ENSMUSG00000062248 3.075306 6.272528 241.6960 2.495914e-08 1.609819e-04
+## ENSMUSG00000006398 3.760817 7.388064 224.4943 3.559628e-08 1.609819e-04
+## ENSMUSG00000017716 3.300729 6.789754 215.3656 4.344111e-08 1.609819e-04
+## ENSMUSG00000012443 3.195863 7.034286 197.0052 6.653719e-08 1.972562e-04
+## ENSMUSG00000028044 2.931031 6.497341 175.1128 1.166072e-07 2.880781e-04</code></pre>
+<pre class="r"><code>summary(decideTests(qlfE_v_L))</code></pre>
+<pre><code>##        1*y$samples$groupENB -1*y$samples$groupLNB
+## Down                                          504
+## NotSig                                      13960
+## Up                                            359</code></pre>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 4.0.0 (2020-04-24)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
