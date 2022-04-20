@@ -359,9 +359,7 @@ pre code {
 
 <div id="comparación-de-2-o-más-condiciones" class="section level2">
 <h2>Comparación de 2 o más condiciones</h2>
-<p>Con este tipo de datos podemos hacernos diferentes preguntas o contrastes. Un caso sencillo sería pensar 1 condición como control y comparar las demás contra esta o por ejemplo si hubiera un orden temporal.</p>
-<p>En ese caso, por ejemplo tendriamos un caso donde hay un orden temporal de las muestras: NSC–&gt;ENB–&gt;LNB</p>
-<p>Para eso, cargamos los datos y estimaremos los parámetros de dispersión teniendo en cuenta todas las condiciones juntas</p>
+<p>Con este tipo de datos podemos hacernos diferentes preguntas o contrastes. Un caso sencillo sería pensar 1 condición como control y comparar las demás contra esta o por ejemplo si hubiera un orden temporal. En ese caso, por ejemplo hay un orden temporal de las muestras: NSC–&gt;ENB–&gt;LNB</p>
 <p>Cargamos todos los paquetes que usaremos:</p>
 <pre class="r"><code>library(ggplot2)
 library(reshape2) 
@@ -609,12 +607,13 @@ head(topTags(lrt))</code></pre>
 <ul>
 <li><em>¿Son los mismos genes afectados?</em></li>
 </ul>
-<p>Aca dependiendo de como definamos el TopTags, armaremos 2 vectores y podemos simplemente superponerlos</p>
 </div>
 <div id="clustering-no-supervisado" class="section level2">
 <h2>Clustering no supervisado</h2>
-<p>Podemos seleccionar aquellos genes más afectadoss (de acuerdo por ejemplo al FDR) y de ahi graficarlos en forma de heatmap. Podemos agruparlos usando un clustering jerarquico y de ahi extraer diferentes grupos para analizarlos, por ejemplo, con Gene Ontology</p>
-<p>Tambien podrias ser por ejemplo, buscar motivos regulatorios comunes dentro de los grupos</p>
+<p>Podemos seleccionar aquellos genes más afectadoss (de acuerdo por ejemplo al FDR o LogFC) y de ahí graficarlos en forma de heatmap. Podemos agruparlos usando un clustering jerárquico y de extraer diferentes grupos para analizarlos con una perspectiva biológica, por ejemplo, con ontologías génicas o buscar secuencias/motivos regulatorios comunes dentro de los grupos, etcétera</p>
+<ul>
+<li>Seleccionamos los genes que consideramos más informativos, que pueden ser: más cambiados, rangos, dispersión, grupos de vías metabólicas… etc</li>
+</ul>
 <pre class="r"><code>tt&lt;-topTags(lrt, n = nrow(lrt$fitted.values))
 head(tt)</code></pre>
 <pre><code>## Coefficient:  y$samples$groupENB y$samples$groupLNB 
@@ -666,9 +665,9 @@ table(lbl)</code></pre>
 ##   1   2   3   4   5   6   7   8   9  10 
 ##  34 306 302  17  30   5  40  59  46   1</code></pre>
 </div>
-<div id="un-contraste-alternativo-cada-condición-es-independiente" class="section level2">
-<h2>Un contraste alternativo: cada condición es independiente</h2>
-<p>Ahora la matriz debe ser definida de esta manera:</p>
+<div id="armando-los-contrastes" class="section level2">
+<h2>Armando los contrastes</h2>
+<p>En este caso, no hay una condición control, la matriz debe ser definida de esta manera:</p>
 <pre class="r"><code>designAlt &lt;- model.matrix(~0+y$samples$group)
 rownames(designAlt ) &lt;- colnames(y)
 designAlt</code></pre>
@@ -688,7 +687,7 @@ designAlt</code></pre>
 ## attr(,&quot;contrasts&quot;)$`y$samples$group`
 ## [1] &quot;contr.treatment&quot;</code></pre>
 <ul>
-<li>Repetimos todos los pasos de estimar la dispersion, definir el modelo y testear por genes DE:</li>
+<li>Repetimos todos los pasos de estimar la dispersión, definir el modelo y testear por genes DE:</li>
 </ul>
 <pre class="r"><code>y &lt;- estimateDisp(y, design = designAlt)
 y$common.dispersion</code></pre>

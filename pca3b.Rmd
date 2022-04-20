@@ -22,12 +22,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Comparación de 2 o más condiciones 
 
-Con este tipo de datos podemos hacernos diferentes preguntas o contrastes.
-Un caso sencillo sería pensar 1 condición como control y comparar las demás contra esta o por ejemplo si hubiera un orden temporal.
-
-En ese caso, por ejemplo tendriamos un caso donde hay un orden temporal de las muestras: NSC-->ENB-->LNB
-
-Para eso, cargamos los datos y estimaremos los parámetros de dispersión teniendo en cuenta todas las condiciones juntas
+Con este tipo de datos podemos hacernos diferentes preguntas o contrastes. Un caso sencillo sería pensar 1 condición como control y comparar las demás contra esta o por ejemplo si hubiera un orden temporal. En ese caso, por ejemplo hay un orden temporal de las muestras: NSC-->ENB-->LNB
 
 Cargamos todos los paquetes que usaremos:
 
@@ -194,15 +189,12 @@ Ahora con estos resultados, podemos empezar a hacernos preguntas más interesant
 
 * _¿Son los mismos genes afectados?_
 
-Aca dependiendo de como definamos el TopTags, armaremos 2 vectores y podemos simplemente superponerlos
-
-
 ## Clustering no supervisado
 
-Podemos seleccionar aquellos genes más afectadoss (de acuerdo por ejemplo al FDR) y de ahi graficarlos en forma de heatmap.
-Podemos agruparlos usando un clustering jerarquico y de ahi extraer diferentes grupos para analizarlos, por ejemplo, con Gene Ontology
+Podemos seleccionar aquellos genes más afectadoss (de acuerdo por ejemplo al FDR o LogFC) y de ahí graficarlos en forma de heatmap.
+Podemos agruparlos usando un clustering jerárquico y de extraer diferentes grupos para analizarlos con una perspectiva biológica, por ejemplo, con ontologías génicas o buscar secuencias/motivos regulatorios comunes dentro de los grupos, etcétera
 
-Tambien podrias ser por ejemplo, buscar motivos regulatorios comunes dentro de los grupos
+* Seleccionamos los genes que consideramos más informativos, que pueden ser: más cambiados, rangos, dispersión, grupos de vías metabólicas... etc
 
 ```{r topTags, echo=TRUE, eval=TRUE}
 tt<-topTags(lrt, n = nrow(lrt$fitted.values))
@@ -244,9 +236,9 @@ lbl <- cutree(hc, 10)
 table(lbl)
 ```
 
-## Un contraste alternativo: cada condición es independiente 
+## Armando los contrastes 
 
-Ahora la matriz debe ser definida de esta manera:
+En este caso, no hay una condición control, la matriz debe ser definida de esta manera:
 
 ```{r modelmatrixAlt, echo=TRUE, eval=TRUE}
 designAlt <- model.matrix(~0+y$samples$group)
@@ -254,7 +246,7 @@ rownames(designAlt ) <- colnames(y)
 designAlt
 ```
 
-* Repetimos todos los pasos de estimar la dispersion, definir el modelo y testear por genes DE:
+* Repetimos todos los pasos de estimar la dispersión, definir el modelo y testear por genes DE:
 
 ```{r dispAlt, echo=TRUE, eval=TRUE}
 y <- estimateDisp(y, design = designAlt)
