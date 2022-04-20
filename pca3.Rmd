@@ -114,16 +114,17 @@ keep <- filterByExpr(y)
 summary(keep)
 y <- y[keep, , keep.lib.sizes=FALSE]
 y<-calcNormFactors(y)
+y$samples
 ```
 
-* Estimamos dispersion
-Es importante notar que aca se consideran todas las muestras juntas
+* Estimamos dispersión
+Es importante notar que acá se consideran todas las muestras juntas
 _¿Hay alguna diferencia en los valores?_
 
 * La matriz de diseño
 
-Aquí tenemos uno de los pasos más oscuros en el workflow, armar la matriz de diseño. Aunque la notación es un poco inentendible, simplemente asiga 0 y 1 a las diferentes condiciones.
-Por defecto toma la primera condicion como "control", todo se comparará a ese factor. 
+Aquí tenemos uno de los pasos más oscuros en el workflow, armar la matriz de diseño. Aunque la notación es un poco inentendible, simplemente asigna 0 y 1 a las diferentes condiciones.
+Usando esta notación se toma la primera condicion como "control", todo se comparará a ese factor. 
 
 **En este punto es donde se presenta la estrategia para analizar diferentes diseños experimentales**
 
@@ -131,6 +132,14 @@ Por defecto toma la primera condicion como "control", todo se comparará a ese f
 design <- model.matrix(~y$samples$group)
 rownames(design) <- colnames(y)
 design
+```
+
+Podemos usar una notación alternativa, que representará ...
+
+```{r modelmatrixAlt, echo=TRUE, eval=TRUE}
+designAlt <- model.matrix(~0+y$samples$group)
+rownames(designAlt) <- colnames(y)
+designAlt
 ```
 
 * Ahora sí estimamos la dispersión usando la matriz definida:
@@ -153,7 +162,7 @@ plotMDS(y, labels=condition,
 col=c("darkgreen","blue","red")[factor(condition)])
 ```
 
-* Ahora fiteamos el modelo:
+* Ahora establecemos el modelo:
 
 ```{r glmFit, echo=TRUE, eval=TRUE}
 fit<-glmFit(y,design)
@@ -197,7 +206,7 @@ Aca dependiendo de como definamos el TopTags, armaremos 2 vectores y podemos sim
 
 ## Clustering no supervisado
 
-Podemos seleccionar aquellos genes más afectos (de acuerdo por ejemplo al FDR) y de ahi graficarlos en forma de heatmap.
+Podemos seleccionar aquellos genes más afectadoss (de acuerdo por ejemplo al FDR) y de ahi graficarlos en forma de heatmap.
 Podemos agruparlos usando un clustering jerarquico y de ahi extraer diferentes grupos para analizarlos, por ejemplo, con Gene Ontology
 
 Tambien podrias ser por ejemplo, buscar motivos regulatorios comunes dentro de los grupos

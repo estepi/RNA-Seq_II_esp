@@ -458,12 +458,23 @@ summary(keep)</code></pre>
 <pre><code>##    Mode   FALSE    TRUE 
 ## logical   24101   14823</code></pre>
 <pre class="r"><code>y &lt;- y[keep, , keep.lib.sizes=FALSE]
-y&lt;-calcNormFactors(y)</code></pre>
+y&lt;-calcNormFactors(y)
+y$samples</code></pre>
+<pre><code>##       group lib.size norm.factors
+## NSC_1   NSC  9507090    1.1022613
+## NSC_2   NSC  8654186    0.9492715
+## NSC_3   NSC  7809603    1.0800020
+## ENB_1   ENB  8028827    0.9210250
+## ENB_2   ENB  4927324    1.0331455
+## ENB_3   ENB  9974904    0.9818950
+## LNB_1   LNB  5233032    1.0024976
+## LNB_2   LNB  9114095    1.0095833
+## LNB_3   LNB  3843948    0.9357870</code></pre>
 <ul>
-<li><p>Estimamos dispersion Es importante notar que aca se consideran todas las muestras juntas <em>¿Hay alguna diferencia en los valores?</em></p></li>
+<li><p>Estimamos dispersión Es importante notar que acá se consideran todas las muestras juntas <em>¿Hay alguna diferencia en los valores?</em></p></li>
 <li><p>La matriz de diseño</p></li>
 </ul>
-<p>Aquí tenemos uno de los pasos más oscuros en el workflow, armar la matriz de diseño. Aunque la notación es un poco inentendible, simplemente asiga 0 y 1 a las diferentes condiciones. Por defecto toma la primera condicion como “control”, todo se comparará a ese factor.</p>
+<p>Aquí tenemos uno de los pasos más oscuros en el workflow, armar la matriz de diseño. Aunque la notación es un poco inentendible, simplemente asigna 0 y 1 a las diferentes condiciones. Usando esta notación se toma la primera condicion como “control”, todo se comparará a ese factor.</p>
 <p><strong>En este punto es donde se presenta la estrategia para analizar diferentes diseños experimentales</strong></p>
 <pre class="r"><code>design &lt;- model.matrix(~y$samples$group)
 rownames(design) &lt;- colnames(y)
@@ -480,6 +491,25 @@ design</code></pre>
 ## LNB_3           1                  0                  1
 ## attr(,&quot;assign&quot;)
 ## [1] 0 1 1
+## attr(,&quot;contrasts&quot;)
+## attr(,&quot;contrasts&quot;)$`y$samples$group`
+## [1] &quot;contr.treatment&quot;</code></pre>
+<p>Podemos usar una notación alternativa, que representará …</p>
+<pre class="r"><code>designAlt &lt;- model.matrix(~0+y$samples$group)
+rownames(designAlt) &lt;- colnames(y)
+designAlt</code></pre>
+<pre><code>##       y$samples$groupNSC y$samples$groupENB y$samples$groupLNB
+## NSC_1                  1                  0                  0
+## NSC_2                  1                  0                  0
+## NSC_3                  1                  0                  0
+## ENB_1                  0                  1                  0
+## ENB_2                  0                  1                  0
+## ENB_3                  0                  1                  0
+## LNB_1                  0                  0                  1
+## LNB_2                  0                  0                  1
+## LNB_3                  0                  0                  1
+## attr(,&quot;assign&quot;)
+## [1] 1 1 1
 ## attr(,&quot;contrasts&quot;)
 ## attr(,&quot;contrasts&quot;)$`y$samples$group`
 ## [1] &quot;contr.treatment&quot;</code></pre>
@@ -508,7 +538,7 @@ plotBCV(y)</code></pre>
 col=c(&quot;darkgreen&quot;,&quot;blue&quot;,&quot;red&quot;)[factor(condition)])</code></pre>
 <p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABUAAAAPACAMAAADDuCPrAAAAD1BMVEUAAAAAAP8AZAD/AAD///8ekhMGAAAACXBIWXMAAB2HAAAdhwGP5fFlAAAcFElEQVR4nO3d7WKiyKKGUafj/V/zObs7Gj4KlDdQVMlaP6YjIVIt9jNRCrzdAYjczh4AQK8EFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAChtgN6A9jP7ona+w73dPaDDXyW3Ru19x3uaf+/LnBdAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgpczNfXfMlX6ebXQPGeBBS4mGJAhwtLAS02VECBi9kQ0NEa83sSUOBiSgEdvYovBLT4YwIKXI2AhgQUWAro189NAS0RUKAY0OFiAS0TUGAxoI9vCGiZgAICGhJQYCGg99WAmsYkoMBqQJ8T6B9/rp+LJKDAxSwF9L4eUL+BCiiwFtDRa3nvgY4JKCCgIQEFFgM6PZo0WXH+Kl5AgYtZDejXXUCXCCiwEtC7gK4QUEBAQwIKrAd0cGUmAR0TUGAtoPflgBamggoocDGrAb0PJs1PrkhvGlPTowNqmJ9ftBhQZyINCSggoCEBBdYDOr6oyNqlRAQUICagACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAUGcBvd1GA75tHb6AAvvpKaC3h+GSrXex85iAC+sooN/pHCZUQIET9RXQ5xe3yaL372PfMQFXJqDAUOkzf6efGPT4c/0Dgy6gn4CW3voUUNhbMaCTT638WXzxhnYZ0OeNFwG9FRw0OvgUGwI6WuP4kTWo24A+Diit/oSAwlalgI5exRcCWvyxK/jkgL66E2BOQDfoNKDfBRVQ2NtSQL9+bgroQz8BndTyb0EFFPZWDOhwsYD+6Cug09OQBBT2thjQxzcE9EdHAb1PT4UXUNifgG4goMDQQkDvqwE1jWm3e9z7DvckoPDCSkCfE+gff159Hr2AAiNLAb2vB/SaBRVQYGgtoKPX8t4DFVBgTEA3EFBgaDGg06NJkxUv+SpeQIGh1YB+3QV0SECBoZWA3gV0QkCBIQHdQECBofWADq7MJKACCoytBfS+HNBrTgUVUGBoNaD3waT5yRXpL5hPAQXG5ucXLQbUmUgCCgwJ6AYCCgytB3R8UZFr1/MuoAAxAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQzvf1NV/yVbr5NVBpbLBCQDlfMaDDhaWAaijnE1DOtyGgozWOHxmsElDOVwro6FV8IaDFH4O6BJTzCSidElDOtxTQr5+bAkqLBJTzFQM6XCygtElAOd9iQB/fEFDaJKCcT0DplIByvoWA3lcDahoT5xNQzrcS0OcE+sef5tHTEAHlfEsBva8HVEE5m4ByvrWAjl7Lew+Utggo5xNQOiWgnG8xoNOjSZMVvYrnZALK+VYD+nUXUFoloJxvJaB3AaVhAsr5BJROCSjnWw/o4MpMAkpbBJTzrQX0vhxQU0E5m4ByvtWA3geT5idXpJdPTiagnG9+ftFiQJ2JREsElPMJKJ0SUM63HtDxRUXUk4YIKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUIHR8QG+30TZupzZMQIH9HBzQ28Nwyd5b3EBAgf0cG9DvdA4TKqDApzg8oM8vbpNFpxBQYD8CChA6NKCltz4FFPgUtQL6vCGgwKeoGdDHAaW9t7iBgAL7EVCAUL2AfhdUQIFPUeko/OPWTUCBj3H8RPrJaUgCCnyKw8+FHxfzFwG9lW29k2zjAHMfHdDfBxdgWU+Xs9vavx1+YwVY9skBLd7FLiMBuPcV0B1GK6DAfgQUICSgAKG+AvprAgrsR0ABQgIKEBJQgJCAAoQEFCAkoAChKgFt53R0AQX2UyGgLV3PQ0CB/Rwf0KYugdTQUIDuCShAqEpA995ErqWxAL0TUICQgAKEBBQgVGca097biDU0FKB7JtIDhEykBwiZBwoQElCAkKPwACEBBQhVOYi09yZyLY0F6J2AAoRMpAcI1TkKbx4o8IEEFCDkQ+UAQgIKEBJQgJCAAoQEFCAkoAChIwP6b8ZS/9OY/ht7LpysM1v3t4MFGiegry0FdJjIUkA1FD6cl/CvFTu4GNDRGsHWgG4I6GsLAR29ii8EdOkngU8hoK8JKFAkoK+tBPS/n5sCCpcjoK8tBXT4HQGFCxLQ19YCOp3VJKBwIQdPYyrae4tbBiegwG6uHtB4kvy/ZasBNY0JPlyVl/A/Gzn7VMq3AzoJYcnjW491Cuse/vcBzlT7M5FO/oCkQkALa60G9Lno8cX0TwWFqxDQwlrvzPGc/ArqPVC4oCqfibRyszIBBfYjoIW13pkkP3jDdHEdx5HgswloYa13JslPjr8LKFyQgBbWemeO508aBRSuqs7nwi/dqk5Agf3UOQr/2MrZ8+i3BPTtSfLf8+oFFC6n0kT6Jk5Dur+cSP9c+PjWY53CuuOj9EtH4QUUPlili4m0kc9tAX1/kvxohv146SF/C6ANAlpYa3K6UTGc/01T6UwkuJyrX85OQIGYgBbWKrwZWgroJKH36bo7jx1ojYAW1hoE1BQlYJGAFtYaTlG6CyiwQEALawko8A4BLaxlkjzwDgEtrGWSPPAOAS2sZZI88A4BLU5Rmq6wvC5wXQIqoEBIQF8E1CR5YMnBAR2d/97AyfCnDwD4IAIKEDo2oLdZQFu7HihA7NCAzoN5dkIFFNjPwQEtbE9AgQ8hoAChIwNaimVrn8q5amGO03SS02zdnQYLNO7YgBY32H9ASx/PaZY9XI+Arlg4UX4hoKM1otEBfRHQFUtXGvlvXMvCugoKVyCgKwQUWCOgK1YCOrzkcmFdAYUrcBR+xfLFQgUUMA901VpAp7OaBBSuR0BXCCiwxrnwK1Y+72M1oKYxwTW4GtOK4tz4Z0CfE+iX1wU+WoXrgY7svbWNdgvofT2gCgpXcPxHejSUzx1fwj9/BfUeKFyXgK4QUGDN1T9UbtX6h8avBdRxJLgCAV3xKqD/3QUUrqz6qZzn2jOgdwGFixPQFQIKrKkT0GZSunNAB1dmElC4HgFd8SKg9+WAmgoKVyCgK14F9D6YND+5Ir18wgUI6Iri2UWLAXUmElyNgK4QUGCNgK54GdDxRUXUEy5GQAFCAgoQElCAkIAChA7+VM6ivbe4ZXACCuxGQAFCLmcHEBJQgJCAAoQEFCDUW0B/eSxKQIH99BTQHY7nCyiwn7ofa/zL3x6HP5rdkYAC+zkpoNEvj7Mf2n4/Agrsp8pL+Pk5nQIK9K9CQEeVe9zYvt3STwgocKKPDmhj55ECH6bKe6CFmzUCutvhK4CSTw7om3cCkOkpoA4iAU3pJ6DmgQKNqTMPdH4r2e4uk0m3bxagrM5R+J/pn7/o58895IeDBBTYT6WJ9OPs/eJouIACzah0MZFx9M6bTSSgwH4EFCDU0+XsdiCgwH4EFCAkoAChU94DPc/5IwA+xynTmM5z9vaBT3LSRPqzCCiwn7NO5TyJgAL7EVCA0FlXYzqJgAL7EVCAkIAChAQUIOQgEkDIPFCAkDORAELOhQcICShAyOXsAEICChASUICQgAKEjgzobcHeW9wyOAEFdiOgACEv4QFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgAKHjA9rUFe0EFNjPSQE9K2QCCuynykv4n408vhJQoH8VAjr6dfNx46SSCSiwHwEFCFV5D7RwU0CB7gkoQEhAAUICChCqMw90fktAge7VOQr/M/3z3H4KKLCjShPpx2cgORMJ+ASVLiYyPoHzvJPhBRTYj4AChFzODiAkoAAhAQUICShAqE5AW7iW8vdATtw48GFqTaQXUODj1L4e6MkaGgrQveoXEzlXS2MBeiegACEBBQgJKEDIQSSAkIAChCpdD3TvjaTaGQnQvzof6WEiPfCBBBQg5GIiACEBBQgJKEBIQAFCAgoQElCA0JEB/TdjyTQm4EMJKEDIS3iAkIAChAQUICSgACEBBQgJKEDo4GlMRXtvccvgBBTYjYAChCp/pMfZATt7+8Anqf2hcid/wpyAAvsRUIBQlc9EWrlZmYAC+xFQgJCAAoQEFCBU53Phl25VJ6DAfuochX9s5ex59AIK7KjSRPomTkO6Cyiwp0oXE2kjnwIK7ElAAUIuZwcQElCAkIAChKoH1DxQ4FNUn8YkoMCnqDWRvo1+Ciiwo1qncn6H8+yAnb194JP0E9BdPmBJQIH91Loa0yN1+Ut4AQUaUzugvzkKv8MbqAIK7Kfe9UB//SuogAJt6SmgO4xWQIH9CChAqNI80Ocfv3sZvvFnf3/QCWBZpTOR/v23csJ2OGoPsKzmufANBOzs7QOfREABQi5nBxDqNKDpsAUU2I+AAoRqfqjcjpsTUOB8NS+ofN/lbMzve6z7cwBzNSfSf9/YZSMCCpyuTkAHW9qnoAIKnE9AAUJ9XUxkcKd1fw5grtOApgQU2I+AAoQEFCBU+yDSyZcTEVBgP5XngZ59PSYBBfZT80wkl7MDPkrNc+FPz6eAAnsSUIBQp5ezSwkosB8BBQhVD6h5oMCnEFCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUIHRkQG8L9t7ilsEJKLAbAQUIuZwdQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQg1FlAb7fRgG9bhy+gwH56CujtYbhk613sPCbgwjoK6Hc6hwkVUOBEfQX0+cVtsuj9+9h3TMCVCShAqJ+Alt76FFA+258/fxZv/vlr/gOFpRyly4A+bwgon21Sw58bfwbGa8+WcqBuA/o4oPSLO4HWLQX0Z+Gf0ZffNxS0FgGFdv1/Bie/Yj4Wz5ZNXu5LaBWdBvS7oALKZxPQxvUT0Ekt/xZUQPls/wI6e73+4mX9eDkH6iug09OQXgT0VnDU6OAAfyO4HtCfbwlofR0F9D49Ff5VEEv9FFB68h3Q6av0Qhz18hSfHNDiHew7IDiUgDaur4D+moDSlX9VnB8nmk/1FNBTCCi06xnQ6W+es/nyAnqKTgOaDltA6coknPOZSoW2UpGAQrsGZxZ9/zlbYfFbVCCg0C4BbZyAQrsG73n+++/iBFABPYWAQruGB43uS5UU0PMIKLRreJT9/iqgzkSqT0ChXQLaOAGFdo0v9rlwLnz5BHkBraHTgKYElK5MLmW3cDWmpUmiNUZ4cQIK7Vr4DKTBOUiDULoifX0CCu1a+hC5P0OTNaZLOZCAQrsEtHECCu2aXXFp/AlyC2cmqWc1AgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElA41p/ZZeVHN1xVvmcCCsea1HDyKZo+16hrAgrHWgro6PON5israA8EFI71/xmc/Ir5WDxbNnm5L6HNE1A4loB+MAGFY/0L6Oz1+ouX9ePlNEpA4Vh/I7ge0J9vCWhfBBSO9R3Q6av0Qhz1sjsCCscS0A8moHCsf1WcHyeaT/UU0O4IKBzrGdCf+Z3351ejiC7Mnzervl0CCseavGRfbqYzk/ojoHCsyW+e0xQ+2zg6CWn03clXtENA4VjzgE4n1v/5t6z8PunoniS0MQIKxxpcPOTff+dnJj0bKqCdEVA41vDqS/efYN6nS8sBndyVgLZFQOFYw1bef4L5s3AY0Om0JgFtm4DCsRYCOv5ts3ig3Uv25gkoHGt8SH0toNOX7ALaPAGFY80PGD2+HC57HEly0KgrAgrHmk/6HH31Z/pVccI9bRJQOFY5oONTjGZnJpXeEqU9AgrH2hTQaUFrD5ZtBBSOtXBgaLmSz6UC2jwBhboKZybNVxnMeKJhAgp1Fc5MWlhJQJsnoFBXcWJ9caXZy3tFbY2AQl0C+kEEFOoqnpk0P9ZUWCigzRFQqKt8ZtJsttNzhcJiWiGgUNfavNCfpcMVpt+nGQIKdS0EdDyFfrKGafWNElCoS0A/iIBCXcuXrHt1ZhLNEVCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChC4XUID97N6ove9wT2c/2MBn2b1Re9/hR+vzPQWjrseo62li1C2MoR9N7LLNjLoeo66niVG3MIZ+NLHLNjPqeoy6niZG3cIY+tHELtvMqOsx6nqaGHULY+hHE7tsM6Oux6jraWLULYyhH03sss2Muh6jrqeJUbcwhn40scs2M+p6jLqeJkbdwhj60cQu28yo6zHqepoYdQtj6EcTu2wzo67HqOtpYtQtjKEfTeyyzYy6HqOup4lRtzCGfjSxyzYz6nqMup4mRt3CGPrRxC7bzKjrMep6mhh1C2PoRxO7bDOjrseo62li1C2MoR9N7LLNjLoeo66niVG3MIZ+NLHLNjPqeoy6niZG3cIY+tHELtvMqOsx6nqaGHULY+hHE7tsM6Oux6jraWLULYyhH03sss2Muh6jrqeJUbcwhn40scs2M+p6jLqeJkbdwhgAuiSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEB3eb2P2cPItHZqG+3Th/pDsfc5yPdyDPk9AF05fZ09kg262vIHudq+nxONzPqs7ffl+/d1cB+26izEX+PtrNR33sccafP6Z9Rnz2Qk7fflz6fbPfuRiyg9fT5nBbQDg321un7bYs2Xuts8RxsZ6Pu7XHu9Tnd0Kj7edDON/zHcfZ+26K/f9gCWkufz2kB7VKfT7ZvHQ14UKHeetTV4/w/fT6nBbRLfT7ZvnU0YAGtp8/ntID2zj/sA/X5j/pbdwN+6u85/T9nD7rHx6wBZ++27ToasYCeoseRnx/9s7ffpe4OFdy7+uchoCfo7zndxiG70wfQoRb222YdDVlA6+vwOd3GqUi9PWotOH+vBToasoDW1+FzWkD7MNlPLey0N8yeXR2M+aHTYf/T3YDv3Tyni84ed6cPW0XjFPXyTBPQk3Q34H6e02Unj73jR+4M/T7XOhq3eaBV9fuc/ktAe9Lvk62jcQtoVf0+p/8S0I50/FTrauR9ngv/V3cj7vE53dCbPP09eOfp+n/VXQ1dQGvp8zntVM4udflce+hq7N+PdI//ujsbcYeP8F/fwz7/GdLnw3eO28jZo9morwH3+ij39jh3+5xuZsxnb78nvT7Z/uprwL0+yr09zt0+p5sZ89nb70mvT7a/Ohtwnw/yvdfHucOHu5Ehnz4AgF4JKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkICSuP3qifP46eReNvzMbWS6+LARciGeHyS6DWi5qXuNUG+vxg4n0UlAC4se3VwvqIDyFjucxD4BPfhn56uOm7mS0GiEL98Y4OPY4SQEtPhDAno1djiJbgM6ublfQN85NMXHscNJFEsxDcisKY+b03cYvxfOfj0crjvf8tt3vzS+QkDfGWG5lAJ6SXY4iaXjM8OGLC4o5enlurMtv3/3gxVe/rUWRzj41nIqBfRq7HASAiqg3AWUzOLxmZ+0DKYLzdYo5Wl0t/N1p1subG/p7idDXPtbrYxwMtCFNzHWN8CnscNJrByfmeWrsKCcp9V1p9t56+4HvziW7mvl71B6D7T8RfEOuAg7nMTaL3fl5I1fbJf/XFt3cY3b7BBUGNC3RiigDNnhJN4NaLlebwR0ZUvFNdbuvjTIgrdGKKAM2eEkBFRAuQsomUKbJq+Xh8u+b81+WkDpnB1O4o2ATg6tCygfyA4n8bJNo6M80zXOC+htumDhloDyFjuchIAKKHcBJfNOQMfrnjKN6cWwZwF9PUIBZcgOJ7HWpvFvhMODSs8VXgS0tO7KGq/ufvjDS8V8d4QCypAdTmKlTePfCMdH5WdLpve2vO7KGq/ufjzK76WFu35nhALKkB1OYumo+7iX/25MlxQvJnKffDVbd3GNwc8u3P3iwBe/6yU877HDSQiogHIXUDKFgD4Wjtf598VkyRsBna27sMbw20t3Xx778vfWRiigDNnhtC1okoxRi6ca7Rn/HnvUj8CvearRHgGlE55qtGf0vuphPwK/5rlGi9YOle/3I/BLnmu0KWihfFKbZxtASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgND/AZ4H6ENZUfghAAAAAElFTkSuQmCC" width="672" /></p>
 <ul>
-<li>Ahora fiteamos el modelo:</li>
+<li>Ahora establecemos el modelo:</li>
 </ul>
 <pre class="r"><code>fit&lt;-glmFit(y,design)</code></pre>
 <ul>
@@ -594,7 +624,7 @@ head(topTags(lrt))</code></pre>
 </div>
 <div id="clustering-no-supervisado" class="section level2">
 <h2>Clustering no supervisado</h2>
-<p>Podemos seleccionar aquellos genes más afectos (de acuerdo por ejemplo al FDR) y de ahi graficarlos en forma de heatmap. Podemos agruparlos usando un clustering jerarquico y de ahi extraer diferentes grupos para analizarlos, por ejemplo, con Gene Ontology</p>
+<p>Podemos seleccionar aquellos genes más afectadoss (de acuerdo por ejemplo al FDR) y de ahi graficarlos en forma de heatmap. Podemos agruparlos usando un clustering jerarquico y de ahi extraer diferentes grupos para analizarlos, por ejemplo, con Gene Ontology</p>
 <p>Tambien podrias ser por ejemplo, buscar motivos regulatorios comunes dentro de los grupos</p>
 <pre class="r"><code>tt&lt;-topTags(lrt, n = nrow(lrt$fitted.values))
 head(tt)</code></pre>
