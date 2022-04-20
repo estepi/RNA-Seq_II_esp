@@ -29,7 +29,7 @@ En ese caso, por ejemplo tendriamos un caso donde hay un orden temporal de las m
 
 Para eso, cargamos los datos y estimaremos los parámetros de dispersión teniendo en cuenta todas las condiciones ahora
 
-Cargamos todas los paquetes que usaremos:
+Cargamos todos los paquetes que usaremos:
 
 ```{r libraries, eval=TRUE, echo=TRUE, message=FALSE}
 library(ggplot2)
@@ -153,7 +153,6 @@ y$common.dispersion
 sqrt(y$common.dispersion)
 summary(y$trended.dispersion)
 summary(y$tagwise.dispersion)
-#coeficiente de variación biológica
 plotBCV(y)
 ```
 

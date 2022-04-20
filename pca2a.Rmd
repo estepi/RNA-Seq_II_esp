@@ -253,8 +253,9 @@ Se recomienda usar la función _estimateDisp()_, que estima _common dispersion_ 
 ```{r disp, echo=TRUE, eval=TRUE}
 y <- estimateDisp(y, verbose=TRUE)
 y$common.dispersion
-#coeficiente de variación biológica
 sqrt(y$common.dispersion)
+summary(y$trended.dispersion)
+summary(y$tagwise.dispersion)
 ```
 
 * En este caso la dispersión tiene 2 componentes: la técnica y la biológica. La biológica es la raı́z cuadrada de la dispersión.

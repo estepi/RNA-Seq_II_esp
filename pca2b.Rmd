@@ -110,8 +110,8 @@ design
 ```{r DGELIST, echo=TRUE, eval=TRUE}
 y <- DGEList(counts=dataset2, group=condition)
 keep <- filterByExpr(y)
+summary(keep)
 y <- y[keep, , keep.lib.sizes=FALSE]
-dim(y)
 condition
 ```
 
@@ -134,7 +134,10 @@ col=c("darkgreen","blue")[factor(condition)])
 
 ```{r dispDC, echo=TRUE, eval=TRUE}
 y <- estimateDisp(y, verbose=TRUE)
-#coeficiente de variación biológica
+y$common.dispersion
+sqrt(y$common.dispersion)
+summary(y$trended.dispersion)
+summary(y$tagwise.dispersion)
 ```
 
 ```{r plotBCV, echo=TRUE, eval=TRUE}
