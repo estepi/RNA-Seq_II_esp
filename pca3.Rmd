@@ -31,7 +31,7 @@ Para eso, cargamos los datos y estimaremos los parámetros de dispersión tenien
 
 Cargamos todas los paquetes que usaremos:
 
-```{r libraries, include=FALSE, eval=TRUE}
+```{r libraries, echo=TRUE,eval=TRUE}
 library(edgeR)
 library(pheatmap)
 library(ggplot2)
