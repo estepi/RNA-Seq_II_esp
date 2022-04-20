@@ -280,6 +280,7 @@ head(topTags(qlfE_v_L))
 summary(decideTests(qlfE_v_L))
 ```
 
+Info:
 ```{r si, echo=TRUE, eval=TRUE}
 sessionInfo()
 ```
