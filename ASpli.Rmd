@@ -129,12 +129,8 @@ jdur
 sr <- splicingReport(gb, jdur, counts=gbcounts)
 is <- integrateSignals(sr,asd)
 exportIntegratedSignals(is,sr=sr,
-                        output.dir = "aspliExample",
-                        counts=gbcounts,features=features,asd=asd,
+                        output.dir = "example",                  counts=gbcounts,features=features,asd=asd,
                         mergedBams = mBAMs)
 ```
 
-
-* Para ispeccionar visualmente los resultados podemos ir directamente al directorio donde se exportaron los resultados y abrir el reporte en un navegador:
-
-[reporte ejemplo](https://estepi.github.io/RNA-Seq_II_esp/example/control-treatment/integratedSignals.html)
+* Para ispeccionar visualmente los resultados podemos ir directamente al directorio donde se exportaron los resultados y abrir el reporte en un navegador: [reporte ejemplo](https://estepi.github.io/RNA-Seq_II_esp/example/control-treatment/integratedSignals.html)
