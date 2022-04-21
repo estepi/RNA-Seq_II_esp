@@ -53,11 +53,20 @@ mBAMs <- data.frame( bam = sub("_[012]","",targets$bam[c(1,4)]),
 gbcounts <- gbCounts(features=features, targets=targets,
                      minReadLength = 100, maxISize = 50000)
 gbcounts
+head(gbcounts@gene.counts)
+head(gbcounts@exon.intron.counts)
+
 
 asd <- jCounts(counts=gbcounts, features=features, minReadLength=100)
-asd
+head(asd@esPSI)
+head(asd@irPIR)
+head(asd@altPSI)
+
+
+
 gb  <- gbDUreport(gbcounts, contrast = c(-1,1))
-gb
+gb@genes
+gb@bins
 jdur <- jDUreport(asd, contrast=c(-1,1))
 jdur
 
@@ -69,3 +78,5 @@ exportIntegratedSignals(is,sr=sr,
                         mergedBams = mBAMs)
 
 getwd()
+
+head(gbcounts@junction.counts)

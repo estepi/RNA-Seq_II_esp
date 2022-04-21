@@ -357,148 +357,263 @@ pre code {
 </div>
 
 
-<div id="aspli-example" class="section level1">
-<h1>ASpli Example</h1>
-<pre class="r"><code>library(ASpli)</code></pre>
-<pre><code>## Loading required package: parallel</code></pre>
-<pre><code>## Loading required package: edgeR</code></pre>
-<pre><code>## Loading required package: limma</code></pre>
-<pre><code>## Loading required package: AnnotationDbi</code></pre>
-<pre><code>## Loading required package: stats4</code></pre>
-<pre><code>## Loading required package: BiocGenerics</code></pre>
-<pre><code>## 
-## Attaching package: 'BiocGenerics'</code></pre>
-<pre><code>## The following object is masked from 'package:limma':
-## 
-##     plotMA</code></pre>
-<pre><code>## The following objects are masked from 'package:parallel':
-## 
-##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
-##     clusterExport, clusterMap, parApply, parCapply, parLapply,
-##     parLapplyLB, parRapply, parSapply, parSapplyLB</code></pre>
-<pre><code>## The following objects are masked from 'package:stats':
-## 
-##     IQR, mad, sd, var, xtabs</code></pre>
-<pre><code>## The following objects are masked from 'package:base':
-## 
-##     anyDuplicated, append, as.data.frame, basename, cbind, colnames,
-##     dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
-##     grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
-##     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
-##     rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
-##     union, unique, unsplit, which.max, which.min</code></pre>
-<pre><code>## Loading required package: Biobase</code></pre>
-<pre><code>## Welcome to Bioconductor
-## 
-##     Vignettes contain introductory material; view with
-##     'browseVignettes()'. To cite Bioconductor, see
-##     'citation(&quot;Biobase&quot;)', and for packages 'citation(&quot;pkgname&quot;)'.</code></pre>
-<pre><code>## Loading required package: IRanges</code></pre>
-<pre><code>## Loading required package: S4Vectors</code></pre>
-<pre><code>## 
-## Attaching package: 'S4Vectors'</code></pre>
-<pre><code>## The following object is masked from 'package:base':
-## 
-##     expand.grid</code></pre>
-<pre class="r"><code>library(GenomicFeatures)</code></pre>
-<pre><code>## Loading required package: GenomeInfoDb</code></pre>
-<pre><code>## Loading required package: GenomicRanges</code></pre>
-<pre class="r"><code># gtf preprocessing ----
-gtfFileName &lt;- aspliExampleGTF()
+<ul>
+<li>Cargamos los paquetes que vamos a usar:</li>
+</ul>
+<pre class="r"><code>library(ASpli)
+library(GenomicFeatures)</code></pre>
+<ul>
+<li>Convertimos el archivo de anotación en un objeto de tipo <strong>TxDB</strong></li>
+</ul>
+<pre class="r"><code>gtfFileName &lt;- aspliExampleGTF()
 genomeTxDb  &lt;- makeTxDbFromGFF( gtfFileName )</code></pre>
-<pre><code>## Import genomic features from the file as a GRanges object ...</code></pre>
-<pre><code>## OK</code></pre>
-<pre><code>## Prepare the 'metadata' data frame ... OK
-## Make the TxDb object ... OK</code></pre>
-<pre class="r"><code># feature extraction ----
-features    &lt;- binGenome( genomeTxDb )</code></pre>
-<pre><code>## * Number of extracted Genes = 10
-## * Number of extracted Exon Bins = 38
-## * Number of extracted intron bins = 34
-## * Number of extracted trascripts = 25
-## * Number of extracted junctions = 23
-## * Number of AS bins (not include external) = 17
-## * Number of AS bins (include external) = 17
-## * Classified as: 
-##  ES bins = 1 (6%)
-##  IR bins = 3 (18%)
-##  Alt5'ss bins = 2    (12%)
-##  Alt3'ss bins = 2    (12%)
-##  Multiple AS bins = 9    (53%)
-##  classified as:
-##          ES bins = 1 (11%)
-##          IR bins = 4 (44%)
-##          Alt5'ss bins = 2    (22%)
-##          Alt3'ss bins = 1    (11%)</code></pre>
-<pre class="r"><code>#bams and target file ----
-BAMFiles &lt;- aspliExampleBamList()
-targets  &lt;- data.frame(row.names = paste0('Sample',c(1:6)),
-                       bam = BAMFiles[1:6],
-                       f1  = c( 'control','control','control','treatment','treatment','treatment'),
-                       stringsAsFactors = FALSE)
-mBAMs &lt;- data.frame( bam = sub(&quot;_[012]&quot;,&quot;&quot;,targets$bam[c(1,4)]),
-                     condition = c(&quot;control&quot;,&quot;treatment&quot;))
+<ul>
+<li>Extraemos todas las posibles <em>features</em> de este transcriptoma:</li>
+</ul>
+<pre class="r"><code>features    &lt;- binGenome( genomeTxDb )</code></pre>
+<ul>
+<li>Definimos la ruta de los archivos <strong>BAM</strong>:</li>
+</ul>
+<pre class="r"><code>BAMFiles &lt;- aspliExampleBamList()
+BAMFiles</code></pre>
+<pre><code>##  [1] &quot;/home/estepi/R/x86_64-pc-linux-gnu-library/4.0/ASpli/extdata/A_C_0.bam&quot;
+##  [2] &quot;/home/estepi/R/x86_64-pc-linux-gnu-library/4.0/ASpli/extdata/A_C_1.bam&quot;
+##  [3] &quot;/home/estepi/R/x86_64-pc-linux-gnu-library/4.0/ASpli/extdata/A_C_2.bam&quot;
+##  [4] &quot;/home/estepi/R/x86_64-pc-linux-gnu-library/4.0/ASpli/extdata/A_D_0.bam&quot;
+##  [5] &quot;/home/estepi/R/x86_64-pc-linux-gnu-library/4.0/ASpli/extdata/A_D_1.bam&quot;
+##  [6] &quot;/home/estepi/R/x86_64-pc-linux-gnu-library/4.0/ASpli/extdata/A_D_2.bam&quot;
+##  [7] &quot;/home/estepi/R/x86_64-pc-linux-gnu-library/4.0/ASpli/extdata/B_C_0.bam&quot;
+##  [8] &quot;/home/estepi/R/x86_64-pc-linux-gnu-library/4.0/ASpli/extdata/B_C_1.bam&quot;
+##  [9] &quot;/home/estepi/R/x86_64-pc-linux-gnu-library/4.0/ASpli/extdata/B_C_2.bam&quot;
+## [10] &quot;/home/estepi/R/x86_64-pc-linux-gnu-library/4.0/ASpli/extdata/B_D_0.bam&quot;
+## [11] &quot;/home/estepi/R/x86_64-pc-linux-gnu-library/4.0/ASpli/extdata/B_D_1.bam&quot;
+## [12] &quot;/home/estepi/R/x86_64-pc-linux-gnu-library/4.0/ASpli/extdata/B_D_2.bam&quot;</code></pre>
+<ul>
+<li>Definimos el diseño experimental asociado a los alineamientos:</li>
+</ul>
+<pre class="r"><code>targets  &lt;- data.frame(row.names = paste0('Sample',c(1:6)),
+       bam = BAMFiles[1:6],
+       f1  = c( 'control','control','control',
+                'treatment','treatment','treatment'),
+      stringsAsFactors = FALSE)
 
-gbcounts &lt;- gbCounts(features=features, targets=targets,
-                     minReadLength = 100, maxISize = 50000)</code></pre>
-<pre><code>## Summarizing Sample1
-## ETA: 1 min
-## Summarizing Sample2
-## ETA: 0 min
-## Summarizing Sample3
-## ETA: 0 min
-## Summarizing Sample4
-## ETA: 0 min
-## Summarizing Sample5
-## ETA: 0 min
-## Summarizing Sample6
-## ETA: 0 min</code></pre>
-<pre class="r"><code>gbcounts</code></pre>
+mBAMs &lt;- data.frame( 
+    bam = sub(&quot;_[012]&quot;,&quot;&quot;,targets$bam[c(1,4)]),
+    condition = c(&quot;control&quot;,&quot;treatment&quot;))</code></pre>
+<ul>
+<li>Superponemos ahora las lecturas a las coordenadas de las <em>features</em> que generamos:</li>
+</ul>
+<pre class="r"><code>gbcounts &lt;- gbCounts(features=features, 
+                     targets=targets,
+                     minReadLength = 100, 
+                     maxISize = 50000)
+gbcounts</code></pre>
 <pre><code>## Object of class ASpliCounts 
 ## Gene counts: 10 genes analysed. Access using countsg(object) 
 ## Gene RD: 10 genes analysed. Access using rdsg(object) 
 ## Bin counts: 55 bins analysed. Access using countsb(object) 
 ## Bin RD: 55 bins analysed. Access using rdsb(object) 
 ## Junction counts: 23 junctions analysed. Access using countsj(object)</code></pre>
-<pre class="r"><code>asd &lt;- jCounts(counts=gbcounts, features=features, minReadLength=100)</code></pre>
-<pre><code>## Junctions PJU completed
-## Junctions PIR completed
-## Junctions IR PIR completed
-## Junctions AltSS PSI completed
-## Junctions ES PSI completed</code></pre>
-<pre class="r"><code>asd</code></pre>
+<ul>
+<li>Podemos inspeccionar este objeto con más detalles y acceder a las diferentes tablas de conteos:</li>
+</ul>
+<pre class="r"><code>head(gbcounts@gene.counts)</code></pre>
+<pre><code>##        symbol locus_overlap    gene_coordinates start  end length
+## GENE01 GENE01             -     reference:1-700     1  700    700
+## GENE02 GENE02             - reference:1001-1800  1001 1800    800
+## GENE03 GENE03             - reference:2001-2800  2001 2800    800
+## GENE04 GENE04             - reference:3001-3800  3001 3800    800
+## GENE05 GENE05             - reference:4001-4800  4001 4800    800
+## GENE06 GENE06             - reference:5001-5800  5001 5800    800
+##        effective_length Sample1 Sample2 Sample3 Sample4 Sample5 Sample6
+## GENE01              700     319     351     330     315     331     354
+## GENE02              550     327     333     340     329     338     333
+## GENE03              650     342     321     337     344     312     344
+## GENE04              650     313     337     350     328     339     333
+## GENE05              650     304     362     334     346     312     342
+## GENE06              650     340     325     335     321     340     339</code></pre>
+<ul>
+<li>Aca tenemos los conteos por <em>bin</em></li>
+</ul>
+<pre class="r"><code>head(gbcounts@exon.intron.counts)</code></pre>
+<pre><code>##             feature    event  locus locus_overlap symbol    gene_coordinates
+## GENE01:E001       E external GENE01             - GENE01     reference:1-700
+## GENE01:E002       E       IR GENE01             - GENE01     reference:1-700
+## GENE01:E003       E external GENE01             - GENE01     reference:1-700
+## GENE02:E001       E external GENE02             - GENE02 reference:1001-1800
+## GENE02:I001       I        - GENE02             - GENE02 reference:1001-1800
+## GENE02:E002       E       ES GENE02             - GENE02 reference:1001-1800
+##             start  end length Sample1 Sample2 Sample3 Sample4 Sample5 Sample6
+## GENE01:E001     1  300    300     189     199     182     178     190     213
+## GENE01:E002   301  500    200     103     119     113     112      94     109
+## GENE01:E003   501  700    200     129     131     137     112     137     131
+## GENE02:E001  1001 1250    250     197     206     194     221     230     236
+## GENE02:I001  1251 1300     50       0       0       0       0       0       0
+## GENE02:E002  1301 1400    100     107     113     119      20      23      24</code></pre>
+<ul>
+<li>Y finalmente las junturas:</li>
+</ul>
+<pre class="r"><code>head(gbcounts@junction.counts)</code></pre>
+<pre><code>##                        junction   gene strand multipleHit symbol
+## reference.300.501   GENE01:J001 GENE01      +           - GENE01
+## reference.1250.1301 GENE02:J001 GENE02      +           - GENE02
+## reference.1250.1601 GENE02:J003 GENE02      +           - GENE02
+## reference.1400.1601 GENE02:J002 GENE02      +           - GENE02
+## reference.2250.2501 GENE03:J002 GENE03      +           - GENE03
+## reference.2350.2501 GENE03:J001 GENE03      +           - GENE03
+##                        gene_coordinates                         bin_spanned
+## reference.300.501       reference:1-700 GENE01:E001;GENE01:E002;GENE01:E003
+## reference.1250.1301 reference:1001-1800             GENE02:E001;GENE02:E002
+## reference.1250.1601 reference:1001-1800 GENE02:E001;GENE02:E002;GENE02:E003
+## reference.1400.1601 reference:1001-1800             GENE02:E002;GENE02:E003
+## reference.2250.2501 reference:2001-2800 GENE03:E001;GENE03:E002;GENE03:E003
+## reference.2350.2501 reference:2001-2800             GENE03:E002;GENE03:E003
+##                     j_within_bin Sample1 Sample2 Sample3 Sample4 Sample5
+## reference.300.501              -      30      24      27      22      31
+## reference.1250.1301            -      60      64      67      10      12
+## reference.1250.1601            -      27      26      22      76      71
+## reference.1400.1601            -      47      49      51      10      11
+## reference.2250.2501            -      69      53      59      27      23
+## reference.2350.2501            -      12       9       9      39      35
+##                     Sample6
+## reference.300.501        24
+## reference.1250.1301      12
+## reference.1250.1601      87
+## reference.1400.1601      12
+## reference.2250.2501      33
+## reference.2350.2501      38</code></pre>
+<ul>
+<li>Ahora con las junturas estimamos los porcentajes de inclusión de cada tipo de evento:</li>
+</ul>
+<pre class="r"><code>asd &lt;- jCounts(counts=gbcounts, features=features, minReadLength=100)
+asd</code></pre>
 <pre><code>## Object of class ASpliAS 
 ## IR PIR:  24 intron bins analysed. 23 intron bins passed the filters. Access using irPIR(object) 
 ## ES PSI: 3 exon bins analysed. 2 exon bins passed the filters.  Access using esPSI(object) 
 ## AltSS PSI: 7 exon bins analysed. 7 exon bins passed the filters.  Access using altPSI(object) 
 ## Junctions PIR: 23 junctions analysed. Access using junctionsPIR(object) 
 ## Junctions PJU: 23 junctions analysed. Access using junctionsPJU(object)</code></pre>
-<pre class="r"><code>gb  &lt;- gbDUreport(gbcounts, contrast = c(-1,1))</code></pre>
-<pre><code>## Filtering genes:
-##   Filtering by reads.
-##   Filtering using control,treatment conditions
-##   Filtering any condition with mean minimum value 10
-##   Filtering by read density.
-##   Filtering using control,treatment conditions
-##   Filtering any condition with mean minimum value 0.05
-## Filtering genes done
-## Genes differential expression:
-##   Contrast:-1control  1treatment  
-##   Running GLM LRT
-## Genes differential expression done
-## Genes DE completed
-## Bins DE completed</code></pre>
-<pre class="r"><code>gb</code></pre>
+<ul>
+<li>Y los inspeccionamos:</li>
+</ul>
+<pre class="r"><code>head(asd@esPSI)</code></pre>
+<pre><code>##             event                  J1 Sample1 Sample2 Sample3 Sample4 Sample5
+## GENE02:E002    ES reference.1250.1301      60      64      67      10      12
+## GENE09:E003     - reference.8250.8351      19      18      12       4       8
+## GENE07:E003   ES* reference.6250.6351      32      28      29      35      34
+##             Sample6                  J2 Sample1 Sample2 Sample3 Sample4 Sample5
+## GENE02:E002      12 reference.1400.1601      47      49      51      10      11
+## GENE09:E003       5 reference.8450.8601      17      20      19      34      32
+## GENE07:E003      29 reference.6450.6601      48      48      49      45      52
+##             Sample6                  J3 Sample1 Sample2 Sample3 Sample4 Sample5
+## GENE02:E002      12 reference.1250.1601      27      26      22      76      71
+## GENE09:E003      13                &lt;NA&gt;      NA      NA      NA      NA      NA
+## GENE07:E003      62 reference.6250.6601      35      25      23      16      15
+##             Sample6  control treatment
+## GENE02:E002      87 0.692623 0.1252336
+## GENE09:E003      NA 1.000000 1.0000000
+## GENE07:E003       8 0.585000 0.7671642</code></pre>
+<pre class="r"><code>head(asd@irPIR)</code></pre>
+<pre><code>##             event              J1 Sample1 Sample2 Sample3 Sample4 Sample5
+## GENE02:I001     - GENE02:I001_E1I       0       0       0       0       0
+## GENE02:I003     - GENE02:I003_E1I       0       0       0       0       0
+## GENE03:I002     - GENE03:I002_E1I       0       0       0       0       0
+## GENE04:I001     - GENE04:I001_E1I       0       0       0       0       0
+## GENE05:I002     - GENE05:I002_E1I       0       0       0       0       0
+## GENE06:I003     - GENE06:I003_E1I       0       0       0       0       0
+##             Sample6              J2 Sample1 Sample2 Sample3 Sample4 Sample5
+## GENE02:I001       0 GENE02:I001_IE2       0       0       0       0       0
+## GENE02:I003       0 GENE02:I003_IE2       0       0       0       0       0
+## GENE03:I002       0 GENE03:I002_IE2       0       0       0       0       0
+## GENE04:I001       0 GENE04:I001_IE2       0       0       0       0       0
+## GENE05:I002       0 GENE05:I002_IE2       0       0       0       0       0
+## GENE06:I003       0 GENE06:I003_IE2       0       0       0       0       0
+##             Sample6                  J3 Sample1 Sample2 Sample3 Sample4 Sample5
+## GENE02:I001       0 reference.1250.1301      60      64      67      10      12
+## GENE02:I003       0 reference.1400.1601      47      49      51      10      11
+## GENE03:I002       0 reference.2350.2501      12       9       9      39      35
+## GENE04:I001       0 reference.3250.3401      54      55      60      31      38
+## GENE05:I002       0                &lt;NA&gt;      NA      NA      NA      NA      NA
+## GENE06:I003       0 reference.5450.5601      52      38      35      32      31
+##             Sample6 control treatment
+## GENE02:I001      12       0         0
+## GENE02:I003      12       0         0
+## GENE03:I002      38       0         0
+## GENE04:I001      29       0         0
+## GENE05:I002      NA     NaN       NaN
+## GENE06:I003      38       0         0</code></pre>
+<pre class="r"><code>head(asd@altPSI)</code></pre>
+<pre><code>##               event                  J1 Sample1 Sample2 Sample3 Sample4 Sample5
+## GENE04:E002  Alt3ss reference.3250.3401      54      55      60      31      38
+## GENE05:E003  Alt3ss reference.4250.4501      44      51      33      52      61
+## GENE03:E002  Alt5ss                &lt;NA&gt;      NA      NA      NA      NA      NA
+## GENE05:E002  Alt5ss                &lt;NA&gt;      NA      NA      NA      NA      NA
+## GENE10:E003 Alt3ss* reference.9250.9351      19      17      18      10      13
+## GENE06:E002 Alt5ss*                &lt;NA&gt;      NA      NA      NA      NA      NA
+##             Sample6                  J2 Sample1 Sample2 Sample3 Sample4 Sample5
+## GENE04:E002      29                &lt;NA&gt;      NA      NA      NA      NA      NA
+## GENE05:E003      53                &lt;NA&gt;      NA      NA      NA      NA      NA
+## GENE03:E002      NA reference.2350.2501      12       9       9      39      35
+## GENE05:E002      NA reference.4350.4601      24      33      38      15      11
+## GENE10:E003      15                &lt;NA&gt;      NA      NA      NA      NA      NA
+## GENE06:E002      NA reference.5350.5601      29      18      30      27      18
+##             Sample6                  J3 Sample1 Sample2 Sample3 Sample4 Sample5
+## GENE04:E002      NA reference.3250.3501      18      17      14      34      36
+## GENE05:E003      NA reference.4350.4601      24      33      38      15      11
+## GENE03:E002      38 reference.2250.2501      69      53      59      27      23
+## GENE05:E002      10 reference.4250.4501      44      51      33      52      61
+## GENE10:E003      NA reference.9250.9451      13       8      16      20      30
+## GENE06:E002      15 reference.5250.5601       9       3       3      20      19
+##             Sample6   control treatment
+## GENE04:E002      45 0.7752294 0.4600939
+## GENE05:E003      10 0.5739910 0.8217822
+## GENE03:E002      33 0.1421801 0.5743590
+## GENE05:E002      53 0.4260090 0.1782178
+## GENE10:E003      19 0.5934066 0.3551402
+## GENE06:E002      21 0.8369565 0.5000000</code></pre>
+<ul>
+<li>Ahora sí podemos estimar el <em>splicing</em> diferencial usando todos los métodos:</li>
+</ul>
+<pre class="r"><code>gb  &lt;- gbDUreport(gbcounts, contrast = c(-1,1))
+gb</code></pre>
 <pre><code>## Object of class ASpliDU 
 ## Gene DE: 10 genes analysed. Access using genesDE(object) 
 ## Bins DU: 14 bins analysed. Access using binsDU(object)</code></pre>
-<pre class="r"><code>jdur &lt;- jDUreport(asd, contrast=c(-1,1))</code></pre>
-<pre><code>## Running junctionsPJU test
-## Running junctionsPIR test
-## Running irPIR test
-## Running esPSI test
-## Running altPSI test</code></pre>
-<pre class="r"><code>jdur</code></pre>
+<pre class="r"><code>head(gb@genes)</code></pre>
+<pre><code>##        symbol locus_overlap    gene_coordinates start  end length
+## GENE01 GENE01             -     reference:1-700     1  700    700
+## GENE02 GENE02             - reference:1001-1800  1001 1800    800
+## GENE03 GENE03             - reference:2001-2800  2001 2800    800
+## GENE04 GENE04             - reference:3001-3800  3001 3800    800
+## GENE05 GENE05             - reference:4001-4800  4001 4800    800
+## GENE06 GENE06             - reference:5001-5800  5001 5800    800
+##        effective_length        logFC    pvalue   gen.fdr
+## GENE01              700 -0.008691551 0.8945021 0.9187175
+## GENE02              550 -0.008682042 0.8946082 0.9187175
+## GENE03              650 -0.008708560 0.8942949 0.9187175
+## GENE04              650 -0.008664899 0.8947945 0.9187175
+## GENE05              650 -0.008661038 0.8948242 0.9187175
+## GENE06              650 -0.008703522 0.8943409 0.9187175</code></pre>
+<pre class="r"><code>head(gb@bins)</code></pre>
+<pre><code>##             feature  event  locus locus_overlap symbol    gene_coordinates
+## GENE05:E002       E Alt5ss GENE05             - GENE05 reference:4001-4800
+## GENE08:E002       E    IR* GENE08             - GENE08 reference:7001-7800
+## GENE08:E004       E    IR* GENE08             - GENE08 reference:7001-7800
+## GENE05:E003       E Alt3ss GENE05             - GENE05 reference:4001-4800
+## GENE09:E002       E     IR GENE09             - GENE09 reference:8001-8800
+## GENE09:E004       E     IR GENE09             - GENE09 reference:8001-8800
+##             start  end length      logFC       pvalue      bin.fdr
+## GENE05:E002  4251 4350    100 -1.0666137 7.783078e-16 1.089631e-14
+## GENE08:E002  7251 7350    100 -0.6337962 1.014452e-08 7.101161e-08
+## GENE08:E004  7451 7600    150  0.6742382 3.318480e-08 1.548624e-07
+## GENE05:E003  4501 4600    100  0.4191274 2.687106e-07 9.404871e-07
+## GENE09:E002  8251 8350    100  0.3296654 2.299414e-04 6.438360e-04
+## GENE09:E004  8451 8600    150 -0.2875260 1.106857e-03 2.582667e-03</code></pre>
+<ul>
+<li>Y también las junturas:</li>
+</ul>
+<pre class="r"><code>jdur &lt;- jDUreport(asd, contrast=c(-1,1))
+jdur</code></pre>
 <pre><code>## Object of class ASpliJDU 
 ## Locale Junctions: 18 junctions. Access using localej(object) 
 ## Locale Clusters: 7 clusters Access using localec(object) 
@@ -507,13 +622,15 @@ gbcounts &lt;- gbCounts(features=features, targets=targets,
 ## Intron Retention Junctions: 9 junctions. Access using jir(object) 
 ## Exon Skipping Junctions: 2 junctions. Access using jes(object) 
 ## Alternative Splicing Junctions: 7 junctions. Access using jalt(object)</code></pre>
+<ul>
+<li>Integramos todos los reportes y lo exportamos a nuestro directorio de trabajo:</li>
+</ul>
 <pre class="r"><code>sr &lt;- splicingReport(gb, jdur, counts=gbcounts)
 is &lt;- integrateSignals(sr,asd)
 exportIntegratedSignals(is,sr=sr,
-                          output.dir = &quot;example&quot;,
-                          counts=gbcounts,features=features,asd=asd,
-                          mergedBams = mBAMs)</code></pre>
-<pre><code>## Generating graphs...</code></pre>
+                        output.dir = &quot;aspliExample&quot;,
+                        counts=gbcounts,features=features,asd=asd,
+                        mergedBams = mBAMs)</code></pre>
 <pre><code>## 
   |                                                                            
   |                                                                      |   0%</code></pre>
@@ -538,7 +655,10 @@ exportIntegratedSignals(is,sr=sr,
 <pre><code>## 
   |                                                                            
   |======================================================================| 100%</code></pre>
-</div>
+<ul>
+<li>Para ispeccionar visualmente los resultados podemos ir directamente al directorio donde se exportaron los resultados y abrir el reporte en un navegador:</li>
+</ul>
+<p><a href="https://estepi.github.io/RNA-Seq_II_esp/example/control-treatment/integratedSignals.html">reporte ejemplo</a></p>
 
 
 

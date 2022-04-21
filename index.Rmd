@@ -38,7 +38,7 @@ Se propone analizar diferentes tipos de experimentos / datos, como comparacion d
 
 * Dia 4 
     * Teoria: _splicing_ alternativo, reconstrucción de isoformas. Cuantificación poliA, análisis de multiómicas 
-    * Practica [ASpli](pca4x.html)
+    * Practica [ASpli](ASpli.html)
     
     
     

@@ -19,44 +19,122 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-# ASpli Example
-```{r design, echo=TRUE, eval=TRUE}
+* Cargamos los paquetes que vamos a usar: 
+
+```{r libraries, echo=TRUE, eval=TRUE, message=FALSE}
 library(ASpli)
 library(GenomicFeatures)
+```
 
-# gtf preprocessing ----
+* Convertimos el archivo de anotación en un objeto de tipo **TxDB**
+
+```{r genomeLoad, echo=TRUE, eval=TRUE, message=FALSE}
 gtfFileName <- aspliExampleGTF()
 genomeTxDb  <- makeTxDbFromGFF( gtfFileName )
+```
 
-# feature extraction ----
+* Extraemos todas las posibles _features_ de este transcriptoma:
+
+```{r features, echo=TRUE, eval=TRUE, message=FALSE}
 features    <- binGenome( genomeTxDb )
+```
 
-#bams and target file ----
+* Definimos la ruta de los archivos **BAM**:
+
+```{r bamf, echo=TRUE, eval=TRUE, message=FALSE}
 BAMFiles <- aspliExampleBamList()
+BAMFiles
+```
+
+* Definimos el diseño experimental asociado a los alineamientos: 
+
+```{r targets, echo=TRUE, eval=TRUE, message=FALSE}
 targets  <- data.frame(row.names = paste0('Sample',c(1:6)),
-                       bam = BAMFiles[1:6],
-                       f1  = c( 'control','control','control','treatment','treatment','treatment'),
-                       stringsAsFactors = FALSE)
-mBAMs <- data.frame( bam = sub("_[012]","",targets$bam[c(1,4)]),
-                     condition = c("control","treatment"))
+       bam = BAMFiles[1:6],
+       f1  = c( 'control','control','control',
+                'treatment','treatment','treatment'),
+      stringsAsFactors = FALSE)
 
-gbcounts <- gbCounts(features=features, targets=targets,
-                     minReadLength = 100, maxISize = 50000)
+mBAMs <- data.frame( 
+    bam = sub("_[012]","",targets$bam[c(1,4)]),
+    condition = c("control","treatment"))
+```
+
+* Superponemos ahora las lecturas a las coordenadas de las _features_ que generamos:
+
+```{r gbcounts, echo=TRUE, eval=TRUE, message=FALSE}
+gbcounts <- gbCounts(features=features, 
+                     targets=targets,
+                     minReadLength = 100, 
+                     maxISize = 50000)
 gbcounts
+```
 
+* Podemos inspeccionar este objeto con más detalles y acceder a las diferentes tablas de conteos:
+
+```{r genes, echo=TRUE, eval=TRUE, message=FALSE}
+head(gbcounts@gene.counts)
+```
+
+* Aca tenemos los conteos por _bin_
+
+```{r bins, echo=TRUE, eval=TRUE, message=FALSE}
+head(gbcounts@exon.intron.counts)
+```
+
+* Y finalmente las junturas:
+
+
+```{r junctions, echo=TRUE, eval=TRUE, message=FALSE}
+head(gbcounts@junction.counts)
+```
+
+* Ahora con las junturas estimamos los porcentajes de inclusión de cada tipo de evento:
+
+```{r asd, echo=TRUE, eval=TRUE, message=FALSE}
 asd <- jCounts(counts=gbcounts, features=features, minReadLength=100)
 asd
+```
+
+* Y los inspeccionamos:
+
+```{r psi, echo=TRUE, eval=TRUE, message=FALSE}
+head(asd@esPSI)
+head(asd@irPIR)
+head(asd@altPSI)
+```
+
+* Ahora sí podemos estimar el _splicing_ diferencial usando todos los métodos:
+
+```{r gbdu, echo=TRUE, eval=TRUE, message=FALSE}
 gb  <- gbDUreport(gbcounts, contrast = c(-1,1))
 gb
+```
+
+```{r headgbdu, echo=TRUE, eval=TRUE, message=FALSE}
+head(gb@genes)
+head(gb@bins)
+```
+
+* Y también las junturas:
+
+```{r jdu, echo=TRUE, eval=TRUE, message=FALSE}
 jdur <- jDUreport(asd, contrast=c(-1,1))
 jdur
+```
 
+* Integramos todos los reportes y lo exportamos a nuestro directorio de trabajo:
+
+```{r sr, echo=TRUE, eval=TRUE, message=FALSE}
 sr <- splicingReport(gb, jdur, counts=gbcounts)
 is <- integrateSignals(sr,asd)
 exportIntegratedSignals(is,sr=sr,
-                          output.dir = "example",
-                          counts=gbcounts,features=features,asd=asd,
-                          mergedBams = mBAMs)
-
+                        output.dir = "aspliExample",
+                        counts=gbcounts,features=features,asd=asd,
+                        mergedBams = mBAMs)
 ```
 
+
+* Para ispeccionar visualmente los resultados podemos ir directamente al directorio donde se exportaron los resultados y abrir el reporte en un navegador:
+
+[reporte ejemplo](https://estepi.github.io/RNA-Seq_II_esp/example/control-treatment/integratedSignals.html)
